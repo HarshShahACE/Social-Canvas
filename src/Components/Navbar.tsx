@@ -1,5 +1,5 @@
 import React from 'react';
-import { Drawer, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, useMediaQuery, AppBar, Toolbar, Typography, IconButton, Box, MenuItem } from '@mui/material';
+import { Drawer, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, useMediaQuery, AppBar, Toolbar, IconButton, Box, MenuItem } from '@mui/material';
 import HomeIcon from '@mui/icons-material/Home';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
@@ -9,7 +9,6 @@ import MenuIcon from '@mui/icons-material/Menu';
 import { useLocation, Link } from 'react-router-dom';
 import Popover from '@mui/material/Popover';
 import MenuList from '@mui/material/MenuList';
-import EditIcon from '@mui/icons-material/Edit';
 import PersonIcon from '@mui/icons-material/Person';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 
@@ -53,30 +52,30 @@ export default function SideNav() {
   return (
     <Box sx={{ display: 'flex' }}>
       <AppBar position="fixed" sx={{ zIndex: 1, top: 0 }}>
-        <Toolbar sx={{ display: 'flex', justifyContent: 'space-between' }}>
-          {isMobile && (
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              onClick={handleDrawerOpen}
-              edge="start"
-              sx={{ marginRight: 2 }}
-            >
-              <MenuIcon />
-            </IconButton>
-          )}
-          <Typography variant="h6" noWrap component="div" sx={{ flexGrow: 1, textAlign: 'center' }}>
-            Social Canvas
-          </Typography>
-          <IconButton
-            color="inherit"
-            aria-label="profile"
-            edge="end"
-            onClick={handleProfileClick}
-            style={{ marginRight: '10px' }}
-          >
-            <AccountCircleIcon />
-          </IconButton>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+  {isMobile && (
+    <IconButton
+      color="inherit"
+      aria-label="open drawer"
+      onClick={handleDrawerOpen}
+      edge="start"
+      sx={{ marginRight: 2 }}
+    >
+      <MenuIcon />
+    </IconButton>
+  )}
+  <div style={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+    <img src="../../SitePhotos/Textlogo.png" alt="Logo" style={{ maxWidth: '80px', maxHeight: '80px', margin: '0 auto' }} />
+  </div>
+  <IconButton
+    color="inherit"
+    aria-label="profile"
+    edge="end"
+    onClick={handleProfileClick}
+    style={{ marginLeft: 'auto' }}
+  >
+    <AccountCircleIcon />
+  </IconButton>
           <Popover
             id={profileId}
             open={openProfile}

@@ -54,29 +54,28 @@ const Profile = () => {
   // API Call For Data Fetch
   useEffect(() => {
     const fetchData = async () => {
-      
-        try {
-          const response = await fetch('http://127.0.0.1:8000/profile?user_id=' + id, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-          });
-          if (response.ok) {
-            const jsonData: UserData = await response.json();
-            setFormData(jsonData);
-            setCountry1(jsonData.country); // Set country from API data
-            setState1(jsonData.state); // Set state from API data
-            console.log(jsonData);
-          } else {
-            console.log('Error:', response.statusText);
-          }
-        } catch (error) {
-          console.error('Error fetching data:', error);
+      try {
+        const response = await axios.post('http://127.0.0.1:8000/profile?user_id='+id, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.status === 200) {
+          const jsonData = response.data;
+          setFormData(jsonData);
+          setCountry1(jsonData.country); // Set country from API data
+          setState1(jsonData.state); // Set state from API data
+          console.log(jsonData);
+        } else {
+          console.log('Error:', response.statusText);
         }
-
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
     };
+
     fetchData(); // Call the fetchData function
+
   }, []);
 
   // For Setting State According to Country
