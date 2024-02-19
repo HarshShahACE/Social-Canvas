@@ -124,6 +124,19 @@ const Profile = () => {
     handleChange(e);
   };
 
+  const handlecancel = () =>{
+    setFormData({
+      name: '',
+      email: '',
+      phone: '',
+      country: '',
+      state: '',
+      gender: '',
+      password: ''
+    });
+    window.location.reload()
+  }
+
   // Save The Changes Of Data
   const handleSubmit = async (e: any) => {
     e.preventDefault();
@@ -335,7 +348,7 @@ const Profile = () => {
                                   <Button type="submit" variant="contained" color="primary">
                                     Save
                                   </Button>
-                                  <Button type="submit" variant="contained" color="primary" style={{marginLeft:'10px'}}>
+                                  <Button type="submit" onClick={handlecancel} variant="contained" color="primary" style={{marginLeft:'10px'}}>
                                     Cancel
                                   </Button>
                                 </Grid>
