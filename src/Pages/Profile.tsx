@@ -45,8 +45,9 @@ const Profile = () => {
   const [state1, setState1] = useState('');
   const [statesList, setStatesList] = useState<string[]>([]);
   const Home = useNavigate()
+  const defaultImagePath = process.env.REACT_APP_DEFAULT_APP_IMAGE;
 
-  const idString = localStorage.getItem('Myid'); // Retrieve the value from localStorage
+  const idString = sessionStorage.getItem('Myid'); // Retrieve the value from localStorage
       if (idString !== null) {
         var id = parseInt(idString);
     }
@@ -55,7 +56,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post('http://127.0.0.1:8000/profile?user_id='+id, {
+        const response = await axios.post(`${process.env.REACT_APP_Fast_API}/profile?user_id=`+id, {
           headers: {
             'Content-Type': 'application/json',
           },
@@ -132,7 +133,7 @@ const Profile = () => {
       if(isEmailValid(formData.email)){
         if(isPhoneNumberValid(formData.phone)){
             try {
-              const response = await fetch('http://127.0.0.1:8000/edit-profile?user_id='+id, {
+              const response = await fetch(`${process.env.REACT_APP_Fast_API}/edit-profile?user_id=`+id, {
                 method: 'PUT',
                 headers: {
                   'Content-Type': 'application/json',
@@ -183,7 +184,8 @@ const Profile = () => {
   }
 
     return(
-        <div style={{ display: 'flex' , backgroundImage: 'url(../SitePhotos/Login.png)', backgroundSize:'contain',
+      <>
+        <div style={{ display: 'flex' , backgroundImage: `url(${defaultImagePath})`, backgroundSize:'contain',
             backgroundRepeat:'no-repeat',
             backgroundPosition:'bottom right'  , height:'100vh' }}>
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -347,6 +349,7 @@ const Profile = () => {
                 </main>
             </div>
         </div>
+      </>
     )
 }
 

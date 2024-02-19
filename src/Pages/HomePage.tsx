@@ -9,12 +9,15 @@ import third from '../Photos/3rd.png'
 import fourth from '../Photos/4th.png'
 import fifth from '../Photos/5th.png'
 
+
 export default function HomePage() {
 
   const isMobile = useMediaQuery('(max-width:600px)');
+  const defaultImagePath = process.env.REACT_APP_DEFAULT_APP_IMAGE;
+
 
   return (
-    <div style={{ display: 'flex' , backgroundImage: 'url(../SitePhotos/Login.png)', backgroundSize:'contain',
+    <div style={{ display: 'flex' , backgroundImage: `url(${defaultImagePath})`, backgroundSize:'contain',
     backgroundRepeat:'no-repeat',
     backgroundPosition:'bottom right'  , height:'100vh' }}>
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -64,6 +67,7 @@ export default function HomePage() {
                 <SocialAccount/>
               </div>
             </main>
+            
         </div>
     </div>
   );

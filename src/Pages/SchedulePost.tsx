@@ -5,9 +5,10 @@ export default function Schedule_Post(){
 
     
     const isMobile = useMediaQuery('(max-width:600px)');
+    const defaultImagePath = process.env.REACT_APP_DEFAULT_APP_IMAGE;
 
     return(
-        <div style={{ display: 'flex' , backgroundImage: 'url(../SitePhotos/Login.png)', backgroundSize:'contain',
+        <div style={{ display: 'flex' , backgroundImage: `url(${defaultImagePath})`, backgroundSize:'contain',
             backgroundRepeat:'no-repeat',
             backgroundPosition:'bottom right'  , height:'100vh' }}>
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>

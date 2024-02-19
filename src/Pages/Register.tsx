@@ -48,6 +48,7 @@ export default function Register() {
   const [confirmpassword , setconfirmpassword] = useState('');
   const [statesList, setStatesList] = useState<string[]>([]);
   const Home = useNavigate();
+  const defaultImagePath = process.env.REACT_APP_DEFAULT_AUTHENTICATION_IMAGE;
 
   const [showPassword, setShowPassword] = useState(false);
 
@@ -157,7 +158,7 @@ export default function Register() {
           if(isPhoneNumberValid(phone1)){
             if(isPasswordValid(password1)) {
               try {
-                const response = await axios.post('http://127.0.0.1:8000/create', {
+                const response = await axios.post(`${process.env.REACT_APP_Fast_API}/create`, {
                   name: name1,
                   email: email1,
                   phone: phone1,
@@ -208,8 +209,10 @@ export default function Register() {
       }
       };
 
+      
+
   return (
-    <div style={{ backgroundImage: 'url(../SitePhotos/Test32.png)', backgroundSize:'cover'}}>
+    <div style={{ backgroundImage: `url(${defaultImagePath})`, backgroundSize:'cover'}}>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <Grid container component="main" sx={{}}>
       <CssBaseline />

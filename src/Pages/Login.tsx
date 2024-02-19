@@ -37,6 +37,7 @@ export default function Login() {
   const [username, setusername] = useState('');
   const [password1, setpassword] = useState('');
   const Home = useNavigate();
+  const defaultImagePath = process.env.REACT_APP_DEFAULT_AUTHENTICATION_IMAGE;
 
   // To Show Password To User
   const [showPassword, setShowPassword] = useState(false);
@@ -104,7 +105,7 @@ export default function Login() {
     if(isEmailValid(username)){
       if(handlepasswordcheck(password1)){
         try {
-          const response = await fetch('http://127.0.0.1:8000/login', {
+          const response = await fetch(`${process.env.REACT_APP_Fast_API}/login`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -124,7 +125,9 @@ export default function Login() {
                 if (data.message === "Login Successful") {
                   const id = data.user_id;
                   console.log(id)
-                  localStorage.setItem('Myid',id)
+                  sessionStorage.setItem('Myid', id);
+                  let booleanValue = true; // or false
+                  sessionStorage.setItem('login', JSON.stringify(booleanValue));
                   Home('/Dashboard');
                 }
               }
@@ -161,9 +164,10 @@ export default function Login() {
   // // Determine the current theme based on the state
   // const currentTheme = isDarkMode ? darkTheme : lighttheme;
 
+  
 
   return (
-    <div style={{ backgroundImage: 'url(../SitePhotos/Test32.png)',
+    <div style={{ backgroundImage: `url(${defaultImagePath})`,
     backgroundSize:'cover',
     backgroundRepeat:'no-repeat'}}>
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
