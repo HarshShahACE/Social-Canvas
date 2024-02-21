@@ -4,8 +4,8 @@ import { deepOrange } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import countries from '../Country/Country';
-import states from '../Country/States';
+import countries from '../assets/country.json';
+import states from '../assets/states.json';
 
 const isEmailValid = (email : any) => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -30,6 +30,7 @@ interface UserData {
 const Profile = () => {
 
   const isMobile = useMediaQuery('(max-width:600px)');
+  type Country = keyof typeof states;
 
   const [formData, setFormData] = useState<UserData>({
     name: '',
@@ -41,7 +42,7 @@ const Profile = () => {
     password: ''
   });
 
-  const [country1, setCountry1] = useState('');
+  const [country1, setcountry1] = useState<Country>('India');
   const [state1, setState1] = useState('');
   const [statesList, setStatesList] = useState<string[]>([]);
   const Home = useNavigate()
@@ -64,7 +65,7 @@ const Profile = () => {
         if (response.status === 200) {
           const jsonData = response.data;
           setFormData(jsonData);
-          setCountry1(jsonData.country); // Set country from API data
+          setcountry1(jsonData.country); // Set country from API data
           setState1(jsonData.state); // Set state from API data
           console.log(jsonData);
         } else {
@@ -110,8 +111,8 @@ const Profile = () => {
 
   // Handle Change On Country
   const handleCountryChange = (e: any) => {
-    const selectedCountry = e.target.value;
-    setCountry1(selectedCountry);
+    const selectedCountry = e.target.value as keyof typeof states;
+    setcountry1(selectedCountry);
     setState1('');
     setStatesList(states[selectedCountry] || []);
     handleChange(e);

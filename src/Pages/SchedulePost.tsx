@@ -1,12 +1,11 @@
-import { Avatar, Box, Button, Card, CardContent, CssBaseline,  Divider,  Grid,  IconButton, MenuItem, Select, Typography, useMediaQuery } from "@mui/material";
+import { Avatar, Box, Button, Card, CardContent, CssBaseline,  Divider,  Grid,  IconButton, MenuItem, Select, TextField, Typography, useMediaQuery } from "@mui/material";
 import SideNav from "../Components/Navbar";
 import { useState } from "react";
 import LinkedInPostLayout from "../Components/Schedule_Post/Linkedin";
 import {  AddPhotoAlternateRounded } from "@mui/icons-material";
 import TwitterPostLayout from "../Components/Schedule_Post/Twitter";
 import FacebookPostLayout from "../Components/Schedule_Post/Facebook";
-import EventIcon from '@mui/icons-material/Event'
-import AccessTimeIcon from '@mui/icons-material/AccessTime'
+import TimezoneSelect, { ITimezone , allTimezones  } from "react-timezone-select";
 
 const platforms = [
     { name: "LinkedIn", value: "linkedin" },
@@ -14,6 +13,24 @@ const platforms = [
     { name: "Facebook", value: "facebook" },
     // Add more platforms as needed
   ];
+
+type MediaType = {
+    type: 'image' | 'video';
+    data: string;
+};
+
+// Function to convert data URL to Blob
+const dataURLtoFile = (dataURL: string, filename: string) => {
+    const byteString = atob(dataURL.split(',')[1]);
+    const ab = new ArrayBuffer(byteString.length);
+    const ia = new Uint8Array(ab);
+    for (let i = 0; i < byteString.length; i++) {
+      ia[i] = byteString.charCodeAt(i);
+    }
+    const blob = new Blob([ab], { type: dataURL.split(':')[1].split(';')[0] });
+    const fileExtension = blob.type.split('/')[1];
+    return new File([blob], `${filename}.${fileExtension}`, { type: blob.type });
+  };
 
 export default function Schedule_Post(){
     
@@ -23,17 +40,19 @@ export default function Schedule_Post(){
     const [selectedPlatform, setSelectedPlatform] = useState<string>('');
 
     const [content, setContent] = useState('');
-    const [media, setMedia] = useState<string | null>(null); // State to store uploaded media
-  
-    const handleMediaUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
-      const files = event.target.files;
-      if (files) {
-        for (let i = 0; i < files.length; i++) {
-          const file = files[i];
-          const mediaURL = URL.createObjectURL(file);
-          setMedia(mediaURL);
+    const [media, setMedia] = useState<MediaType | null>(null);
+
+    const handleMediaUpload = (event : React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                if (reader.result) {
+                    setMedia({ type: file.type.startsWith('image/') ? 'image' : 'video', data: reader.result.toString() });
+                }
+            };
+            reader.readAsDataURL(file);
         }
-      }
     };
 
 
@@ -46,6 +65,10 @@ export default function Schedule_Post(){
     const [selectedTime, setSelectedTime] = useState('');
     const [selectedTimeZone, setSelectedTimeZone] = useState('');
     const [isScheduled, setIsScheduled] = useState(false);
+
+    const [selectedTimezone, setSelectedTimezone] = useState<ITimezone>(
+        Intl.DateTimeFormat().resolvedOptions().timeZone
+      )
 
     const handleDateChange = (event : any) => {
         setSelectedDate(event.target.value);
@@ -61,6 +84,35 @@ export default function Schedule_Post(){
 
     const handlePostNow = () => {
         // Handle post now action
+        const postData = async () => {
+            // Create form data
+            const formData = new FormData();
+            formData.append('content', content);
+            formData.append('platform', selectedPlatform);
+            if (media) {
+                const file = dataURLtoFile(media.data, 'Myfile');
+                console.log(file);
+                formData.append('Media', file);
+            }
+            try {
+                const response = await fetch('127.0.0.1:8000/API', {
+                    method: 'POST',
+                    body: formData,
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to create post');
+                }
+                const data = await response.json();
+                console.log('Post created successfully:', data);
+                // Reset form fields after successful post creation
+                setContent('');
+                setSelectedPlatform('');
+                setMedia(null);
+            } catch (error : any) {
+                console.error('Error creating post:', error.message);
+            }
+        };
+        postData();
     };
 
     const handleSchedule = () => {
@@ -83,7 +135,7 @@ export default function Schedule_Post(){
                     {/* Main content */}
                     <Grid container spacing={2}>
                         <Grid md={6}>
-                    <Card style={{background: 'rgba(255, 255, 255, 0.7)' , margin:'20px', borderRadius:'20px', height: '100%' }}>
+                    <Card style={{background: 'rgba(255, 255, 255, 0.7)' , margin:'20px', borderRadius:'20px'}}>
                         <CardContent>
                             {/* Drop Down For Plateform Selection */}
                             <Box display="flex" alignItems="center" mt={2}>
@@ -118,12 +170,12 @@ export default function Schedule_Post(){
                             {/* Media Upload */}
                             <Box display="flex" alignItems="center" mt={2}>
                                 <input
-                                    accept="image/*"
+                                    accept="image/*,video/*"
                                     style={{ display: 'none' }}
                                     id="media-upload"
                                     type="file"
                                     onChange={handleMediaUpload}
-                                    multiple
+                                    multiple={false} // Allow only single file selection
                                 />
                                 <label htmlFor="media-upload">
                                     <IconButton component="span">
@@ -131,33 +183,69 @@ export default function Schedule_Post(){
                                     </IconButton>
                                 </label>
                                 {media && (
-                                    <Avatar alt="Uploaded Media" src={media} sx={{ width: 100, height: 100, borderRadius: '0' }} /> // Remove border radius
+                                <>
+                                {media.type === 'image' && (
+                                    <Avatar
+                                        alt="Uploaded Media"
+                                        src={media.data}
+                                        sx={{ width: 100, height: 100, borderRadius: '0' }}
+                                    />
+                                )}
+                                {media.type === 'video' && (
+                                    <video controls src={media.data} style={{ maxWidth: '250px', maxHeight:'250px',  marginTop: 16 }} />
+                                )}
+                                </>
                                 )}
                             </Box>
-                            <Divider/>
-                            {/* Select Date And Time */}
-                            <Box display="flex" alignItems="center" mt={2}>
-                                <EventIcon />
-                                <input type="date" value={selectedDate} onChange={handleDateChange} />
-                            </Box>
+                            <Divider style={{marginTop:'10px'}}/>
 
-                            {/* Time Picker */}
+                            {/* Time And Date Selection */}
                             <Box display="flex" alignItems="center" mt={2}>
-                                <AccessTimeIcon />
-                                <input type="time" value={selectedTime} onChange={handleTimeChange} />
+                                <TextField
+                                    type="date"
+                                    value={selectedDate}
+                                    onChange={handleDateChange}
+                                    InputProps={{
+                                        style: { borderRadius: '4px'},
+                                    }}
+                                    InputLabelProps={{
+                                        style: { color: '#757575' },
+                                    }}
+                                    sx={{ '& .MuiOutlinedInput-root': { borderColor: '#9e9e9e' } }}
+                                />
+                                <TextField
+                                    type="time"
+                                    value={selectedTime}
+                                    onChange={handleTimeChange}
+                                    InputProps={{
+                                        style: { borderRadius: '4px' , marginLeft:'10px'},
+                                    }}
+                                    InputLabelProps={{
+                                        style: { color: '#757575' },
+                                    }}
+                                    inputProps={{
+                                        step: 300,
+                                        hour12 : true 
+                                    }}
+                                    sx={{ '& .MuiOutlinedInput-root': { borderColor: '#9e9e9e' } }}
+                                />
                             </Box>
 
                             {/* Time Zone Selection */}
                             <Box display="flex" alignItems="center" mt={2}>
-                                <Select
-                                    value={selectedTimeZone}
-                                    onChange={handleTimeZoneChange}
-                                    variant="outlined"
-                                    fullWidth
-                                >
-                                    <MenuItem value="">Select Time Zone</MenuItem>
-                                    {/* Add time zone options here */}
-                                </Select>
+                                <TimezoneSelect
+                                    value={selectedTimezone}
+                                    onChange={setSelectedTimezone}
+                                    timezones={{
+                                        ...allTimezones,
+                                        'America/Lima': 'Pittsburgh',
+                                        'Europe/Berlin': 'Frankfurt',
+                                    }}
+                                    styles={{
+                                        control: (provided) => ({ ...provided, position: 'relative' }),
+                                        menu: (provided) => ({ ...provided, top: 'unset', bottom: 'calc(100% + 4px)', position: 'absolute' })
+                                    }}
+                                />    
                             </Box>
 
                             {/* Buttons */}
@@ -183,7 +271,7 @@ export default function Schedule_Post(){
                                 <LinkedInPostLayout
                                 username="Harsh"
                                 content={content}
-                                imageUrl={media || undefined}
+                                media={media || undefined}
                                 />
                             </CardContent>
                             </Card>
@@ -195,7 +283,7 @@ export default function Schedule_Post(){
                                 <FacebookPostLayout
                                 username="Harsh"
                                 content={content}
-                                imageUrl={media || undefined}
+                                media={media || undefined}
                                 />
                             </CardContent>
                             </Card>
@@ -208,7 +296,7 @@ export default function Schedule_Post(){
                                 username="Harsh"
                                 handle="@Harsh-shah"
                                 content={content}
-                                imageUrl={media || undefined}
+                                media={media || undefined}
                                 />
                             </CardContent>
                             </Card>

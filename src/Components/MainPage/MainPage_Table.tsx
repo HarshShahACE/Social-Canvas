@@ -1,17 +1,10 @@
 import React, { useState } from 'react';
-import { Card, CardContent, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogContent } from '@mui/material';
-import EditIcon from '@mui/icons-material/Edit';
+import { Card, CardContent, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogContent, Avatar } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SocialMediaPopup from './SocialMediaPopup';
 import LinkInputPopup from './LinkInput';
 
 const SocialAccount = () => {
-
-  // Handle For Editing Any Account Details
-  const handleEditClick = (id : any) => {
-    // Handle edit click for a specific row
-    console.log(`Edit clicked for ID: ${id}`);
-  };
 
   // Handle For  Deleting An Account
   const handleDeleteClick = (id : any) => {
@@ -93,6 +86,7 @@ const SocialAccount = () => {
             <TableHead>
               <TableRow>
                 <TableCell>ID</TableCell>
+                <TableCell></TableCell>
                 <TableCell>Username</TableCell>
                 <TableCell>Platform Name</TableCell>
                 <TableCell>Actions</TableCell>
@@ -101,11 +95,11 @@ const SocialAccount = () => {
             <TableBody>
               <TableRow>
                 <TableCell>1</TableCell>
+                <TableCell><Avatar alt="User" src='test.jpg' /></TableCell>
                 <TableCell>Harsh Shah</TableCell>
                 <TableCell>Linkedin</TableCell>
                 <TableCell>
-                  <Button variant="contained" startIcon={<EditIcon />} onClick={() => handleEditClick(1)}>Edit</Button>
-                  <Button variant="contained" style={{margin:'10px'}} startIcon={<DeleteIcon />} onClick={() => handleDeleteClick(1)}>Delete</Button>
+                  <Button variant="contained" startIcon={<DeleteIcon />} onClick={() => handleDeleteClick(1)}>Delete</Button>
                 </TableCell>
               </TableRow>
               {/* Add more rows here */}

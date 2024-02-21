@@ -12,8 +12,8 @@ import Typography from '@mui/material/Typography';
 import { FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Paper, Select } from '@mui/material';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
 import { useEffect, useState } from 'react';
-import countries from '../Country/Country';
-import states from '../Country/States';
+import countries from '../assets/country.json';
+import states from '../assets/states.json';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
@@ -37,11 +37,13 @@ function Copyright(props: any) {
 }
 
 export default function Register() {
+
+  type Country = keyof typeof states;
         
   const [name1, setname] = useState('');
   const [email1, setemail] = useState('');
   const [phone1, setphone] = useState('');
-  const [country1, setcountry] = useState('');
+  const [country1, setcountry] = useState<Country>('India');
   const [state1, setstate] = useState('');
   const [gender1, setgender] = useState('');
   const [password1, setpassword] = useState('');
@@ -60,19 +62,23 @@ export default function Register() {
     setgender(e.target.value);
   };
 
-  const handleCountryChange = (e : any) => {
-    setcountry(e.target.value);
-  };
-
-  const handleStateChange = (e : any) => {
-    setstate(e.target.value);
-  }
-
   useEffect(() => {
     // Update statesList when the selected country changes
     setStatesList(states[country1] || []);
     setstate(''); // Reset selected state when country changes
   }, [country1]);
+  
+  // Modify the handleCountryChange function to set the selected country
+  const handleCountryChange = (e : any) => {
+    const selectedCountry = e.target.value;
+    setcountry(selectedCountry);
+  };
+  
+  // Modify the handleStateChange function to set the selected state
+  const handleStateChange = (e : any) => {
+    const selectedState = e.target.value;
+    setstate(selectedState);
+  };
 
   // Validation Start
   // Check Email Validation
@@ -151,7 +157,7 @@ export default function Register() {
 
       const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        if(name1==='' || email1==='' || password1 ==='' ||country1==='' || state1 === '' || phone1==='' || gender1 ===''){
+        if(name1==='' || email1==='' || password1 ==='' || state1 === '' || phone1==='' || gender1 ===''){
           window.alert("Required Fields should not be empty")
         }else{
         if(isEmailValid(email1)){
@@ -264,7 +270,6 @@ export default function Register() {
                 label="Phone Number"
                 name="phone"
                 autoComplete="phone"
-                autoFocus
                 onChange={handlephoneChange}
                 onBlur={handlephoneBlur}
                 InputProps={{
@@ -288,7 +293,6 @@ export default function Register() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
-                autoFocus
                 onChange={handleemailChange}
                 onBlur={handleemailBlur}
                 InputProps={{

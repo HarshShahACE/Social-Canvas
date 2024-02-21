@@ -9,13 +9,19 @@ import MessageIcon from '@mui/icons-material/Message';
 import ReplyIcon from '@mui/icons-material/Reply';
 import PeopleIcon from '@mui/icons-material/People';
 
+type MediaType = {
+  type: 'image' | 'video';
+  data: string;
+};
+
+
 interface FacebookProps {
     username: string;
     content: string;
-    imageUrl?: string;
+    media?: MediaType;
 }
 
-const FacebookPostLayout: React.FC<FacebookProps> = ({ username, content, imageUrl }) => {
+const FacebookPostLayout: React.FC<FacebookProps> = ({ username, content, media }) => {
 
   return (
     <>
@@ -58,7 +64,12 @@ const FacebookPostLayout: React.FC<FacebookProps> = ({ username, content, imageU
         {/* Post Content */}
         <CardContent>
           <Typography>{content}</Typography>
-          {imageUrl && <img src={imageUrl} alt="Post" style={{ maxWidth: '100%', marginTop: 16 }} />}
+          {media && media.type === 'image' && (
+                <img src={media.data} alt="Post" style={{ maxWidth: '100%', marginTop: 16 }} />
+            )}
+            {media && media.type === 'video' && (
+                <video controls src={media.data} style={{maxWidth:'500px' ,maxHeight:'500px'}} />
+            )}
         </CardContent>
 
         {/* Post Actions */}

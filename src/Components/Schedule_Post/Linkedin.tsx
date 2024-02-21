@@ -6,14 +6,19 @@ import LinkedinLogo from '../../Photos/Linkedin.png'
 import SendIcon from '@mui/icons-material/Send';
 import RepeatIcon from '@mui/icons-material/Repeat'
 
+type MediaType = {
+  type: 'image' | 'video';
+  data: string;
+};
+
 interface LinkedInPostProps {
     username: string;
     content: string;
-    imageUrl?: string;
+    media?: MediaType;
   }
   
 
-const LinkedInPost:React.FC<LinkedInPostProps> = ({ username, content, imageUrl }) => {
+const LinkedInPost:React.FC<LinkedInPostProps> = ({ username, content, media }) => {
 
   const Image = 'https://media.licdn.com/dms/image/D4D03AQFaAYtlJw689Q/profile-displayphoto-shrink_100_100/0/1688900557185?e=1714003200&v=beta&t=iDvDDCakIq8ZI1Adqr1nXLzozGT3aLkYwogdwM04zwg'
 
@@ -38,9 +43,12 @@ const LinkedInPost:React.FC<LinkedInPostProps> = ({ username, content, imageUrl 
           <Typography variant="body1" color="textPrimary" component="p">
             {content}
           </Typography>
-          {imageUrl && (
-            <img src={imageUrl} alt="Post" style={{ maxWidth: '100%', marginTop: 16 }} />
-          )}
+          {media && media.type === 'image' && (
+                <img src={media.data} alt="Post" style={{ maxWidth: '100%', marginTop: 16 }} />
+            )}
+            {media && media.type === 'video' && (
+                <video controls src={media.data} style={{maxWidth:'500px' ,maxHeight:'500px'}} />
+            )}
         </CardContent>
         <CardActions disableSpacing>
           <IconButton aria-label="like">

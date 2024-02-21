@@ -28,7 +28,7 @@ const GrowthCard: React.FC<GrowthCardProps> = ({ title, currentValue, previousVa
                 backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url(${backgroundImage})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                margin: '10px 20px'
+                margin: '20px 30px 20px 0px'
             }}>
                 <CardContent style={{ position: 'relative', zIndex: 1, color: '#000', textAlign: 'center' }}>
                     <Typography variant="h5" component="div">
