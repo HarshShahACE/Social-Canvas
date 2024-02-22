@@ -2,36 +2,21 @@ import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Grid from '@mui/material/Grid';
 import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
-import { IconButton, InputAdornment } from '@mui/material';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import { IconButton } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import {  EmailRounded, PasswordRounded } from '@mui/icons-material';
-import { isEmailValid, handlepasswordcheck } from '../validation';
-
-// To Change Copyright Statement
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="/">
-        Social Canvas
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import { isEmailValid, handlepasswordcheck } from '../utils/validation';
+import Copyright from '../Components/Copyright';
+import axios, { AxiosError } from 'axios';
+import TextFieldComponent from '../Components/Textfield';
 
 export default function Login() {
   
@@ -39,12 +24,6 @@ export default function Login() {
   const [password1, setpassword] = useState('');
   const Home = useNavigate();
   const defaultImagePath = process.env.REACT_APP_DEFAULT_AUTHENTICATION_IMAGE;
-
-  // To Show Password To User
-  const [showPassword, setShowPassword] = useState(false);
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
 
   // Set Email on Chnage
   const handleemailChange = (e : any) => {
@@ -60,7 +39,6 @@ export default function Login() {
     }
   };
 
-  
   // Set Password on Chnage
   const handlepasswordChange = (e : any) => {
     setpassword(e.target.value);
@@ -73,59 +51,46 @@ export default function Login() {
     }
   };
 
-
   // On Submit Button
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     if(username==='' || password1 ===''){
       window.alert("Required Fields should not be empty")
     }else{
     if(isEmailValid(username)){
       if(handlepasswordcheck(password1)){
-        try {
-          const response = await fetch(`${process.env.REACT_APP_Fast_API}/login`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              email : username,
-              password : password1
-            }),
-          });
-    
-          if (response.ok) {
-            if (response.body) {
-              let data: any = await response.json();
-              console.log(data);
-        
-              if (response.status === 200) {
-                if (data.message === "Login Successful") {
-                  const id = data.user_id;
-                  console.log(id)
-                  sessionStorage.setItem('Myid', id);
-                  let booleanValue = true; // or false
-                  sessionStorage.setItem('login', JSON.stringify(booleanValue));
-                  Home('/Dashboard');
-                }
-              }
-            }
-          } else {
-              console.log(response.body);
-              if (response.body) {
-                let data: any = await response.json();
-                console.log(data);
+          try {
+            const response = await axios.post(`${process.env.REACT_APP_Fast_API}/login`, {
+              email: username,
+              password: password1
+            });
           
-                if (response.status === 400) {
-                  if (data.detail === "Invalid Credentials") {
-                    window.alert('Incorrect EmailID or Password');
-                  }
-                }
+            if (response.status === 200) {
+              const data = response.data;
+              console.log(data);
+          
+              if (data.message === "Login Successful") {
+                const id = data.user_id;
+                sessionStorage.setItem('Myid', id);
+                let booleanValue = true; // or false
+                sessionStorage.setItem('login', JSON.stringify(booleanValue));
+                Home('/Dashboard');
               }
             }
-          } catch (error) {
-            console.error('Error occurred:', error);
+          } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+              const axiosError = error as AxiosError;
+              if (axiosError.response && axiosError.response.status === 400) {
+                const responseData = axiosError.response.data;
+                if (responseData && typeof responseData === 'object') {
+                  // Use a type assertion to inform TypeScript that responseData has a 'detail' property
+                  const detail = (responseData as { detail: string }).detail;
+                  window.alert(detail)
+                }
+              } else {
+                console.error('Error occurred:', axiosError);
+              }
+            }
           }
         }
       }
@@ -139,16 +104,7 @@ export default function Login() {
       <CssBaseline/>
       <Grid container component="main" style={{ height: '100vh'}}>
         <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square style={{border:'none', borderRadius:'20px' , margin:'20px' ,boxShadow:'none', background: 'rgba(255, 255, 255, 0.7)'}} >
-          <Box
-            sx={{
-              my: 8,
-              mx: 4,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              
-            }}
-          >
+          <Box sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
             <Box sx={{display: 'flex',flexDirection: 'row',alignItems: 'center',}}>
             <Avatar sx={{ m:1, bgcolor: 'primary.main' }}>
               <LoginOutlinedIcon />
@@ -158,52 +114,20 @@ export default function Login() {
             </Typography>
             </Box>
             <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                style={{}}
-                fullWidth
-                id="email"
+              <TextFieldComponent
                 label="Email Address"
-                name="email"
-                autoComplete="email"
+                value={username}
                 onChange={handleemailChange}
                 onBlur={handleemailBlur}
-                autoFocus
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <IconButton disabled>
-                        <EmailRounded style={{color:'#707070'}} />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
+                startAdornment={<IconButton disabled><EmailRounded style={{color:'#707070'}} /></IconButton>}
               />
-              <TextField
-                margin="normal"
-                fullWidth
-                name="password"
+              <TextFieldComponent
                 label="Password"
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                autoComplete="current-password"
-                InputProps={{
-                  startAdornment:(
-                    <InputAdornment position="start">
-                      <IconButton disabled>
-                        <PasswordRounded style={{color:'#707070'}}/>
-                      </IconButton>
-                    </InputAdornment>),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={handleTogglePasswordVisibility}>
-                        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
+                type='password'
+                value={password1}
                 onChange={handlepasswordChange}
                 onBlur={handlepasswordBlur}
+                startAdornment={<IconButton disabled><PasswordRounded style={{color:'#707070'}} /></IconButton>}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary"/>}

@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Card, CardContent, CssBaseline,  Divider,  Grid,  IconButton, MenuItem, Select, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Avatar, Box, Button, Card, CardContent, CssBaseline,  Divider,  Grid,  IconButton, TextField, useMediaQuery } from "@mui/material";
 import SideNav from "../Components/Navbar";
 import { useState } from "react";
 import LinkedInPostLayout from "../Components/Schedule_Post/Linkedin";
@@ -6,13 +6,14 @@ import {  AddPhotoAlternateRounded } from "@mui/icons-material";
 import TwitterPostLayout from "../Components/Schedule_Post/Twitter";
 import FacebookPostLayout from "../Components/Schedule_Post/Facebook";
 import TimezoneSelect, { ITimezone , allTimezones  } from "react-timezone-select";
+import SelectComponent from "../Components/Selectfield";
 
 const platforms = [
     { name: "LinkedIn", value: "linkedin" },
     { name: "Twitter", value: "twitter" },
     { name: "Facebook", value: "facebook" },
     // Add more platforms as needed
-  ];
+];
 
 type MediaType = {
     type: 'image' | 'video';
@@ -30,7 +31,7 @@ const dataURLtoFile = (dataURL: string, filename: string) => {
     const blob = new Blob([ab], { type: dataURL.split(':')[1].split(';')[0] });
     const fileExtension = blob.type.split('/')[1];
     return new File([blob], `${filename}.${fileExtension}`, { type: blob.type });
-  };
+};
 
 export default function Schedule_Post(){
     
@@ -56,14 +57,13 @@ export default function Schedule_Post(){
     };
 
 
-    const handlePlatformChange = (e : any) => {
-        setSelectedPlatform(e.target.value);
+    const handlePlatformChange = (e : string) => {
+        setSelectedPlatform(e);
       };
 
     // Schedule Post
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
-    const [isScheduled, setIsScheduled] = useState(false);
 
     const [selectedTimezone, setSelectedTimezone] = useState<ITimezone>(
         Intl.DateTimeFormat().resolvedOptions().timeZone
@@ -113,7 +113,6 @@ export default function Schedule_Post(){
 
     const handleSchedule = () => {
         // Handle schedule action
-        setIsScheduled(true);
     };
   
 
@@ -135,20 +134,12 @@ export default function Schedule_Post(){
                         <CardContent>
                             {/* Drop Down For Plateform Selection */}
                             <Box display="flex" alignItems="center" mt={2}>
-                                <Select
+                                <SelectComponent
+                                    label="Select Plateform"
                                     value={selectedPlatform}
                                     onChange={handlePlatformChange}
-                                    variant="outlined"
-                                    fullWidth
-                                    id="platform-select"
-                                    label="Select Platform"
-                                    style={{ marginRight: '10px' }}
-                                >
-                                    <MenuItem value="">Select Platform</MenuItem>
-                                    {platforms.map((platform) => (
-                                        <MenuItem key={platform.value} value={platform.value}>{platform.name}</MenuItem>
-                                    ))}
-                                </Select>
+                                    options={platforms.map((platform) => ({ value: platform.value, label: platform.name }))}
+                                />
                             </Box>
                             <Divider style={{ margin: '10px 0' }} />
 
@@ -221,7 +212,7 @@ export default function Schedule_Post(){
                                     }}
                                     inputProps={{
                                         step: 300,
-                                        hour12 : true 
+                                        twelveHour : false 
                                     }}
                                     sx={{ '& .MuiOutlinedInput-root': { borderColor: '#9e9e9e' } }}
                                 />
@@ -249,19 +240,12 @@ export default function Schedule_Post(){
                                 <Button variant="contained" onClick={handlePostNow}>Post Now</Button>
                                 <Button variant="contained" onClick={handleSchedule} style={{marginLeft:'10px'}}>Schedule for Later</Button>
                             </Box>
-
-                            {/* Confirmation message */}
-                            {isScheduled && (
-                                <Typography variant="body2" mt={2}>
-                                    Scheduled for later.
-                                </Typography>
-                            )}
                             </CardContent>
                         </Card>
                     </Grid>
                     <Grid md={6} style={{ marginTop: isMobile? '20px' : '0px' }}>
                         {selectedPlatform === 'linkedin' && (
-                            <Card style={{ background: 'rgba(255, 255, 255, 0.9)', margin: '20px', borderRadius: '20px', }}>
+                            <Card style={{ background: 'rgba(255, 255, 255, 0.9)', margin: '20px', borderRadius: '20px', width:'70%' }}>
                             <CardContent>
                                 {/* Pass data to LinkedInPostLayout component */}
                                 <LinkedInPostLayout

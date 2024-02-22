@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import countries from '../assets/country.json';
 import states from '../assets/states.json';
-import { isEmailValid, isPhoneNumberValid } from "../validation";
+import { isEmailValid, isPhoneNumberValid } from "../utils/validation";
 
 interface UserData {
   name: string,

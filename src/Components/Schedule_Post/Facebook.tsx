@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardHeader, CardContent, CardActions, Avatar, Typography, IconButton, Divider } from '@mui/material';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import CommentIcon from '@mui/icons-material/Comment';
-import FBLogo from '../../Photos/FBLogo.png';
+import FBLogo from '../../assets/Photos/FBLogo.png';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import SearchIcon from '@mui/icons-material/Search';
 import MessageIcon from '@mui/icons-material/Message';

@@ -15,9 +15,9 @@ function App() {
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <Routes>
         {/* Public Routes */}
-        <Route path='/' element={<Navigate to="/login" replace />} />
-        <Route path='/login' element={<Login/>} />
-        <Route path='/register' element={<Register/>} />
+        <Route path='/' element={<Navigate to="/Login" replace />} />
+        <Route path='/Login' element={<Login/>} />
+        <Route path='/Register' element={<Register/>} />
 
         {/* Private Routes */}
         <Route path='/Dashboard' element={<PrivateRoute element={Homepage}/>} />

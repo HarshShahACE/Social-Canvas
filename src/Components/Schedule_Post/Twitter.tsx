@@ -1,7 +1,7 @@
 import React from 'react';
 import { Card, CardContent, CardHeader ,CardActions, Avatar, Typography, IconButton, Divider } from '@mui/material';
 import CommentIcon from '@mui/icons-material/Comment';
-import TwitterLogo from '../../Photos/twitter.jpg';
+import TwitterLogo from '../../assets/Photos/twitter.jpg';
 import RepeatIcon from '@mui/icons-material/Repeat';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import VerifiedIcon from '@mui/icons-material/Verified';

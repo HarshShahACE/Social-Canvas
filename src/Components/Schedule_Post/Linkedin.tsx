@@ -2,7 +2,7 @@ import React from 'react';
 import { Card, CardHeader, CardContent, Avatar, Typography, CardActions, IconButton } from '@mui/material';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import CommentIcon from '@mui/icons-material/Comment';
-import LinkedinLogo from '../../Photos/Linkedin.png'
+import LinkedinLogo from '../../assets/Photos/Linkedin.png'
 import SendIcon from '@mui/icons-material/Send';
 import RepeatIcon from '@mui/icons-material/Repeat'
 

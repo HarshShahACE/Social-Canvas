@@ -2,40 +2,27 @@ import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
-import Link from '@mui/material/Link';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { FormControl, IconButton, InputAdornment, InputLabel, MenuItem, Paper, Select } from '@mui/material';
+import { IconButton, Paper} from '@mui/material';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
 import { useEffect, useState } from 'react';
 import countries from '../assets/country.json';
 import states from '../assets/states.json';
-import VisibilityIcon from '@mui/icons-material/Visibility';
-import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
-import { EmailRounded, LocationCityRounded, PasswordRounded, Person2Rounded } from '@mui/icons-material';
+import { EmailRounded, PasswordRounded, Person2Rounded } from '@mui/icons-material';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import ContactPhoneRoundedIcon from '@mui/icons-material/ContactPhoneRounded';
-import axios from "axios";
-import { isEmailValid , isPhoneNumberValid , isPasswordValid } from '../validation';
-
-function Copyright(props: any) {
-  return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
-      {'Copyright © '}
-      <Link color="inherit" href="">
-        Social Canvas
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
+import axios, { AxiosError } from "axios";
+import { isEmailValid , isPhoneNumberValid , isPasswordValid } from '../utils/validation';
+import Copyright from '../Components/Copyright';
+import TextFieldComponent from '../Components/Textfield';
+import SelectComponent from '../Components/Selectfield';
+import { LocationCity } from '@mui/icons-material';
 
 export default function Register() {
 
@@ -53,14 +40,8 @@ export default function Register() {
   const Home = useNavigate();
   const defaultImagePath = process.env.REACT_APP_DEFAULT_AUTHENTICATION_IMAGE;
 
-  const [showPassword, setShowPassword] = useState(false);
-
-  const handleTogglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  };
-
-  const handleGenderChange = (e : any) => {
-    setgender(e.target.value);
+  const handleGenderChange = (e : string) => {
+    setgender(e);
   };
 
   useEffect(() => {
@@ -70,14 +51,14 @@ export default function Register() {
   }, [country1]);
   
   // Modify the handleCountryChange function to set the selected country
-  const handleCountryChange = (e : any) => {
-    const selectedCountry = e.target.value;
-    setcountry(selectedCountry);
+  const handleCountryChange = (e : string) => {
+    const selectedCountry = countries.find(country => country === e);
+    setcountry(selectedCountry as Country);
   };
   
   // Modify the handleStateChange function to set the selected state
-  const handleStateChange = (e : any) => {
-    const selectedState = e.target.value;
+  const handleStateChange = (e : string) => {
+    const selectedState = e;
     setstate(selectedState);
   };
 
@@ -173,19 +154,28 @@ export default function Register() {
               console.log(response.data);
               if (response.data) {
                 if (response.status === 400) {
-                  if (response.data.detail === "Email already exists") {
-                    window.alert('Email Already Registered Please Enter Another Email Address');
-                  } else if (response.data.detail === "Phone number already exists") {
-                    window.alert('Phone Number Already Registered Please Enter Another Phone Number');
-                  } else {
-                    // Handle other 400 status cases if needed
-                  }
+                  window.alert(response.data.detail)
                 }
               }
             }
-          } catch (error) {
-            console.error('Error occurred:', error);
-          }           
+          } catch (error: unknown) {
+            if (axios.isAxiosError(error)) {
+              const axiosError = error as AxiosError;
+          
+              if (axiosError.response && axiosError.response.status === 400) {
+                const responseData = axiosError.response.data;
+          
+                if (responseData && typeof responseData === 'object') {
+                  // Use a type assertion to inform TypeScript that responseData has a 'detail' property
+                  const detail = (responseData as { detail: string }).detail;
+                  window.alert(detail)
+                }
+              } else {
+                console.error('Error occurred:', axiosError);
+                window.alert('Registration failed. Please try again later.');
+              }
+            }
+          }
         }
         else{
           alert("Please make sure your Password Have 8 Characters Which contains at least one uppercase letter, one lowercase letter, one Number & One Sepcial Character")
@@ -200,8 +190,6 @@ export default function Register() {
     }
   }
   };
-
-      
 
   return (
     <div style={{ backgroundImage: `url(${defaultImagePath})`, backgroundSize:'cover'}}>
@@ -228,216 +216,86 @@ export default function Register() {
             </Typography>
           </Box>
             <Box component="form" onSubmit={handleSubmit} sx={{ mt : 1}}>
-            <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="name"
-                label="Name"
-                name="name"
-                autoComplete="name"
-                autoFocus
-                onChange={(e) => setname(e.target.value)}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <IconButton disabled>
-                        <Person2Rounded style={{color:'#707070'}} />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="phone"
-                label="Phone Number"
-                name="phone"
-                autoComplete="phone"
-                onChange={handlephoneChange}
-                onBlur={handlephoneBlur}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <IconButton disabled>
-                      <ContactPhoneRoundedIcon style={{color:'#707070'}} />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                  inputProps:{
-                    maxLength : 10
-                  }
-                }}
-                />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
-                onChange={handleemailChange}
-                onBlur={handleemailBlur}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <IconButton disabled>
-                        <EmailRounded style={{color:'#707070'}} />
-                      </IconButton>
-                    </InputAdornment>
-                  )
-                }}
-              />
-              <TextField
-                margin="normal"
-                fullWidth
-                name="password"
-                label="Password"
-                type={showPassword ? 'text' : 'password'}
-                id="password"
-                autoComplete="current-password"
-                onChange={handlepasswordChange}
-                onBlur={handlepasswordBlur}
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <IconButton disabled>
-                        <PasswordRounded style={{color:'#707070'}} />
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={handleTogglePasswordVisibility}>
-                        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <p style={{ textAlign: 'left', fontSize: 12 , marginBottom: 0 , marginTop:0 }}>
-                Password Field Contains at least 8 character : 1 UpperCase , 1 LowerCase </p>
-              <p style={{ textAlign: 'left', fontSize: 12 , marginTop: 0 , marginBottom:0}}> 1 Number , 1 Special Character</p>
-              <TextField
-                margin="normal"
-                fullWidth
-                name="confirmpassword"
-                label="Confirm Password"
-                type={showPassword ? 'text' : 'password'}
-                id="confirm password"
-                autoComplete="current-password"
-                onChange={handlecpasswordChange}
-                onBlur={handlecpasswordBlur}
-                InputProps={{
-                    startAdornment: (
-                      <InputAdornment position="start">
-                        <IconButton disabled>
-                          <PasswordRounded style={{color:'#707070'}} />
-                        </IconButton>
-                      </InputAdornment>
-                    ),
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <IconButton onClick={handleTogglePasswordVisibility}>
-                        {showPassword ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                      </IconButton>
-                    </InputAdornment>
-                  ),
-                }}
-              />
-
+            <TextFieldComponent
+              label="Name"
+              value={name1}
+              onChange={(e) => setname(e.target.value)}
+              startAdornment={<IconButton disabled><Person2Rounded style={{ color: '#707070' }} /></IconButton>}
+            />
+            <TextFieldComponent
+              label="Phone Number"
+              value={phone1}
+              onChange={handlephoneChange}
+              onBlur={handlephoneBlur}
+              startAdornment={<IconButton disabled><ContactPhoneRoundedIcon style={{color:'#707070'}} /></IconButton>}
+              maxLength={10}
+            />
+            <TextFieldComponent
+              label="Email Address"
+              value={email1}
+              onChange={handleemailChange}
+              onBlur={handleemailBlur}
+              startAdornment={<IconButton disabled><EmailRounded style={{color:'#707070'}} /></IconButton>}
+            />
+            <TextFieldComponent
+              label="Password"
+              type='password'
+              value={password1}
+              onChange={handlepasswordChange}
+              onBlur={handlepasswordBlur}
+              startAdornment={<IconButton><PasswordRounded style={{color:'#707070'}} /></IconButton>}
+            />
+            <p style={{ textAlign: 'left', fontSize: 12 , marginBottom: 0 , marginTop:0 }}>
+              Password Field Contains at least 8 character : 1 UpperCase , 1 LowerCase </p>
+            <p style={{ textAlign: 'left', fontSize: 12 , marginTop: 0 , marginBottom:0}}> 1 Number , 1 Special Character</p>
+            <TextFieldComponent
+            label="Confirm Password"
+            type='password'
+            value={confirmpassword}
+            onChange={handlecpasswordChange}
+            onBlur={handlecpasswordBlur}
+            startAdornment={<IconButton><PasswordRounded style={{color:'#707070'}} /></IconButton>}
+            />
               
-              {/*Select Gender*/}
-              <FormControl fullWidth style={{marginTop:10}}>
-              <InputLabel id="demo-simple-select-label">Gender</InputLabel>
-              <Select
-                  labelId="demo-simple-select-label"
-                  id="gender"
-                  label="Gender"
-                  name="gender"
-                  onChange={handleGenderChange}
-                  style={{ textAlign: 'left'}}
-                  startAdornment={
-                    <InputAdornment position="start">
-                      <IconButton>
-                        <PersonRoundedIcon style={{color:'#707070'}}/>
-                      </IconButton>
-                    </InputAdornment>
-                  }
-              >
-                  <MenuItem value={'Male'}>Male</MenuItem>
-                  <MenuItem value={'Female'}>Female</MenuItem>
-                  <MenuItem value={'Other'}>Other</MenuItem>
-              </Select>
-          </FormControl>
-
-
-              {/*Address Field*/}
-              <Grid container spacing={2} mt={0.2}>
+            {/*Select Gender*/}
+            <div style={{marginTop:'10px'}}>
+              <SelectComponent
+                label="Gender"
+                value={gender1}
+                onChange={handleGenderChange}
+                startAdornment={
+                  <IconButton>
+                    <PersonRoundedIcon style={{ color: '#707070' }} />
+                  </IconButton>
+                }
+                options={[
+                  { value: 'Male', label: 'Male' },
+                  { value: 'Female', label: 'Female' },
+                  { value: 'Other', label: 'Other' }
+                ]}
+              />
+            </div>
+            {/*Address Field*/}
+            <Grid container spacing={2} mt={0.2}>
               <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                <InputLabel id="demo-simple-select-label">Country</InputLabel>
-                <Select
-                    labelId="demo-simple-select-label"
-                    id="country"
-                    label="Country"
-                    name="country"
-                    onChange={handleCountryChange}
-                    style={{ textAlign: 'left'}}
-                    startAdornment={
-                      <InputAdornment position="start">
-                        <IconButton>
-                          <PublicRoundedIcon style={{color:'#707070'}} />
-                        </IconButton>
-                      </InputAdornment>
-                    }
-                >
-                    <MenuItem value="">Select a country</MenuItem>
-                      {countries.map((country) => (
-                    <MenuItem key={country} value={country}>
-                      {country}
-                    </MenuItem>
-                      ))}
-                </Select>
-                </FormControl>
+                <SelectComponent
+                  label="Country"
+                  value={country1}
+                  onChange={handleCountryChange}
+                  startAdornment={<IconButton><PublicRoundedIcon style={{ color: '#707070' }} /></IconButton>}
+                  options={countries.map((country) => ({ value: country, label: country }))}
+                />
               </Grid>
               <Grid item xs={12} sm={6}>
-                    <div>
-                      <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">State</InputLabel>
-                        <Select
-                          id="state"
-                          value={state1}
-                          onChange={handleStateChange}
-                          label="State"
-                          startAdornment={
-                            <InputAdornment position="start">
-                              <IconButton>
-                                <LocationCityRounded style={{color:'#707070'}}/>
-                              </IconButton>
-                            </InputAdornment>
-                          }
-                        >
-                          {!country1 && (
-                            <MenuItem value="">
-                              Select a state
-                            </MenuItem>
-                          )}
-                          {
-                            statesList.map((state) => (
-                            <MenuItem key={state} value={state}>
-                              {state}
-                            </MenuItem>
-                          ))}
-                          
-                        </Select>
-                      </FormControl>
-                    </div>
+                <SelectComponent
+                  label="State"
+                  value={state1}
+                  onChange={handleStateChange}
+                  startAdornment={<IconButton><LocationCity style={{ color: '#707070' }} /></IconButton>}
+                  options={statesList.map((state) => ({ value: state, label: state }))}
+                />
               </Grid>
-              </Grid>
+            </Grid>
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary" />}
                 label="I Agree to the Terms and Conditions"

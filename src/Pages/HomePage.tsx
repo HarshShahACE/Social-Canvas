@@ -1,14 +1,20 @@
 import React, { useState } from 'react';
 import SideNav from '../Components/Navbar';
-import { Avatar, CssBaseline, ListItemAvatar, MenuItem, Select, useMediaQuery } from '@mui/material';
+import { CssBaseline, useMediaQuery } from '@mui/material';
 import GrowthCard from '../Components/MainPage/MainPage_cards';
 import SocialAccount from '../Components/MainPage/MainPage_Table';
-import first from '../Photos/1st.png'
-import second from '../Photos/2nd.png'
-import third from '../Photos/3rd.png'
-import fourth from '../Photos/4th.png'
-import fifth from '../Photos/5th.png'
+import first from '../assets/Photos/1st.png'
+import second from '../assets/Photos/2nd.png'
+import third from '../assets/Photos/3rd.png'
+import fourth from '../assets/Photos/4th.png'
+import fifth from '../assets/Photos/5th.png'
+import SelectComponent from '../Components/Selectfield';
 
+const options = [
+  { value: 'linkedin', label: 'LinkedIn', avatar: 'avatar_url_linkedin' },
+  { value: 'facebook', label: 'Facebook', avatar: 'avatar_url_facebook' },
+  { value: 'twitter', label: 'Twitter', avatar: 'avatar_url_twitter' },
+];
 
 export default function HomePage() {
 
@@ -17,8 +23,8 @@ export default function HomePage() {
 
   const [selectedPlatform, setSelectedPlatform] = useState("linkedin");
 
-  const handlePlatformChange = (event : any) => {
-    setSelectedPlatform(event.target.value);
+  const handlePlatformChange = (event : string) => {
+    setSelectedPlatform(event);
   };
 
   return (
@@ -35,37 +41,14 @@ export default function HomePage() {
             {/* Main content */}
               <div style={{marginLeft: "20px", justifyContent: "flex-start"}}>
                 {/* Dropdown for selecting platform */}
-                <Select
-                  value={selectedPlatform}
-                  onChange={handlePlatformChange}
-                  variant="outlined"
-                  style={{ marginBottom: "10px" , width:'50%' , borderRadius:'20px' , paddingLeft:'10px' }}
-                >
-                  <MenuItem value="linkedin">
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <ListItemAvatar>
-                        <Avatar src="avatar_url_linkedin" alt="LinkedIn" />
-                      </ListItemAvatar>
-                      <span>LinkedIn</span>
-                    </div>
-                  </MenuItem>
-                  <MenuItem value="facebook">
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <ListItemAvatar>
-                        <Avatar src="avatar_url_facebook" alt="Facebook" />
-                      </ListItemAvatar>
-                      <span>Facebook</span>
-                    </div>
-                  </MenuItem>
-                  <MenuItem value="twitter">
-                    <div style={{ display: "flex", alignItems: "center" }}>
-                      <ListItemAvatar>
-                        <Avatar src="avatar_url_twitter" alt="Twitter" />
-                      </ListItemAvatar>
-                      <span>Twitter</span>
-                    </div>
-                  </MenuItem>
-                </Select>
+                <div style={{width:'50%' , marginTop:'10px'}}>
+                  <SelectComponent
+                    label="Platform"
+                    value={selectedPlatform}
+                    onChange={handlePlatformChange}
+                    options={options}
+                  />
+                </div>
                 {/* Growth Cards */}
                 <div
                   style={{
