@@ -51,7 +51,7 @@ export default function SideNav() {
     { id: 'dashboard', text: 'Dashboard', icon: <HomeIcon />, path: '/Dashboard' },
     { id: 'Schedulepost', text: 'Schedule New Post', icon:<PostAddIcon/> ,path: '/Schedule_Post' },
     { id: 'managepost', text: 'Manange Post', icon:<ManageHistoryIcon/>, path: '/Manage_Post' },
-    { id: 'analysis', text: 'Insights', icon: <AnalyticsIcon />, path: '/Analytics' },
+    { id: 'analysis', text: 'Insights', icon: <AnalyticsIcon />, path: '/Analysis' },
     { id: 'profile', text: 'My Profile', icon: <AccountCircleIcon />, path: '/Profile' },
     { id: 'logout', text: 'Logout', icon: <LogoutIcon />, path:'/Login' , onclick:handlelogout }, // Change path to the login page
   ];

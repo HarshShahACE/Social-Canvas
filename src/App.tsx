@@ -4,6 +4,8 @@ import Login from './Pages/Login';
 import Homepage from './Pages/HomePage';
 import Profile from './Pages/Profile';
 import Schedule_Post from './Pages/SchedulePost';
+import ManagePost from './Pages/ManagePost';
+import Analysis from './Pages/Analysis';
 import PrivateRoute from './Components/Private_Route';
 
 
@@ -19,8 +21,10 @@ function App() {
 
         {/* Private Routes */}
         <Route path='/Dashboard' element={<PrivateRoute element={Homepage}/>} />
-        <Route path='/profile' element={<PrivateRoute element={Profile}/>} />
-        <Route path='/schedule_post' element={<PrivateRoute element={Schedule_Post}/>} />
+        <Route path='/Profile' element={<PrivateRoute element={Profile}/>} />
+        <Route path='/Schedule_Post' element={<PrivateRoute element={Schedule_Post}/>} />
+        <Route path='/Manage_Post' element={<PrivateRoute element={ManagePost}/>} />
+        <Route path='/Analysis' element={<PrivateRoute element={Analysis}/>} />
       </Routes>
     </div>
   );

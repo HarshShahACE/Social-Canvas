@@ -6,16 +6,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import countries from '../assets/country.json';
 import states from '../assets/states.json';
-
-const isEmailValid = (email : any) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-
-const isPhoneNumberValid = (phoneNumber :any) => {
-const phoneRegex = /^\d{10}$/; // Assumes 10-digit phone number, modify as needed
-return phoneRegex.test(phoneNumber);
-};
+import { isEmailValid, isPhoneNumberValid } from "../validation";
 
 interface UserData {
   name: string,

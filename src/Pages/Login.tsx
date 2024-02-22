@@ -17,6 +17,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import { useNavigate } from 'react-router-dom';
 import {  EmailRounded, PasswordRounded } from '@mui/icons-material';
+import { isEmailValid, handlepasswordcheck } from '../validation';
 
 // To Change Copyright Statement
 function Copyright(props: any) {
@@ -45,54 +46,32 @@ export default function Login() {
     setShowPassword(!showPassword);
   };
 
-
-  // Check Email Validation
-  const isEmailValid = (email : any) => {
-    if(email === ''){
-      window.alert('Please enter a valid Email ID');
-    }
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
+  // Set Email on Chnage
+  const handleemailChange = (e : any) => {
+    setusername(e.target.value);
   };
-        // Set Email on Chnage
-        const handleemailChange = (e : any) => {
-          setusername(e.target.value);
-        };
 
-        // Check On Field When field is leave
-        const handleemailBlur = () => {
-          if(username !== ''){
-          if(!isEmailValid(username)){
-            window.alert("Please enter a valid Email ID");
-          };
-          }
-        };
-
-  // Password Validation
-  const handlepasswordcheck = (value : any) => {
-    if ( value.trim() === '' ) {
-      window.alert('Password Should Not Be Blank');
-      }
-    else{
-      if(value.length <=7){
-        window.alert('Password Length Should Not Be Below 8');
-      }
-      else{
-        return true
-      }
+  // Check On Field When field is leave
+  const handleemailBlur = () => {
+    if(username !== ''){
+    if(!isEmailValid(username)){
+      window.alert("Please enter a valid Email ID");
+    };
     }
-  }
-      // Set Password on Chnage
-      const handlepasswordChange = (e : any) => {
-        setpassword(e.target.value);
-      };
+  };
 
-      // Check Password on  leave
-      const handlepasswordBlur = () => {
-        if(password1 !== ''){
-        handlepasswordcheck(password1);
-        }
-      };
+  
+  // Set Password on Chnage
+  const handlepasswordChange = (e : any) => {
+    setpassword(e.target.value);
+  };
+
+  // Check Password on  leave
+  const handlepasswordBlur = () => {
+    if(password1 !== ''){
+    handlepasswordcheck(password1);
+    }
+  };
 
 
   // On Submit Button
@@ -133,39 +112,25 @@ export default function Login() {
               }
             }
           } else {
-            console.log(response.body);
-            if (response.body) {
-              let data: any = await response.json();
-              console.log(data);
-        
-              if (response.status === 400) {
-                if (data.detail === "Invalid Credentials") {
-                  window.alert('Incorrect EmailID or Password');
+              console.log(response.body);
+              if (response.body) {
+                let data: any = await response.json();
+                console.log(data);
+          
+                if (response.status === 400) {
+                  if (data.detail === "Invalid Credentials") {
+                    window.alert('Incorrect EmailID or Password');
+                  }
+                }
               }
             }
+          } catch (error) {
+            console.error('Error occurred:', error);
           }
-          }
-        } catch (error) {
-          console.error('Error occurred:', error);
         }
       }
     }
-  }
-    
-          
-      }
-  // //Theme 
-  // const [isDarkMode, setIsDarkMode] = useState(true);
-
-  // const toggleTheme = () => {
-  //   setIsDarkMode((prevMode) => !prevMode);
-  // };
-
-  // // Determine the current theme based on the state
-  // const currentTheme = isDarkMode ? darkTheme : lighttheme;
-
-  
-
+  }  
   return (
     <div style={{ backgroundImage: `url(${defaultImagePath})`,
     backgroundSize:'cover',

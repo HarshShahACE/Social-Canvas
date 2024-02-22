@@ -63,12 +63,12 @@ export default function Schedule_Post(){
     // Schedule Post
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
-    const [selectedTimeZone, setSelectedTimeZone] = useState('');
     const [isScheduled, setIsScheduled] = useState(false);
 
     const [selectedTimezone, setSelectedTimezone] = useState<ITimezone>(
         Intl.DateTimeFormat().resolvedOptions().timeZone
-      )
+    )
+    console.log(selectedTimezone);
 
     const handleDateChange = (event : any) => {
         setSelectedDate(event.target.value);
@@ -76,10 +76,6 @@ export default function Schedule_Post(){
 
     const handleTimeChange = (event : any) => {
         setSelectedTime(event.target.value);
-    };
-
-    const handleTimeZoneChange = (event : any) => {
-        setSelectedTimeZone(event.target.value);
     };
 
     const handlePostNow = () => {

@@ -22,6 +22,7 @@ import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import ContactPhoneRoundedIcon from '@mui/icons-material/ContactPhoneRounded';
 import axios from "axios";
+import { isEmailValid , isPhoneNumberValid , isPasswordValid } from '../validation';
 
 function Copyright(props: any) {
   return (
@@ -80,40 +81,31 @@ export default function Register() {
     setstate(selectedState);
   };
 
-  // Validation Start
-  // Check Email Validation
-  const isEmailValid = (email : any) => {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-  };
-        // Set Email on Chnage
-        const handleemailChange = (e : any) => {
-          setemail(e.target.value);
-        };
-
-        // Check On Field When field is leave
-        const handleemailBlur = () => {
-        if(email1 !== ''){ 
-          if(!isEmailValid(email1)){
-            window.alert("Please enter a valid Email ID");
-          };
-        };
-      }
   
-  // Check Phone Validation
-  const isPhoneNumberValid = (phoneNumber :any) => {
-    const phoneRegex = /^\d{10}$/; // Assumes 10-digit phone number, modify as needed
-    return phoneRegex.test(phoneNumber);
+  // Check Email Validation
+  // Set Email on Chnage
+  const handleemailChange = (e : any) => {
+    setemail(e.target.value);
   };
-
-    // Set Phone on Chnage
-    const handlephoneChange = (e : any) => {
-      setphone(e.target.value);
-    };
 
     // Check On Field When field is leave
-    const handlephoneBlur = () => {
-      if(phone1 !== ''){
+  const handleemailBlur = () => {
+    if(email1 !== ''){ 
+      if(!isEmailValid(email1)){
+        window.alert("Please enter a valid Email ID");
+      };
+    };
+  }
+  
+  // Check Phone Validation
+  // Set Phone on Chnage
+  const handlephoneChange = (e : any) => {
+    setphone(e.target.value);
+  };
+
+  // Check On Field When field is leave
+  const handlephoneBlur = () => {
+    if(phone1 !== ''){
       if(!isPhoneNumberValid(phone1)){
         window.alert("Please enter valid Phone number");
       };
@@ -121,99 +113,93 @@ export default function Register() {
   }
 
   // Check Password Validation
-  const isPasswordValid = (password :any) => {
-    // Requires at least 8 characters, 1 uppercase, 1 lowercase, 1 number, 1 special character
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return passwordRegex.test(password);
+  // Set PassWord on Chnage
+  const handlepasswordChange = (e : any) => {
+    setpassword(e.target.value);
   };
 
-      // Set Phone on Chnage
-    const handlepasswordChange = (e : any) => {
-      setpassword(e.target.value);
-    };
-
-    // Check On Field When field is leave
-    const handlepasswordBlur = () => {
-      if(password1 !== ''){
+  // Check On Field When field is leave
+  const handlepasswordBlur = () => {
+    if(password1 !== ''){
       if(!isPasswordValid(password1)){
         window.alert("Please enter valid Password");
       };
     };
   }
 
-          // Set Phone on Chnage
-          const handlecpasswordChange = (e : any) => {
-            setconfirmpassword(e.target.value);
-          };
+  // Set Confirm Password on Chnage
+  const handlecpasswordChange = (e : any) => {
+    setconfirmpassword(e.target.value);
+  };
 
-          // Check On Field When field is leave
-          const handlecpasswordBlur = () => {
-            if(confirmpassword !== ''){
-              if(password1 !==  confirmpassword){
-                window.alert("Password And Confirm Password Must Be Same");
-              };
-            };
-          }
+  // Check On Field When field is leave
+  const handlecpasswordBlur = () => {
+    if(confirmpassword !== ''){
+      if(password1 !==  confirmpassword){
+        window.alert("Password And Confirm Password Must Be Same");
+      };
+    };
+  }
 
-      const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-        event.preventDefault();
-        if(name1==='' || email1==='' || password1 ==='' || state1 === '' || phone1==='' || gender1 ===''){
-          window.alert("Required Fields should not be empty")
-        }else{
-        if(isEmailValid(email1)){
-          if(isPhoneNumberValid(phone1)){
-            if(isPasswordValid(password1)) {
-              try {
-                const response = await axios.post(`${process.env.REACT_APP_Fast_API}/create`, {
-                  name: name1,
-                  email: email1,
-                  phone: phone1,
-                  country: country1,
-                  state: state1,
-                  gender: gender1,
-                  password: password1,
-                }, {
-                  headers: {
-                    'Content-Type': 'application/json',
-                  }
-                });
-              
-                if (response.status === 200) {
-                  // Handle success, e.g., redirect to a success page or show a success message
-                  window.alert('Registration Successful');
-                  Home("/Login");
-                  console.log('Registration successful!');
-                } else {
-                  console.log(response.data);
-                  if (response.data) {
-                    if (response.status === 400) {
-                      if (response.data.detail === "Email already exists") {
-                        window.alert('Email Already Registered Please Enter Another Email Address');
-                      } else if (response.data.detail === "Phone number already exists") {
-                        window.alert('Phone Number Already Registered Please Enter Another Phone Number');
-                      } else {
-                        // Handle other 400 status cases if needed
-                      }
-                    }
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if(name1==='' || email1==='' || password1 ==='' || state1 === '' || phone1==='' || gender1 ===''){
+      window.alert("Required Fields should not be empty")
+    }else{
+    if(isEmailValid(email1)){
+      if(isPhoneNumberValid(phone1)){
+        if(isPasswordValid(password1)) {
+          try {
+            const response = await axios.post(`${process.env.REACT_APP_Fast_API}/create`, {
+              name: name1,
+              email: email1,
+              phone: phone1,
+              country: country1,
+              state: state1,
+              gender: gender1,
+              password: password1,
+            }, {
+              headers: {
+                'Content-Type': 'application/json',
+              }
+            });
+          
+            if (response.status === 200) {
+              // Handle success, e.g., redirect to a success page or show a success message
+              window.alert('Registration Successful');
+              Home("/Login");
+              console.log('Registration successful!');
+            } else {
+              console.log(response.data);
+              if (response.data) {
+                if (response.status === 400) {
+                  if (response.data.detail === "Email already exists") {
+                    window.alert('Email Already Registered Please Enter Another Email Address');
+                  } else if (response.data.detail === "Phone number already exists") {
+                    window.alert('Phone Number Already Registered Please Enter Another Phone Number');
+                  } else {
+                    // Handle other 400 status cases if needed
                   }
                 }
-              } catch (error) {
-                console.error('Error occurred:', error);
-              }           
+              }
             }
-            else{
-              alert("Please make sure your Password Have 8 Characters Which contains at least one uppercase letter, one lowercase letter, one Number & One Sepcial Character")
-            }
-          }
-          else{
-            alert("Please enter valid Phone number");
-          }
+          } catch (error) {
+            console.error('Error occurred:', error);
+          }           
         }
         else{
-          alert("Please Enter Valid Email");
+          alert("Please make sure your Password Have 8 Characters Which contains at least one uppercase letter, one lowercase letter, one Number & One Sepcial Character")
         }
       }
-      };
+      else{
+        alert("Please enter valid Phone number");
+      }
+    }
+    else{
+      alert("Please Enter Valid Email");
+    }
+  }
+  };
 
       
 

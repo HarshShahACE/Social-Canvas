@@ -75,7 +75,7 @@ const SocialAccount = () => {
           <LinkInputPopup isOpen={linkInputPopupOpen} onClose={handleCloseAllPopups} onSubmit={handleLinkSubmit} />
         </DialogContent>
       </Dialog>
-    <Card sx={{ maxWidth:'80%' , margin:'10px' , borderRadius:'20px' , padding:'20px' }}>
+    <Card sx={{ maxWidth:'80%' , margin:'10px' , borderRadius:'20px' , padding:'20px' , background: 'rgba(255, 255, 255 , 0.8)' }}>
       <CardContent>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
           <h2>Social Media Accounts</h2>

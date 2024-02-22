@@ -39,7 +39,7 @@ export default function HomePage() {
                   value={selectedPlatform}
                   onChange={handlePlatformChange}
                   variant="outlined"
-                  style={{ marginBottom: "10px" , width:'50%' }}
+                  style={{ marginBottom: "10px" , width:'50%' , borderRadius:'20px' , paddingLeft:'10px' }}
                 >
                   <MenuItem value="linkedin">
                     <div style={{ display: "flex", alignItems: "center" }}>
@@ -77,88 +77,30 @@ export default function HomePage() {
                 >
                   {/* Conditional rendering of GrowthCard components based on selected platform */}
                   {selectedPlatform === "linkedin" && (
-                    <>
-                      <GrowthCard
-                        title="Posts"
-                        currentValue={500}
-                        previousValue={450}
-                        backgroundImage={first}
-                      />
-                      <GrowthCard
-                        title="Likes"
-                        currentValue={1000}
-                        previousValue={980}
-                        backgroundImage={second}
-                      />
-                      <GrowthCard
-                        title="Comments"
-                        currentValue={300}
-                        previousValue={275}
-                        backgroundImage={third}
-                      />
-                      <GrowthCard
-                        title="New Connections"
-                        currentValue={30}
-                        previousValue={35}
-                        backgroundImage={fifth}
-                      />
-                    </>
+                    <div style={{ display: 'flex' , flexDirection: isMobile? 'column' : 'row' }}>
+                      <GrowthCard title="Posts" currentValue={500} previousValue={450} backgroundImage={first} />
+                      <GrowthCard title="Likes" currentValue={1000} previousValue={980} backgroundImage={second} />
+                      <GrowthCard title="Comments" currentValue={300} previousValue={275} backgroundImage={third} />
+                      <GrowthCard title="New Connections" currentValue={30} previousValue={35} backgroundImage={fifth} />
+                    </div>
                   )}
                   {selectedPlatform === "facebook" && (
-                    <>
-                      <GrowthCard
-                        title="Posts"
-                        currentValue={500}
-                        previousValue={450}
-                        backgroundImage={first}
-                      />
-                      <GrowthCard
-                        title="Likes"
-                        currentValue={1000}
-                        previousValue={980}
-                        backgroundImage={second}
-                      />
-                      <GrowthCard
-                        title="Comments"
-                        currentValue={300}
-                        previousValue={275}
-                        backgroundImage={third}
-                      />
-                      <GrowthCard
-                        title="New Followers"
-                        currentValue={30}
-                        previousValue={35}
-                        backgroundImage={fifth}
-                      />
-                    </>
+                    <div style={{ display: 'flex' , flexDirection: isMobile? 'column' : 'row' }}>
+                      <GrowthCard title="Posts" currentValue={500} previousValue={450} backgroundImage={first} />
+                      <GrowthCard title="Likes" currentValue={1000} previousValue={980} backgroundImage={second} />
+                      <GrowthCard title="Comments" currentValue={300} previousValue={275} backgroundImage={third} />
+                      <GrowthCard title="Share" currentValue={150} previousValue={130} backgroundImage={fourth} />
+                      <GrowthCard title="New Followers" currentValue={30} previousValue={35} backgroundImage={fifth} />
+                    </div>
                   )}
                   {selectedPlatform === "twitter" && (
-                    <>
-                     <GrowthCard
-                        title="Posts"
-                        currentValue={500}
-                        previousValue={450}
-                        backgroundImage={first}
-                      />
-                      <GrowthCard
-                        title="Likes"
-                        currentValue={1000}
-                        previousValue={980}
-                        backgroundImage={second}
-                      />
-                      <GrowthCard
-                        title="Comments"
-                        currentValue={300}
-                        previousValue={275}
-                        backgroundImage={third}
-                      />
-                      <GrowthCard
-                        title="New Followers"
-                        currentValue={30}
-                        previousValue={35}
-                        backgroundImage={fifth}
-                      />
-                    </>
+                    <div style={{ display: 'flex', flexDirection: isMobile? 'column' : 'row' }}>
+                      <GrowthCard title="Posts" currentValue={500} previousValue={450} backgroundImage={first} />
+                      <GrowthCard title="Likes" currentValue={1000} previousValue={980} backgroundImage={second} />
+                      <GrowthCard title="Comments" currentValue={300} previousValue={275} backgroundImage={third} />
+                      <GrowthCard title="Share" currentValue={140} previousValue={160} backgroundImage={fourth} />
+                      <GrowthCard title="New Followers" currentValue={30} previousValue={35} backgroundImage={fifth} />
+                    </div>
                   )}
                 </div>
               </div>
