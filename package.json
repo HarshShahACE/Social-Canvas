@@ -24,6 +24,7 @@
     "react-router-dom": "^6.22.0",
     "react-scripts": "5.0.1",
     "react-select": "^5.8.0",
+    "react-slick": "^0.30.2",
     "react-timezone-select": "^3.2.3",
     "recharts": "^2.12.0",
     "typescript": "^4.9.5",
@@ -54,6 +55,7 @@
     ]
   },
   "devDependencies": {
-    "@babel/plugin-proposal-private-property-in-object": "^7.18.0"
+    "@babel/plugin-proposal-private-property-in-object": "^7.18.0",
+    "@types/react-slick": "^0.23.13"
   }
 }

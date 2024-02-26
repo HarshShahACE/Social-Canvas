@@ -1,71 +1,117 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogContent, Avatar } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SocialMediaPopup from './SocialMediaPopup';
 import LinkInputPopup from './LinkInput';
+import axios from 'axios';
+import LoadingScreen from '../Loading';
+
+interface SocialAccountData { 
+  username: string;
+  profile_pic_url: string;
+  platform: string;
+}
+
 
 const SocialAccount = () => {
+  const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState<string[]>([]);
+  const [userPic, setUserPic] = useState<string[]>([]);
+  const [platform, setPlatform] = useState<string[]>([]);
 
-  // Handle For  Deleting An Account
-  const handleDeleteClick = (id : any) => {
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const idString = sessionStorage.getItem('Myid');
+      if (idString !== null) {
+        const id = parseInt(idString);
+        try {
+          const timeoutId = setTimeout(() => {
+            setLoading(false);
+          }, 2000);
+
+          const response = await axios.post(`${process.env.REACT_APP_Fast_API}/s_account_list?user_id=`+id, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          clearTimeout(timeoutId);
+          if (response.status === 200) {
+            const jsonData = response.data;
+            if (Array.isArray(jsonData)) {
+              setUsername(jsonData.map((item: SocialAccountData) => item.username));
+              setUserPic(jsonData.map((item: SocialAccountData) => item.profile_pic_url));
+              setPlatform(jsonData.map((item: SocialAccountData) => item.platform));
+            } else {
+              setUsername([jsonData.username]);
+              setUserPic([jsonData.profile_pic_url]);
+              setPlatform([jsonData.platform]);
+            setLoading(false);
+          }
+        } else {
+            console.log('Error:', response.statusText);
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const handleDeleteClick = (index: number) => {
     // Handle delete click for a specific row
-    console.log(`Delete clicked for ID: ${id}`);
+    console.log(`Delete clicked for index: ${index}`);
   };
 
-  // To Open POPUPS
   const [socialMediaPopupOpen, setSocialMediaPopupOpen] = useState(false);
   const [linkInputPopupOpen, setLinkInputPopupOpen] = useState(false);
 
-  // Handle Select Plateform Popup open
   const handleSocialMediaPopupOpen = () => {
     setSocialMediaPopupOpen(true);
   };
 
-  // Handle  Close Plateform Popup
   const handleCloseAllPopups = () => {
     setSocialMediaPopupOpen(false);
     setLinkInputPopupOpen(false);
   };
 
-  // Handle Entering URL After Giving Access Of Linkedin
   const handleLinkSubmit = (link : any) => {
-    // Call API with the submitted link
     console.log('Submitted link:', link);
-    window.alert("Account Added Successfully")
+    window.alert("Account Added Successfully");
     setSocialMediaPopupOpen(false);
     setLinkInputPopupOpen(false);
   };
 
-  // Check For Selected Palteform And Redirect Particular Plateform  Page and Redirect In Site For Entering URL
   const handlePlatformSelectAndOpen = (platform : any) => {
-    // Open link based on selected platform
-    if(platform === ''){
-      window.alert( "Please select a Social Media Platform" );
-    } 
-    else {
+    if (platform === '') {
+      window.alert("Please select a Social Media Platform");
+    } else {
       switch (platform) {
         case 'linkedin':
           window.open(`${process.env.REACT_APP_LINKEDIN_API}`, '_blank');
-          break
+          break;
         case 'facebook':
           window.open('https://www.facebook.com', '_blank');
           break;
         case 'twitter':
           window.open('https://www.twitter.com', '_blank');
           break;
-        // Add more cases for other platforms as needed
         default:
           break;
       }
-      // Open the second popup after opening the link in a new tab
-      setSocialMediaPopupOpen(false); // Close the first popup
-      setLinkInputPopupOpen(true); // Open the second popup
-      };
+      setSocialMediaPopupOpen(false);
+      setLinkInputPopupOpen(true);
+    }
   }
+
+  console.log(username,userPic,platform)
 
   return (
     <>
-    <Dialog open={socialMediaPopupOpen} onClose={handleCloseAllPopups}>
+      <Dialog open={socialMediaPopupOpen} onClose={handleCloseAllPopups}>
         <DialogContent>
           <SocialMediaPopup isOpen={socialMediaPopupOpen} onClose={handleCloseAllPopups} onSelect={handlePlatformSelectAndOpen} />
         </DialogContent>
@@ -75,39 +121,47 @@ const SocialAccount = () => {
           <LinkInputPopup isOpen={linkInputPopupOpen} onClose={handleCloseAllPopups} onSubmit={handleLinkSubmit} />
         </DialogContent>
       </Dialog>
-    <Card sx={{ maxWidth:'80%' , margin:'10px' , borderRadius:'20px' , padding:'20px' , background: 'rgba(255, 255, 255 , 0.8)' }}>
-      <CardContent>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
-          <h2>Social Media Accounts</h2>
-          <Button variant="contained" onClick={handleSocialMediaPopupOpen}>Add</Button>
-        </div>
-        <TableContainer>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>ID</TableCell>
-                <TableCell></TableCell>
-                <TableCell>Username</TableCell>
-                <TableCell>Platform Name</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              <TableRow>
-                <TableCell>1</TableCell>
-                <TableCell><Avatar alt="User" src='test.jpg' /></TableCell>
-                <TableCell>Harsh Shah</TableCell>
-                <TableCell>Linkedin</TableCell>
-                <TableCell>
-                  <Button variant="contained" startIcon={<DeleteIcon />} onClick={() => handleDeleteClick(1)}>Delete</Button>
-                </TableCell>
-              </TableRow>
-              {/* Add more rows here */}
-            </TableBody>
-          </Table>
-        </TableContainer>
-      </CardContent>
-    </Card>
+      {loading && <LoadingScreen />}
+      <Card sx={{ maxWidth:'80%' , margin:'10px' , borderRadius:'20px' , padding:'20px' , background: 'rgba(255, 255, 255 , 0.8)' }}>
+        <CardContent>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
+            <h2>Social Media Accounts</h2>
+            <Button variant="contained" onClick={handleSocialMediaPopupOpen}>Add</Button>
+          </div>
+          <TableContainer>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell>ID</TableCell>
+                  <TableCell></TableCell>
+                  <TableCell>Username</TableCell>
+                  <TableCell>Platform Name</TableCell>
+                  <TableCell>Actions</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {username.length > 0 ? (
+                  username.map((user, index) => (
+                    <TableRow key={index}>
+                      <TableCell>{index + 1}</TableCell>
+                      <TableCell><Avatar alt="User" src={userPic[index]} /></TableCell>
+                      <TableCell>{user}</TableCell>
+                      <TableCell>{platform[index]}</TableCell>
+                      <TableCell>
+                        <Button variant="contained" startIcon={<DeleteIcon />} onClick={() => handleDeleteClick(index)}>Delete</Button>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={5} style={{ textAlign: 'center', color: 'red' }}>No data found</TableCell>
+                  </TableRow>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </CardContent>
+      </Card>
     </>
   );
 };

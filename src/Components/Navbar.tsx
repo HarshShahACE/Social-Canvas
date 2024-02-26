@@ -37,15 +37,7 @@ export default function SideNav() {
     };
   
     const openProfile = Boolean(anchorEl);
-    const profileId = openProfile ? 'profile-popover' : undefined;
-  
-    const handlelogout = () => {
-      let updatedValue = false;
-      // Set the updated value back to session storage
-      sessionStorage.setItem('login', JSON.stringify(updatedValue));
-      // Redirect to the login page
-      window.location.href = "/Login";
-    };  
+    const profileId = openProfile ? 'profile-popover' : undefined; 
 
   const sideList = [
     { id: 'dashboard', text: 'Dashboard', icon: <HomeIcon />, path: '/Dashboard' },
@@ -53,7 +45,7 @@ export default function SideNav() {
     { id: 'managepost', text: 'Manange Post', icon:<ManageHistoryIcon/>, path: '/Manage_Post' },
     { id: 'analysis', text: 'Insights', icon: <AnalyticsIcon />, path: '/Analysis' },
     { id: 'profile', text: 'My Profile', icon: <AccountCircleIcon />, path: '/Profile' },
-    { id: 'logout', text: 'Logout', icon: <LogoutIcon />, path:'/Login' , onclick:handlelogout }, // Change path to the login page
+    { id: 'logout', text: 'Logout', icon: <LogoutIcon /> , path:'/Logout' }, // Change path to the login page
   ];
 
   return (
@@ -72,7 +64,7 @@ export default function SideNav() {
     </IconButton>
   )}
   <div style={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-    <img src="../../SitePhotos/TextLogoT.png" alt="Logo" style={{ maxWidth: '200px', maxHeight: '200px', marginTop:'10px' , margin: '0 auto' }} />
+    <img src="../../SitePhotos/TextLogoT.png" alt="Logo" style={{ maxWidth: '275px', maxHeight: '275px', marginTop:'10px' , margin: '0 auto' }} />
   </div>
   <IconButton
     color="inherit"
@@ -104,7 +96,7 @@ export default function SideNav() {
                 </ListItemIcon>
                 Profile
                 </MenuItem>
-                <MenuItem onClick={handlelogout}>
+                <MenuItem component={Link} to="/Logout" onClick={handleProfileClose}>
                 <ListItemIcon>
                     <LogoutIcon fontSize="small" />
                 </ListItemIcon>

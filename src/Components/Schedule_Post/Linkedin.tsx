@@ -15,12 +15,11 @@ interface LinkedInPostProps {
     username: string;
     content: string;
     media?: MediaType;
+    image? : string
   }
   
 
-const LinkedInPost:React.FC<LinkedInPostProps> = ({ username, content, media }) => {
-
-  const Image = 'https://media.licdn.com/dms/image/D4D03AQFaAYtlJw689Q/profile-displayphoto-shrink_100_100/0/1688900557185?e=1714003200&v=beta&t=iDvDDCakIq8ZI1Adqr1nXLzozGT3aLkYwogdwM04zwg'
+const LinkedInPost:React.FC<LinkedInPostProps> = ({ username, content, media , image }) => {
 
   return (
     <>
@@ -33,7 +32,7 @@ const LinkedInPost:React.FC<LinkedInPostProps> = ({ username, content, media }) 
       <Card style={{ maxWidth: 400, margin:'20px',  }}>
         <CardHeader
           avatar={
-            <Avatar aria-label="user" src = {Image} style={{}}> 
+            <Avatar aria-label="user" src = {image} style={{}}> 
             </Avatar>
           }
           title={username}

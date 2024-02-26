@@ -301,12 +301,7 @@ export default function Register() {
                 label="I Agree to the Terms and Conditions"
                 sx={{ display: 'flex', alignItems: 'center', marginLeft: '-8px', mt:2}}
               />
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ mt: 2, mb: 2 }}
-              >
+              <Button type="submit" fullWidth variant="contained" sx={{ mt: 2, mb: 2 }}>
                 Sign In
               </Button>
               <Grid container>

@@ -7,6 +7,7 @@ import TwitterPostLayout from "../Components/Schedule_Post/Twitter";
 import FacebookPostLayout from "../Components/Schedule_Post/Facebook";
 import TimezoneSelect, { ITimezone , allTimezones  } from "react-timezone-select";
 import SelectComponent from "../Components/Selectfield";
+import React from "react";
 
 const platforms = [
     { name: "LinkedIn", value: "linkedin" },
@@ -38,7 +39,7 @@ export default function Schedule_Post(){
     const isMobile = useMediaQuery('(max-width:600px)');
     const defaultImagePath = process.env.REACT_APP_DEFAULT_APP_IMAGE;
 
-    const [selectedPlatform, setSelectedPlatform] = useState<string>('');
+    const [selectedPlatforms, setSelectedPlatforms] = React.useState<string[]>([]);
 
     const [content, setContent] = useState('');
     const [media, setMedia] = useState<MediaType | null>(null);
@@ -57,9 +58,15 @@ export default function Schedule_Post(){
     };
 
 
-    const handlePlatformChange = (e : string) => {
-        setSelectedPlatform(e);
-      };
+    const handlePlatformChange = (value: string) => {
+    if (selectedPlatforms.includes(value)) {
+        // If the platform is already selected, remove it from the selectedPlatforms array
+        setSelectedPlatforms(selectedPlatforms.filter(platform => platform !== value));
+    } else {
+        // If the platform is not selected, add it to the selectedPlatforms array
+        setSelectedPlatforms([...selectedPlatforms, value]);
+    }
+};
 
     // Schedule Post
     const [selectedDate, setSelectedDate] = useState('');
@@ -84,7 +91,7 @@ export default function Schedule_Post(){
             // Create form data
             const formData = new FormData();
             formData.append('content', content);
-            formData.append('platform', selectedPlatform);
+            //formData.append('platform', selectedPlatforms);
             if (media) {
                 const file = dataURLtoFile(media.data, 'Myfile');
                 console.log(file);
@@ -102,7 +109,7 @@ export default function Schedule_Post(){
                 console.log('Post created successfully:', data);
                 // Reset form fields after successful post creation
                 setContent('');
-                setSelectedPlatform('');
+                setSelectedPlatforms([]);
                 setMedia(null);
             } catch (error : any) {
                 console.error('Error creating post:', error.message);
@@ -134,12 +141,9 @@ export default function Schedule_Post(){
                         <CardContent>
                             {/* Drop Down For Plateform Selection */}
                             <Box display="flex" alignItems="center" mt={2}>
-                                <SelectComponent
-                                    label="Select Plateform"
-                                    value={selectedPlatform}
-                                    onChange={handlePlatformChange}
-                                    options={platforms.map((platform) => ({ value: platform.value, label: platform.name }))}
-                                />
+                                {platforms.map(platform => (
+                                    <Avatar key={platform.value} style={{ cursor: 'pointer', marginRight: '10px', backgroundColor: selectedPlatforms.includes(platform.value) ? '#007bff' : '#FFBBFF' }} onClick={() => handlePlatformChange(platform.value)}>{platform.name.charAt(0)}</Avatar>
+                                ))}
                             </Box>
                             <Divider style={{ margin: '10px 0' }} />
 
@@ -244,43 +248,22 @@ export default function Schedule_Post(){
                         </Card>
                     </Grid>
                     <Grid md={6} style={{ marginTop: isMobile? '20px' : '0px' }}>
-                        {selectedPlatform === 'linkedin' && (
-                            <Card style={{ background: 'rgba(255, 255, 255, 0.9)', margin: '20px', borderRadius: '20px', width:'70%' }}>
+                    {selectedPlatforms.map((platform, index) => (
+                        <Card key={index} style={{ background: 'rgba(255, 255, 255, 0.9)', margin: '20px', borderRadius: '20px', width: '70%' }}>
                             <CardContent>
-                                {/* Pass data to LinkedInPostLayout component */}
-                                <LinkedInPostLayout
-                                username="Harsh"
-                                content={content}
-                                media={media || undefined}
-                                />
+                                {/* Render preview based on platform */}
+                                {platform === 'linkedin' && (
+                                    <LinkedInPo tLayout username="Harsh" content={content} media={media || undefined} />
+                                )}
+                                {platform === 'facebook' && (
+                                    <FacebookPostLayout username="Harsh" content={content} media={media || undefined} />
+                                )}
+                                {platform === 'twitter' && (
+                                    <TwitterPostLayout username="Harsh" handle="@Harsh-shah" content={content} media={media || undefined} />
+                                )}
                             </CardContent>
-                            </Card>
-                        )}
-                        {selectedPlatform === 'facebook' && (
-                            <Card style={{ background: 'rgba(255, 255, 255, 0.9)', margin: '20px', borderRadius: '20px', width: '70%' }}>
-                            <CardContent>
-                                {/* Pass data to LinkedInPostLayout component */}
-                                <FacebookPostLayout
-                                username="Harsh"
-                                content={content}
-                                media={media || undefined}
-                                />
-                            </CardContent>
-                            </Card>
-                        )}
-                        {selectedPlatform === 'twitter' && (
-                            <Card style={{ background: 'rgba(255, 255, 255, 0.9)', margin: '20px', borderRadius: '20px', width: '70%' }}>
-                            <CardContent>
-                                {/* Pass data to LinkedInPostLayout component */}
-                                <TwitterPostLayout
-                                username="Harsh"
-                                handle="@Harsh-shah"
-                                content={content}
-                                media={media || undefined}
-                                />
-                            </CardContent>
-                            </Card>
-                        )}
+                        </Card>
+                    ))}
                     </Grid>
                 </Grid>
                 </main>

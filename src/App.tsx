@@ -6,10 +6,32 @@ import Profile from './Pages/Profile';
 import Schedule_Post from './Pages/SchedulePost';
 import ManagePost from './Pages/ManagePost';
 import Analysis from './Pages/Analysis';
-import PrivateRoute from './Components/Private_Route';
+import PrivateRoute from './Components/Authentication/Private_Route';
+import { useState } from 'react';
+import LoadingScreen from './Components/Loading';
 
 
 function App() {
+
+  const [loading, setLoading] = useState(false);
+
+  const Logout = () => {
+    setLoading(true);
+    console.log("logging out");
+      const currentLoginValue = false;
+      // Store the updated login value back into sessionStorage
+      sessionStorage.setItem('login', JSON.stringify(currentLoginValue));
+      // Redirect to the login page
+      setLoading(false);
+      window.location.href = "/Login";
+    return(
+      <>
+        {loading && <LoadingScreen />}
+      </>
+    )
+  }
+
+
   return (
     <div className="App">
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -18,6 +40,7 @@ function App() {
         <Route path='/' element={<Navigate to="/Login" replace />} />
         <Route path='/Login' element={<Login/>} />
         <Route path='/Register' element={<Register/>} />
+        <Route path='/Logout' element={<Logout/>} />
 
         {/* Private Routes */}
         <Route path='/Dashboard' element={<PrivateRoute element={Homepage}/>} />

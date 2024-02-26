@@ -7,6 +7,8 @@ import axios from "axios";
 import countries from '../assets/country.json';
 import states from '../assets/states.json';
 import { isEmailValid, isPhoneNumberValid } from "../utils/validation";
+import LoadingScreen from "../Components/Loading";
+import NoDataPopup from "../Components/NoDatapop";
 
 interface UserData {
   name: string,
@@ -22,6 +24,12 @@ const Profile = () => {
 
   const isMobile = useMediaQuery('(max-width:600px)');
   type Country = keyof typeof states;
+  const [loading,setLoading] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+
+  const handlePopupClose = () => {
+    setShowPopup(false);
+  };
 
   const [formData, setFormData] = useState<UserData>({
     name: '',
@@ -47,18 +55,27 @@ const Profile = () => {
   // API Call For Data Fetch
   useEffect(() => {
     const fetchData = async () => {
+      setLoading(true);
       try {
+
+        const timeoutId = setTimeout(() => {
+          setLoading(false);
+          setShowPopup(true);
+        }, 2000);
+
         const response = await axios.post(`${process.env.REACT_APP_Fast_API}/profile?user_id=`+id, {
           headers: {
             'Content-Type': 'application/json',
           },
         });
+        clearTimeout(timeoutId);
         if (response.status === 200) {
           const jsonData = response.data;
           setFormData(jsonData);
           setcountry1(jsonData.country); // Set country from API data
           setState1(jsonData.state); // Set state from API data
           console.log(jsonData);
+          setLoading(false);
         } else {
           console.log('Error:', response.statusText);
         }
@@ -137,6 +154,7 @@ const Profile = () => {
       }else{
       if(isEmailValid(formData.email)){
         if(isPhoneNumberValid(formData.phone)){
+          setLoading(true);
             try {
               const response = await fetch(`${process.env.REACT_APP_Fast_API}/edit-profile?user_id=`+id, {
                 method: 'PUT',
@@ -155,6 +173,7 @@ const Profile = () => {
             
               if (response.ok) {
                 // Handle success, e.g., redirect to a success page or show a success message
+                setLoading(false);
                 window.alert('Profile Updated SuccessFull');
                 Home("/Profile")
               } else {
@@ -195,6 +214,8 @@ const Profile = () => {
             backgroundPosition:'bottom right'  , height:'100vh' }}>
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             <CssBaseline />
+            {loading && <LoadingScreen />}
+            <NoDataPopup isOpen={showPopup} onClose={handlePopupClose} />
             {/* Sidebar */}
             <SideNav/>
             {/* Main content */}

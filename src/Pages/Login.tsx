@@ -11,19 +11,21 @@ import LoginOutlinedIcon from '@mui/icons-material/LoginOutlined';
 import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { IconButton } from '@mui/material';
-import { useNavigate } from 'react-router-dom';
 import {  EmailRounded, PasswordRounded } from '@mui/icons-material';
 import { isEmailValid, handlepasswordcheck } from '../utils/validation';
 import Copyright from '../Components/Copyright';
 import axios, { AxiosError } from 'axios';
 import TextFieldComponent from '../Components/Textfield';
+import { useNavigate } from 'react-router-dom';
+import LoadingScreen from '../Components/Loading';
 
 export default function Login() {
   
   const [username, setusername] = useState('');
   const [password1, setpassword] = useState('');
-  const Home = useNavigate();
   const defaultImagePath = process.env.REACT_APP_DEFAULT_AUTHENTICATION_IMAGE;
+  const navigate = useNavigate()
+  const [loading, setLoading] = useState(false);
 
   // Set Email on Chnage
   const handleemailChange = (e : any) => {
@@ -59,23 +61,27 @@ export default function Login() {
     }else{
     if(isEmailValid(username)){
       if(handlepasswordcheck(password1)){
+        setLoading(true);
           try {
+
+            const timeoutId = setTimeout(() => {
+              setLoading(false);
+              window.alert("Request timed out. Please try again later.");
+            }, 2000);
+
             const response = await axios.post(`${process.env.REACT_APP_Fast_API}/login`, {
               email: username,
               password: password1
             });
+
+            clearTimeout(timeoutId);
           
             if (response.status === 200) {
               const data = response.data;
-              console.log(data);
-          
-              if (data.message === "Login Successful") {
-                const id = data.user_id;
-                sessionStorage.setItem('Myid', id);
-                let booleanValue = true; // or false
-                sessionStorage.setItem('login', JSON.stringify(booleanValue));
-                Home('/Dashboard');
-              }
+              const id = data.user_id;
+              sessionStorage.setItem('Myid', id);
+              setLoading(false);
+              navigate("/Dashboard", { replace: true });
             }
           } catch (error: unknown) {
             if (axios.isAxiosError(error)) {
@@ -102,6 +108,7 @@ export default function Login() {
     backgroundRepeat:'no-repeat'}}>
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <CssBaseline/>
+      {loading && <LoadingScreen />}
       <Grid container component="main" style={{ height: '100vh'}}>
         <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square style={{border:'none', borderRadius:'20px' , margin:'20px' ,boxShadow:'none', background: 'rgba(255, 255, 255, 0.7)'}} >
           <Box sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
