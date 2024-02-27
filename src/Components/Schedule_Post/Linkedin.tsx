@@ -6,15 +6,16 @@ import LinkedinLogo from '../../assets/Photos/Linkedin.png'
 import SendIcon from '@mui/icons-material/Send';
 import RepeatIcon from '@mui/icons-material/Repeat'
 
-type MediaType = {
-  type: 'image' | 'video';
-  data: string;
+type FilePreview = {
+  file: File;
+  previewUrl: string;
+  type: "image" | "video";
 };
 
 interface LinkedInPostProps {
     username: string;
     content: string;
-    media?: MediaType;
+    media?: FilePreview;
     image? : string
   }
   
@@ -43,10 +44,10 @@ const LinkedInPost:React.FC<LinkedInPostProps> = ({ username, content, media , i
             {content}
           </Typography>
           {media && media.type === 'image' && (
-                <img src={media.data} alt="Post" style={{ maxWidth: '100%', marginTop: 16 }} />
+                <img src={media.previewUrl} alt="Post" style={{ maxWidth: '100%', marginTop: 16 }} />
             )}
             {media && media.type === 'video' && (
-                <video controls src={media.data} style={{maxWidth:'500px' ,maxHeight:'500px'}} />
+                <video controls src={media.previewUrl} style={{maxWidth:'500px' ,maxHeight:'500px'}} />
             )}
         </CardContent>
         <CardActions disableSpacing>

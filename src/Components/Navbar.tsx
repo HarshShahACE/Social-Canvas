@@ -41,7 +41,7 @@ export default function SideNav() {
 
   const sideList = [
     { id: 'dashboard', text: 'Dashboard', icon: <HomeIcon />, path: '/Dashboard' },
-    { id: 'Schedulepost', text: 'Schedule New Post', icon:<PostAddIcon/> ,path: '/Schedule_Post' },
+    { id: 'Schedulepost', text: 'Schedule Post', icon:<PostAddIcon/> ,path: '/Schedule_Post' },
     { id: 'managepost', text: 'Manange Post', icon:<ManageHistoryIcon/>, path: '/Manage_Post' },
     { id: 'analysis', text: 'Insights', icon: <AnalyticsIcon />, path: '/Analysis' },
     { id: 'profile', text: 'My Profile', icon: <AccountCircleIcon />, path: '/Profile' },
@@ -63,8 +63,8 @@ export default function SideNav() {
       <MenuIcon />
     </IconButton>
   )}
-  <div style={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-    <img src="../../SitePhotos/TextLogoT.png" alt="Logo" style={{ maxWidth: '275px', maxHeight: '275px', marginTop:'10px' , margin: '0 auto' }} />
+  <div style={{ display: 'flex', alignItems: 'center', flexGrow: 1 , marginTop:'15px' }}>
+    <img src="../../SitePhotos/TextLogo2.png" alt="Logo" style={{ maxWidth: '250px', maxHeight: '250px', marginTop:'10px' , margin: '0 auto' }} />
   </div>
   <IconButton
     color="inherit"

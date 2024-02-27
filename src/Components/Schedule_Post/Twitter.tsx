@@ -7,16 +7,17 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import VerifiedIcon from '@mui/icons-material/Verified';
 import UploadIcon from '@mui/icons-material/Upload';
 
-type MediaType = {
-  type: 'image' | 'video';
-  data: string;
+type FilePreview = {
+  file: File;
+  previewUrl: string;
+  type: "image" | "video";
 };
 
 interface TwitterProps {
     username: string;
     handle: string;
     content: string;
-    media?: MediaType;
+    media?: FilePreview;
 }
 
 const TwitterPostLayout: React.FC<TwitterProps> = ({ username, handle, content, media }) => {
@@ -52,10 +53,10 @@ const TwitterPostLayout: React.FC<TwitterProps> = ({ username, handle, content, 
             <img src={imageUrl} alt="Post" style={{ maxWidth: '100%', marginTop: 16 }} />
           )} */}
           {media && media.type === 'image' && (
-                <img src={media.data} alt="Post" style={{ maxWidth: '100%', marginTop: 16 }} />
+                <img src={media.previewUrl} alt="Post" style={{ maxWidth: '100%', marginTop: 16 }} />
             )}
             {media && media.type === 'video' && (
-                <video controls src={media.data} style={{maxWidth:'500px' ,maxHeight:'500px'}} />
+                <video controls src={media.previewUrl} style={{maxWidth:'500px' ,maxHeight:'500px'}} />
             )}
         </CardContent>
         <CardActions disableSpacing>

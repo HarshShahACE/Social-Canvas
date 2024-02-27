@@ -8,12 +8,15 @@ import second from '../assets/Photos/2nd.png'
 import third from '../assets/Photos/3rd.png'
 import fourth from '../assets/Photos/4th.png'
 import fifth from '../assets/Photos/5th.png'
+import linkedin from '../assets/Photos/Linkedin.png'
+import twitter from '../assets/Photos/twitter.jpg'
+import facebook from '../assets/Photos/FBLogo.png'
 import SelectComponent from '../Components/Selectfield';
 
 const options = [
-  { value: 'linkedin', label: 'LinkedIn', avatar: 'avatar_url_linkedin' },
-  { value: 'facebook', label: 'Facebook', avatar: 'avatar_url_facebook' },
-  { value: 'twitter', label: 'Twitter', avatar: 'avatar_url_twitter' },
+  { value: 'linkedin', label: 'LinkedIn', avatar: linkedin },
+  { value: 'facebook', label: 'Facebook', avatar: facebook },
+  { value: 'twitter', label: 'Twitter', avatar: twitter },
 ];
 
 export default function HomePage() {
