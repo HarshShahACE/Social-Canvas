@@ -122,7 +122,7 @@ const SocialAccount = () => {
         </DialogContent>
       </Dialog>
       {loading && <LoadingScreen />}
-      <Card sx={{ maxWidth:'80%' , margin:'10px' , borderRadius:'20px' , padding:'20px' , background: 'rgba(255, 255, 255 , 0.8)' }}>
+      <Card sx={{ maxWidth:'80%' , margin:'10px' , borderRadius:'20px' , padding:'20px' , background: 'rgba(255, 255, 255 , 0.8)' , boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.5)' }}>
         <CardContent>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h2>Social Media Accounts</h2>

@@ -54,54 +54,54 @@ export default function Login() {
   };
 
   // On Submit Button
-  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    if(username==='' || password1 ===''){
-      window.alert("Required Fields should not be empty")
-    }else{
-    if(isEmailValid(username)){
-      if(handlepasswordcheck(password1)){
-        setLoading(true);
-          try {
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      if(username==='' || password1 ===''){
+        window.alert("Required Fields should not be empty")
+      }else{
+      if(isEmailValid(username)){
+        if(handlepasswordcheck(password1)){
+          setLoading(true);
+            try {
 
-            const timeoutId = setTimeout(() => {
-              setLoading(false);
-              window.alert("Request timed out. Please try again later.");
-            }, 2000);
+              const timeoutId = setTimeout(() => {
+                setLoading(false);
+                window.alert("Request timed out. Please try again later.");
+              }, 2000);
 
-            const response = await axios.post(`${process.env.REACT_APP_Fast_API}/login`, {
-              email: username,
-              password: password1
-            });
+              const response = await axios.post(`${process.env.REACT_APP_Fast_API}/login`, {
+                email: username,
+                password: password1
+              });
 
-            clearTimeout(timeoutId);
-          
-            if (response.status === 200) {
-              const data = response.data;
-              const id = data.user_id;
-              sessionStorage.setItem('Myid', id);
-              setLoading(false);
-              navigate("/Dashboard", { replace: true });
-            }
-          } catch (error: unknown) {
-            if (axios.isAxiosError(error)) {
-              const axiosError = error as AxiosError;
-              if (axiosError.response && axiosError.response.status === 400) {
-                const responseData = axiosError.response.data;
-                if (responseData && typeof responseData === 'object') {
-                  // Use a type assertion to inform TypeScript that responseData has a 'detail' property
-                  const detail = (responseData as { detail: string }).detail;
-                  window.alert(detail)
+              clearTimeout(timeoutId);
+            
+              if (response.status === 200) {
+                const data = response.data;
+                const id = data.user_id;
+                sessionStorage.setItem('Myid', id);
+                setLoading(false);
+                navigate("/Dashboard", { replace: true });
+              }
+            } catch (error: unknown) {
+              if (axios.isAxiosError(error)) {
+                const axiosError = error as AxiosError;
+                if (axiosError.response && axiosError.response.status === 400) {
+                  const responseData = axiosError.response.data;
+                  if (responseData && typeof responseData === 'object') {
+                    // Use a type assertion to inform TypeScript that responseData has a 'detail' property
+                    const detail = (responseData as { detail: string }).detail;
+                    window.alert(detail)
+                  }
+                } else {
+                  console.error('Error occurred:', axiosError);
                 }
-              } else {
-                console.error('Error occurred:', axiosError);
               }
             }
           }
         }
       }
-    }
-  }  
+    }  
   return (
     <div style={{ backgroundImage: `url(${defaultImagePath})`,
     backgroundSize:'cover',

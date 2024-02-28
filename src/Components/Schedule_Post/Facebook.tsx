@@ -33,6 +33,7 @@ const FacebookPostLayout: React.FC<FacebookProps> = ({ username, content, media 
         </Typography>
       </div>
       {/* Header section */}
+      <div style={{ boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.3)'}}>
       <div style={{ display: 'flex', alignItems: 'center', backgroundColor: '#1877f2', padding: '8px' }}>
         <IconButton aria-label="camera" color="inherit">
           <PhotoCameraIcon />
@@ -91,6 +92,7 @@ const FacebookPostLayout: React.FC<FacebookProps> = ({ username, content, media 
         </CardActions>
         <Divider style={{ marginBottom: '10px' }} />
       </Card>
+      </div>
     </>
   );
 };

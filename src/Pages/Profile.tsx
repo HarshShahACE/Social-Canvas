@@ -155,47 +155,44 @@ const Profile = () => {
       if(isEmailValid(formData.email)){
         if(isPhoneNumberValid(formData.phone)){
           setLoading(true);
-            try {
-              const response = await fetch(`${process.env.REACT_APP_Fast_API}/edit-profile?user_id=`+id, {
-                method: 'PUT',
-                headers: {
-                  'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    name : formData.name,
-                    email : formData.email,
-                    phone : formData.phone,
-                    country : formData.country,
-                    state : formData.state,
-                    gender : formData.gender,
-                }),
-              });
-            
-              if (response.ok) {
-                // Handle success, e.g., redirect to a success page or show a success message
-                setLoading(false);
-                window.alert('Profile Updated SuccessFull');
-                Home("/Profile")
-              } else {
-                console.log(response.body);
-                if (response.body) {
-                  let data: any = await response.json();
-                  console.log(data);
-            
-                  if (response.status === 400) {
-                    if (data.detail === "Email already exists") {
-                      window.alert('Email Already Registered Please Enter Another Email Address');
-                    } else if (data.detail === "Phone number already exists") {
-                      window.alert('Phone Number Already Registered Please Enter Another Phone Number');
-                    } else {
-                      // Handle other 400 status cases if needed
-                    }
-                  }
-                }
-              }
-            } catch (error) {
+          try {
+            const response = await axios.put(`${process.env.REACT_APP_Fast_API}/edit-profile?user_id=${id}`, {
+              name: formData.name,
+              email: formData.email,
+              phone: formData.phone,
+              country: formData.country,
+              state: formData.state,
+              gender: formData.gender,
+            }, {
+              headers: {
+                'Content-Type': 'application/json',
+              },
+            });
+          
+            if (response.status === 200) {
+              // Handle success, e.g., redirect to a success page or show a success message
+              setLoading(false);
+              window.alert('Profile Updated Successfully');
+              Home("/Profile");
+            } else {
+              console.log(response.data);
+            }
+          }  catch (error: any) { // Explicitly cast error to 'any'
               console.error('Error occurred:', error);
-            }              
+              if (error.response && error.response.status === 400) {
+                const responseData = error.response.data;
+                if (responseData.detail === "Email already exists") {
+                  window.alert('Email Already Registered. Please Enter Another Email Address');
+                } else if (responseData.detail === "Phone number already exists") {
+                  window.alert('Phone Number Already Registered. Please Enter Another Phone Number');
+                } else {
+                  // Handle other 400 status cases if needed
+                }
+              } else {
+                // Handle other errors
+                window.alert('An error occurred while updating the profile. Please try again later.');
+              }
+            }           
           }
           else{
             alert("Please enter valid Phone number");
@@ -226,7 +223,7 @@ const Profile = () => {
                       <Typography variant="h5" gutterBottom style={{ margin:'10px' }}>
                         User Profile
                       </Typography>
-                      <Card sx={{ borderRadius: '20px', background: 'rgba(255, 255, 255 , 0.9)', fontWeight: 'bold' }}>
+                      <Card sx={{ borderRadius: '20px', background: 'rgba(255, 255, 255 , 0.9)', fontWeight: 'bold' , boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.5)' }}>
                         <CardContent sx={{ color: 'black', padding: '20px' }}>
                           <Grid container spacing={2} alignItems="flex-start">
                             {/* Avatar */}

@@ -1,6 +1,7 @@
 import { useMediaQuery } from "@mui/material";
 import { CssBaseline } from "@mui/material"
 import SideNav from "../Components/Navbar";
+import TableauVisualization from "../Components/tablau";
 
 const Analysis = () => {
 
@@ -18,7 +19,7 @@ const Analysis = () => {
           {/* Main content */}
             <div style={{ flex: 1  }}>
                 <main style={{ flexGrow: 1, padding: 3, marginTop: '70px' , marginLeft: isMobile? '20px' : '240px'  }}>
-                
+                <TableauVisualization />
                 </main>
             </div>
         </div>
