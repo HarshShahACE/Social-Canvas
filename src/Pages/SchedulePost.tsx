@@ -5,7 +5,6 @@ import LinkedInPostLayout from "../Components/Schedule_Post/Linkedin";
 import {  AddPhotoAlternateRounded } from "@mui/icons-material";
 import TwitterPostLayout from "../Components/Schedule_Post/Twitter";
 import FacebookPostLayout from "../Components/Schedule_Post/Facebook";
-import { ITimezone  } from "react-timezone-select";
 import { NavigateBefore, NavigateNext } from '@mui/icons-material';
 import linkedin from '../assets/Photos/Linkedin.png'
 import twitter from '../assets/Photos/twitter.jpg'
@@ -36,11 +35,8 @@ export default function Schedule_Post(){
     const [content, setContent] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
-    const [selectedTimezone, setSelectedTimezone] = useState<ITimezone>({
-        value: 'America/New_York', // Set the default timezone here
-        label: 'Eastern Time (ET)'
-    });
-    const [scheduleType, setScheduleType] = useState<'postnow' | 'schedule'>('postnow'); // Default to 'Post Now'
+    const [selectedTimezone, setSelectedTimezone] = useState<string>('');
+    let scheduleType = ''
 
     const [selectedFiles, setSelectedFiles] = useState<FilePreview[]>([]);
     const [firstSelectedFileType, setFirstSelectedFileType] = useState<string | null>(null);
@@ -105,6 +101,11 @@ export default function Schedule_Post(){
         if (fileInput) {
             fileInput.value = "";
         }
+    
+        // If no files are selected, reset post_type to a default value
+        if (updatedFiles.length === 0) {
+            setFirstSelectedFileType(null);
+        }
     };
     
     const handlePlatformChange = (value: string) => {
@@ -123,47 +124,45 @@ export default function Schedule_Post(){
     };
 
     const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-        const inputTime = new Date(`2000-01-01T${event.target.value}`).getTime();
-        const currentTime = new Date().getTime();
+        if (!selectedDate) {
+            window.alert("Please select a date first.");
+            return;
+        }
     
-        const tenMinutesLater = currentTime + 10 * 60 * 1000; // 10 minutes ahead in milliseconds
+        // Parse the selected time value to extract hours, minutes, and seconds
+        const [hours, minutes] = event.target.value.split(':');
+        
+        // Format the time as HH:MM:SS
+        const formattedTime = `${hours}:${minutes}:00`;
     
-        if (inputTime >= tenMinutesLater) {
-            setSelectedTime(event.target.value);
+        const selectedDateTime = new Date(`${selectedDate}T${formattedTime}`);
+        const tenMinutesLater = new Date();
+        tenMinutesLater.setMinutes(tenMinutesLater.getMinutes() + 10);
+    
+        // Check if the selected time is at least 10 minutes ahead of the current time
+        if (selectedDateTime >= tenMinutesLater) {
+            setSelectedTime(formattedTime); // Use formatted time
         } else {
-            // Show error or handle invalid time
+            // Show error message if the selected time is not valid
             window.alert("Selected time must be at least 10 minutes ahead of the current time.");
         }
-    }
+    };
+    
+    
     
 
     const handlePostNow = () => {
-        setScheduleType('postnow');
+        scheduleType = 'postnow'
         postData();
     };
 
     const handleScheduleClick = () => {
-        setScheduleType('schedule');
+        scheduleType = 'schedule'
         postData();
     };
 
 
     const postData = async () => {
-        const formData = new FormData();
-        formData.append('schedule_post', JSON.stringify({
-            platform_name: selectedPlatforms,
-            post_type: firstSelectedFileType || "",
-            sch_type: scheduleType,
-            content: content,
-            sch_user_time: selectedDate ? new Date(`${selectedDate}T${selectedTime}`).toISOString() : null,
-            sch_utc_time: null, // This will be populated during processing on the server
-            timezone: selectedTimezone.valueOf
-        }));
-    
-        selectedFiles.forEach((file, index) => {
-            formData.append(`file${index + 1}`, file.file);
-        });
-    
         const idString = sessionStorage.getItem('Myid');
         let id;
     
@@ -172,8 +171,41 @@ export default function Schedule_Post(){
         }
     
         try {
+            const formData = new FormData();
+            // Append platform_name if platforms are selected
+            if (selectedPlatforms.length > 0) {
+                formData.append('platform_name', selectedPlatforms.join(','));
+            } else {
+                // Handle case where no platform is selected
+                window.alert('Please select at least one platform.');
+                return;
+            }
+
+            // Set post_type to 'content' if no file is selected
+            if (selectedFiles.length === 0) {
+                formData.append('post_type', 'content');
+            } else {
+                formData.append('post_type', firstSelectedFileType || 'content');
+            }
+            formData.append('sch_type', scheduleType);
+            formData.append('content', content);
+            let Media = selectedFiles.length;
+            formData.append('MediaNo',Media.toString());
+            
+            if (selectedDate !== null) {
+                formData.append('time', new Date(`${selectedDate}T${selectedTime}`).toISOString());
+            }
+            formData.append('timezone', selectedTimezone);
+    
+            // Append media files if they exist
+            if (selectedFiles.length > 0) {
+                selectedFiles.forEach((file, index) => {
+                    formData.append(`media${index + 1}`, file.file);
+                });
+            }
+    
             const response = await axios.post(
-                `${process.env.REACT_APP_Fast_API}/create-schedule-post/${id}`,
+                `${process.env.REACT_APP_Fast_API}/create_schedule_post/${id}`,
                 formData,
                 {
                     headers: {
@@ -183,19 +215,17 @@ export default function Schedule_Post(){
             );
     
             console.log('Post created successfully:', response.data);
+            alert(`Post For  ${scheduleType} Successfully`)
             // Reset form fields after successful post creation
             setContent('');
             setSelectedPlatforms([]);
             setSelectedFiles([]);
             setSelectedDate('');
             setSelectedTime('');
-            setSelectedTimezone({
-                value: 'America/New_York',
-                label: 'Eastern Time (ET)'
-            });
+            setSelectedTimezone('');
         } catch (error) {
             // Handle error
-           //console.error('Error creating post:', error.message);
+            //console.error('Error creating post:', error.message);
         }
     };
 
@@ -332,7 +362,6 @@ export default function Schedule_Post(){
                                 <>
                                         {reversedPlatforms[previewPageIndex] === 'linkedin' && (
                                             <LinkedInPostLayout
-                                                username="Harsh"
                                                 content={content}
                                                 media={selectedFiles.length > 0 ? selectedFiles[0] : undefined}
                                             />

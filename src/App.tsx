@@ -18,9 +18,7 @@ function App() {
   const Logout = () => {
     setLoading(true);
     console.log("logging out");
-      const currentLoginValue = false;
-      // Store the updated login value back into sessionStorage
-      sessionStorage.setItem('login', JSON.stringify(currentLoginValue));
+      sessionStorage.clear();
       // Redirect to the login page
       setLoading(false);
       window.location.href = "/Login";

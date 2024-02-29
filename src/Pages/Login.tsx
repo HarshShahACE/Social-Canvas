@@ -21,10 +21,17 @@ import LoadingScreen from '../Components/Loading';
 
 export default function Login() {
   
+  // Define Username And Password
   const [username, setusername] = useState('');
   const [password1, setpassword] = useState('');
+
+  // Default BackGround Image
   const defaultImagePath = process.env.REACT_APP_DEFAULT_AUTHENTICATION_IMAGE;
+  
+  // Define Naviagation 
   const navigate = useNavigate()
+
+  // Define Loading Screen
   const [loading, setLoading] = useState(false);
 
   // Set Email on Chnage
@@ -56,12 +63,16 @@ export default function Login() {
   // On Submit Button
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
+      // Check For Blank Values
       if(username==='' || password1 ===''){
         window.alert("Required Fields should not be empty")
       }else{
+        // Check For Email Validation
       if(isEmailValid(username)){
+        // Password validation
         if(handlepasswordcheck(password1)){
           setLoading(true);
+          // Login API 
             try {
 
               const timeoutId = setTimeout(() => {

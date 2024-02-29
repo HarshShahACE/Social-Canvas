@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardHeader, CardContent, Avatar, Typography, CardActions, IconButton } from '@mui/material';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import CommentIcon from '@mui/icons-material/Comment';
 import LinkedinLogo from '../../assets/Photos/Linkedin.png'
 import SendIcon from '@mui/icons-material/Send';
 import RepeatIcon from '@mui/icons-material/Repeat'
+import axios from 'axios';
 
 type FilePreview = {
   file: File;
@@ -13,19 +14,70 @@ type FilePreview = {
 };
 
 interface LinkedInPostProps {
-    username: string;
     content: string;
     media?: FilePreview;
-    image? : string
+  }
+
+  interface SocialAccountData { 
+    username: string;
+    profile_pic_url: string;
+    platform: string;
   }
   
 
-const LinkedInPost:React.FC<LinkedInPostProps> = ({ username, content, media , image }) => {
+const LinkedInPost:React.FC<LinkedInPostProps> = ({ content, media }) => {
+
+  const [loading, setLoading] = useState(false);
+  const [username, setUsername] = useState<string[]>([]);
+  const [userPic, setUserPic] = useState<string[]>([]);
+  const [platform, setPlatform] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true);
+      const idString = sessionStorage.getItem('Myid');
+      if (idString !== null) {
+        const id = parseInt(idString);
+        try {
+          const timeoutId = setTimeout(() => {
+            setLoading(false);
+          }, 2000);
+
+          const response = await axios.post(`${process.env.REACT_APP_Fast_API}/s_account_list?user_id=`+id, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+
+          clearTimeout(timeoutId);
+          if (response.status === 200) {
+            const jsonData = response.data;
+            if (Array.isArray(jsonData)) {
+              setUsername(jsonData.map((item: SocialAccountData) => item.username));
+              setUserPic(jsonData.map((item: SocialAccountData) => item.profile_pic_url));
+              setPlatform(jsonData.map((item: SocialAccountData) => item.platform));
+            } else {
+              setUsername([jsonData.username]);
+              setUserPic([jsonData.profile_pic_url]);
+              setPlatform([jsonData.platform]);
+            setLoading(false);
+          }
+        } else {
+            console.log('Error:', response.statusText);
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <>
       <div style={{ display: 'flex', alignItems: 'center' , margin:'10px' }}>
-        <img src={LinkedinLogo} alt={username} style={{ width: '30px', height: '30px' }}/>
+        <img src={LinkedinLogo} style={{ width: '30px', height: '30px' }}/>
         <Typography variant="body1" color="textPrimary" style={{ marginLeft:'5px'}}>
           Linkedin
         </Typography>
@@ -33,8 +85,7 @@ const LinkedInPost:React.FC<LinkedInPostProps> = ({ username, content, media , i
       <Card style={{ maxWidth: 400, margin:'20px', boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.5)' }}>
         <CardHeader
           avatar={
-            <Avatar aria-label="user" src = {image} style={{}}> 
-            </Avatar>
+            <Avatar alt="User" src={userPic[0]} />
           }
           title={username}
           subheader="3h Ago"
