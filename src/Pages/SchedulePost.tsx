@@ -1,8 +1,8 @@
-import { Avatar, Box, Button, Card, CardContent, CssBaseline,  Divider,  Grid,  IconButton, useMediaQuery } from "@mui/material";
+import { Avatar, Box, Button, Card, CardContent, CssBaseline,  Dialog,  DialogContent,  DialogTitle,  Divider,  Grid,  IconButton, useMediaQuery } from "@mui/material";
 import SideNav from "../Components/Navbar";
 import { useState } from "react";
 import LinkedInPostLayout from "../Components/Schedule_Post/Linkedin";
-import {  AddPhotoAlternateRounded } from "@mui/icons-material";
+import {  AddPhotoAlternateRounded, InsertEmoticonRounded } from "@mui/icons-material";
 import TwitterPostLayout from "../Components/Schedule_Post/Twitter";
 import FacebookPostLayout from "../Components/Schedule_Post/Facebook";
 import { NavigateBefore, NavigateNext } from '@mui/icons-material';
@@ -13,6 +13,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import React from "react";
 import SchedulePopup from "../Components/Schedule_Post/Schedule_Time";
 import axios from "axios";
+import Picker from 'emoji-picker-react';
 
 const platforms = [
     { name: "LinkedIn", value: "linkedin" , imageUrl:linkedin },
@@ -36,10 +37,21 @@ export default function Schedule_Post(){
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
     const [selectedTimezone, setSelectedTimezone] = useState<string>('');
+    const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
     let scheduleType = ''
 
     const [selectedFiles, setSelectedFiles] = useState<FilePreview[]>([]);
     const [firstSelectedFileType, setFirstSelectedFileType] = useState<string | null>(null);
+
+    const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        const inputContent = e.target.value;
+        if (inputContent.length <= 250) { // Check if character count is less than or equal to 200
+            setContent(inputContent);
+        }
+        else{
+            alert("Limit Has Been Reached");
+        }
+    };
 
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const files = event.target.files;
@@ -148,12 +160,11 @@ export default function Schedule_Post(){
         }
     };
     
-    
-    
-
     const handlePostNow = () => {
+        console.log("Post Now CLicked");
         scheduleType = 'postnow'
         postData();
+        console.log("After PostData Function");
     };
 
     const handleScheduleClick = () => {
@@ -192,10 +203,12 @@ export default function Schedule_Post(){
             let Media = selectedFiles.length;
             formData.append('MediaNo',Media.toString());
             
-            if (selectedDate !== null) {
-                formData.append('time', new Date(`${selectedDate}T${selectedTime}`).toISOString());
+            if(scheduleType === 'schedule'){
+                if (selectedDate !== null) {
+                    formData.append('time', new Date(`${selectedDate}T${selectedTime}`).toISOString());
+                }
+                formData.append('timezone', selectedTimezone);
             }
-            formData.append('timezone', selectedTimezone);
     
             // Append media files if they exist
             if (selectedFiles.length > 0) {
@@ -249,7 +262,6 @@ export default function Schedule_Post(){
     };
 
     const reversedPlatforms = selectedPlatforms.slice().reverse();
-  
 
     return(
         <div style={{ display: 'flex' , backgroundImage: `url(${defaultImagePath})`, backgroundSize:'contain',
@@ -278,16 +290,42 @@ export default function Schedule_Post(){
                             <Divider style={{ margin: '10px 0' }} />
 
                             {/* Content Textarea with Emoji Picker */}
-                            <Box display="flex" flexDirection="column" alignItems="flex-start" position="relative" width="100%" marginBottom={5}>
-                                <textarea
-                                    rows={10} // Increased the number of rows to make the textarea taller
-                                    value={content}
-                                    onChange={(e) => setContent(e.target.value)}
-                                    placeholder="Write something..."
-                                    style={{ width: '100%' ,resize: 'none' , padding:'10px' }} // Full width textarea with margin at the bottom
-                                />
-                            </Box>
-
+                            <Box position="relative" width="100%" marginBottom={5}>
+      <textarea
+        rows={10}
+        value={content}
+        onChange={handleContentChange}
+        placeholder="Write something..."
+        style={{ width: '100%', resize: 'none', padding: '10px' }}
+      />
+      <Box
+        style={{
+          position: 'absolute',
+          bottom: '5px',
+          left: '0',
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <p style={{ fontSize: '14px', color: 'black', marginLeft:'10px' }}>
+          {`${content.length}/250`}
+        </p>
+        <IconButton onClick={() => setEmojiPickerOpen(!emojiPickerOpen)}>
+          <InsertEmoticonRounded />
+        </IconButton>
+        <Dialog open={emojiPickerOpen} onClose={() => setEmojiPickerOpen(false)} fullWidth maxWidth="xs" PaperProps={{ style: { position: 'absolute', left: '0', bottom: '60px' } }}>
+          <DialogTitle>Choose an emoji</DialogTitle>
+          <DialogContent>
+            <Picker
+              onEmojiClick={(emojiObject) => {
+                setContent((prevContent) => prevContent + emojiObject.emoji);
+                setEmojiPickerOpen(false);
+              }}
+            />
+          </DialogContent>
+        </Dialog>
+      </Box>
+    </Box>
                             {/* Media Upload */}
                             <Box display="flex" alignItems="center" mt={2}>
                                 <input
@@ -331,7 +369,7 @@ export default function Schedule_Post(){
                                 <Button variant="contained" onClick={handlePostNow}>Post Now</Button>
                                 <Button variant="contained" onClick={handleScheduleOpen} style={{marginLeft:'10px'}}>Schedule</Button>
                             </Box>
-                            </CardContent>
+                            </CardContent>  
                         </Card>
                     </Grid>
                     <SchedulePopup

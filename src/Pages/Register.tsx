@@ -40,10 +40,6 @@ export default function Register() {
   const Home = useNavigate();
   const defaultImagePath = process.env.REACT_APP_DEFAULT_AUTHENTICATION_IMAGE;
 
-  const handleGenderChange = (e : string) => {
-    setgender(e);
-  };
-
   useEffect(() => {
     // Update statesList when the selected country changes
     setStatesList(states[country1] || []);
@@ -64,12 +60,7 @@ export default function Register() {
 
   
   // Check Email Validation
-  // Set Email on Chnage
-  const handleemailChange = (e : any) => {
-    setemail(e.target.value);
-  };
-
-    // Check On Field When field is leave
+    // Check On Email Field When field is leave
   const handleemailBlur = () => {
     if(email1 !== ''){ 
       if(!isEmailValid(email1)){
@@ -79,12 +70,7 @@ export default function Register() {
   }
   
   // Check Phone Validation
-  // Set Phone on Chnage
-  const handlephoneChange = (e : any) => {
-    setphone(e.target.value);
-  };
-
-  // Check On Field When field is leave
+  // Check On Phone Number Field When field is leave
   const handlephoneBlur = () => {
     if(phone1 !== ''){
       if(!isPhoneNumberValid(phone1)){
@@ -94,12 +80,7 @@ export default function Register() {
   }
 
   // Check Password Validation
-  // Set PassWord on Chnage
-  const handlepasswordChange = (e : any) => {
-    setpassword(e.target.value);
-  };
-
-  // Check On Field When field is leave
+  // Check On Password Field When field is leave
   const handlepasswordBlur = () => {
     if(password1 !== ''){
       if(!isPasswordValid(password1)){
@@ -108,12 +89,7 @@ export default function Register() {
     };
   }
 
-  // Set Confirm Password on Chnage
-  const handlecpasswordChange = (e : any) => {
-    setconfirmpassword(e.target.value);
-  };
-
-  // Check On Field When field is leave
+  // Check Confirm Password On Field When field is leave
   const handlecpasswordBlur = () => {
     if(confirmpassword !== ''){
       if(password1 !==  confirmpassword){
@@ -225,7 +201,7 @@ export default function Register() {
             <TextFieldComponent
               label="Phone Number"
               value={phone1}
-              onChange={handlephoneChange}
+              onChange={e=>setphone(e.target.value)}
               onBlur={handlephoneBlur}
               startAdornment={<IconButton disabled><ContactPhoneRoundedIcon style={{color:'#707070'}} /></IconButton>}
               maxLength={10}
@@ -233,7 +209,7 @@ export default function Register() {
             <TextFieldComponent
               label="Email Address"
               value={email1}
-              onChange={handleemailChange}
+              onChange={e=>setemail(e.target.value)}
               onBlur={handleemailBlur}
               startAdornment={<IconButton disabled><EmailRounded style={{color:'#707070'}} /></IconButton>}
             />
@@ -241,7 +217,7 @@ export default function Register() {
               label="Password"
               type='password'
               value={password1}
-              onChange={handlepasswordChange}
+              onChange={e=>setpassword(e.target.value)}
               onBlur={handlepasswordBlur}
               startAdornment={<IconButton><PasswordRounded style={{color:'#707070'}} /></IconButton>}
             />
@@ -252,7 +228,7 @@ export default function Register() {
             label="Confirm Password"
             type='password'
             value={confirmpassword}
-            onChange={handlecpasswordChange}
+            onChange={e=>setconfirmpassword(e.target.value)}
             onBlur={handlecpasswordBlur}
             startAdornment={<IconButton><PasswordRounded style={{color:'#707070'}} /></IconButton>}
             />
@@ -262,7 +238,7 @@ export default function Register() {
               <SelectComponent
                 label="Gender"
                 value={gender1}
-                onChange={handleGenderChange}
+                onChange={e=>setgender(e)}
                 startAdornment={
                   <IconButton>
                     <PersonRoundedIcon style={{ color: '#707070' }} />

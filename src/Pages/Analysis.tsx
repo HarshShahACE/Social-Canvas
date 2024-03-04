@@ -4,6 +4,7 @@ import SideNav from "../Components/Navbar";
 import TableauVisualization from "../Components/tablau";
 import PieChart from "../Components/Analysis/PieChart";
 import BubbleChart from "../Components/Analysis/BarChart";
+import MapChart from "../Components/Analysis/Mapchart";
 
 const Analysis = () => {
 
@@ -20,16 +21,19 @@ const Analysis = () => {
           <SideNav/>
           {/* Main content */}
             <div style={{ flex: 1  }}>
-            <main style={{ flexGrow: 1, padding: 3, marginTop: '70px', marginLeft: isMobile ? '20px' : '240px', display: 'flex', flexDirection: 'row' }}>
-    <div style={{ width: '45%', height: '450px', borderRadius:'20px' ,padding: '20px', backgroundColor: 'rgba(250,250,250,0.8)', border: '1px solid #ddd' }} >
-        <h2>Connection Details</h2>
-        <div>
-            <PieChart />
+            <main style={{ flexGrow: 1, padding: 3, marginTop: '70px', marginLeft: isMobile ? '20px' : '240px', display: 'flex', flexDirection: 'column' }}>
+    {/* First row */}
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
+        <div style={{ width: '45%', height: '450px', borderRadius:'20px' ,padding: '20px', backgroundColor: 'rgba(250,250,250,0.8)', border: '1px solid #ddd' }} >
+            <h2>Connection Details</h2>
+            <div>
+                <PieChart />
+            </div>
         </div>
-    </div>
-    <div style={{ width: '50%',marginLeft:'15px', borderRadius:'20px' ,height: '450px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(250,250,250,0.8)', border: '1px solid #ddd' }} >
-        <div>
-            <BubbleChart />
+        <div style={{ width: '50%',marginLeft:'15px', borderRadius:'20px' ,height: '450px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(250,250,250,0.8)', border: '1px solid #ddd' }} >
+            <div>
+                <BubbleChart />
+            </div>
         </div>
     </div>
 </main>

@@ -34,11 +34,6 @@ export default function Login() {
   // Define Loading Screen
   const [loading, setLoading] = useState(false);
 
-  // Set Email on Chnage
-  const handleemailChange = (e : any) => {
-    setusername(e.target.value);
-  };
-
   // Check On Field When field is leave
   const handleemailBlur = () => {
     if(username !== ''){
@@ -46,11 +41,6 @@ export default function Login() {
       window.alert("Please enter a valid Email ID");
     };
     }
-  };
-
-  // Set Password on Chnage
-  const handlepasswordChange = (e : any) => {
-    setpassword(e.target.value);
   };
 
   // Check Password on  leave
@@ -135,7 +125,7 @@ export default function Login() {
               <TextFieldComponent
                 label="Email Address"
                 value={username}
-                onChange={handleemailChange}
+                onChange={e=>setusername(e.target.value)}
                 onBlur={handleemailBlur}
                 startAdornment={<IconButton disabled><EmailRounded style={{color:'#707070'}} /></IconButton>}
               />
@@ -143,7 +133,7 @@ export default function Login() {
                 label="Password"
                 type='password'
                 value={password1}
-                onChange={handlepasswordChange}
+                onChange={e=>setpassword(e.target.value)}
                 onBlur={handlepasswordBlur}
                 startAdornment={<IconButton disabled><PasswordRounded style={{color:'#707070'}} /></IconButton>}
               />

@@ -13,6 +13,7 @@ import twitter from '../assets/Photos/twitter.jpg'
 import facebook from '../assets/Photos/FBLogo.png'
 import SelectComponent from '../Components/Selectfield';
 
+// Plateform Selection Options
 const options = [
   { value: 'linkedin', label: 'LinkedIn', avatar: linkedin },
   { value: 'facebook', label: 'Facebook', avatar: facebook },
@@ -21,11 +22,14 @@ const options = [
 
 export default function HomePage() {
 
+  // Check for Phone View
   const isMobile = useMediaQuery('(max-width:600px)');
   const defaultImagePath = process.env.REACT_APP_DEFAULT_APP_IMAGE;
 
+  // Selected Paterforms
   const [selectedPlatform, setSelectedPlatform] = useState("linkedin");
 
+  // Chnage On Selected Plaeform
   const handlePlatformChange = (event : string) => {
     setSelectedPlatform(event);
   };

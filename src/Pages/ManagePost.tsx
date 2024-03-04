@@ -1,5 +1,5 @@
-import { useMediaQuery } from "@mui/material";
-import { CssBaseline, TextField, Button } from "@mui/material";
+import { TextField, useMediaQuery } from "@mui/material";
+import {  Button } from "@mui/material";
 import SideNav from "../Components/Navbar";
 import { useEffect, useState } from "react";
 import { Calendar, momentLocalizer, Event as CalendarEvent } from 'react-big-calendar';
@@ -42,18 +42,31 @@ const ManagePost = () => {
                 });
                 if (response.status === 200) {
                     const jsonData = response.data;
-
-                    // Map the response data to event objects
-                    const formattedEvents: Event[] = jsonData.map((item: any) => ({
-                        ...item,
-                        id: item.id, // Assign the id
-                        title: item.platform_name, // Assign platform_name to title
-                        start: new Date(item.sch_user_time),
-                        end: new Date(item.sch_user_time),
-                        Details: item.content, // Assign content to Details
-                        color: getRandomColor(), // Assign random color
-                    }));
-
+                
+                    // Group events by start time
+                    const groupedEvents: { [key: string]: Event[] } = {};
+                    jsonData.forEach((item: any) => {
+                        const startTime = new Date(item.sch_user_time).toISOString();
+                        if (!groupedEvents[startTime]) {
+                            groupedEvents[startTime] = [];
+                        }
+                        groupedEvents[startTime].push({
+                            ...item,
+                            id: item.id,
+                            title : `${item.content}\n${item.platform_name}`,
+                            platform_name: item.platform_name,
+                            content: item.content,
+                            start: new Date(item.sch_user_time),
+                            end: new Date(item.sch_user_time),
+                        });
+                    });
+                
+                    // Flatten the grouped events
+                    const formattedEvents: Event[] = [];
+                    Object.keys(groupedEvents).forEach((key) => {
+                        formattedEvents.push(...groupedEvents[key]);
+                    });
+                
                     setEvents(formattedEvents);
                 } else {
                     console.log('Error:', response.statusText);
@@ -76,76 +89,80 @@ const ManagePost = () => {
         setOpenDialog(false);
     };
 
-    // Function to generate random color
-    const getRandomColor = () => {
-        const colors = [
-            'rgba(54, 162, 235, 0.8)', // Dark blue
-            'rgba(255, 99, 132, 0.8)', // Dark red
-            'rgba(255, 206, 86, 0.8)', // Dark yellow
-            // Add more colors as needed
-        ];
-        return colors[Math.floor(Math.random() * colors.length)];
-    };
-
     return (
-        <div style={{
-            display: 'flex', backgroundImage: `url(${defaultImagePath})`, backgroundSize: 'contain',
-            backgroundRepeat: 'no-repeat',
-            backgroundPosition: 'bottom right', height: '100vh'
-        }}>
-            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-            <CssBaseline />
+        <div style={{ display: 'flex', backgroundImage: `url(${defaultImagePath})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'bottom right', height: '100vh' }}>
             {/* Sidebar */}
             <SideNav />
             {/* Main content */}
             <div style={{ flex: 1 }}>
                 <main style={{ flexGrow: 1, padding: 3, marginTop: '70px', marginLeft: isMobile ? '20px' : '240px' }}>
                     <div style={{ height: '80vh', width: '80vw', padding: '20px' }}>
-                        <Calendar
-                            localizer={localizer}
-                            events={events}
-                            startAccessor="start"
-                            endAccessor="end"
-                            style={{ background: 'rgba(255,255,255,0.8)' }}
-                            onSelectSlot={(slotInfo) => console.log(slotInfo)}
-                            selectable
-                            onSelectEvent={handleEventClick}
-                            defaultView="month"
-                            views={['month','day' ,'agenda']}
+                    <Calendar
+                        localizer={localizer}
+                        events={events}
+                        startAccessor="start"
+                        endAccessor="end"
+                        style={{ background: 'rgba(255,255,255,0.8)' }}
+                        onSelectSlot={(slotInfo) => console.log(slotInfo)}
+                        selectable
+                        onSelectEvent={handleEventClick}
+                        defaultView="month"
+                        views={['month', 'day', 'agenda']}
+                        // Render multiple events for the same time slot
+                        eventPropGetter={(event, start, end, isSelected) => {
+                            const backgroundColor = event.color;
+                            return { style: { backgroundColor } };
+                        }}
+                        // Show all events in day cells
+                        dayPropGetter={(date: Date) => {
+                            const dayEvents = events.filter((event) => {
+                                const eventStart = event.start;
+                                if (eventStart) {
+                                    const eventStartDate = new Date(eventStart);
+                                    return eventStartDate.getDate() === date.getDate() && eventStartDate.getMonth() === date.getMonth() && eventStartDate.getFullYear() === date.getFullYear();
+                                }
+                                return false;
+                            });
+                            return { style: {}, className: '', events: dayEvents };
+                        }}
+
                         />
                     </div>
                 </main>
             </div>
             {/* Event details dialog */}
-            <Dialog open={openDialog} onClose={handleCloseDialog} style={{ borderRadius: '30px' }}>
-                <DialogTitle align="center" style={{ marginTop: '10px', marginBottom: '0' }}>{selectedEvent?.title}</DialogTitle>
+            <Dialog open={openDialog} onClose={handleCloseDialog} style={{  }}>
+                <DialogTitle align="center" style={{ marginTop: '10px', marginBottom: '0' }}>{selectedEvent?.content}</DialogTitle>
                 <DialogContent style={{ marginTop: '0', marginBottom: '0' }}>
                     <TextField
                         style={{ margin: '10px 0' }}
-                        label="Details"
+                        label="Content"
                         fullWidth
                         multiline
-                        value={selectedEvent?.Details || ''}
+                        value={selectedEvent?.content || ''}
                         InputProps={{
                             readOnly: true,
                         }}
                     />
                     <TextField
                         style={{ margin: '10px 0' }}
-                        label="Start"
+                        label="Plateform"
+                        fullWidth
+                        multiline
+                        value={selectedEvent?.platform_name || ''}
+                        InputProps={{
+                            readOnly: true,
+                        }}
+                    />
+                    <TextField
+                        style={{ margin: '10px 0' }}
+                        label="Date & Time"
                         value={selectedEvent?.start ? selectedEvent.start.toLocaleString() : ''}
                         InputProps={{
                             readOnly: true,
                         }}
                     />
-                    <TextField
-                        style={{ margin: '10px 10px' }}
-                        label="End"
-                        value={selectedEvent?.end ? selectedEvent.end.toLocaleString() : ''}
-                        InputProps={{
-                            readOnly: true,
-                        }}
-                    />
+                    
                 </DialogContent>
                 <DialogActions style={{ margin: '0 auto', paddingBottom: '30px' }}>
                     <Button variant="contained" onClick={handleCloseDialog}>Update</Button>
@@ -153,7 +170,7 @@ const ManagePost = () => {
                 </DialogActions>
             </Dialog>
         </div>
-    )
-}
+    );
+};
 
 export default ManagePost;

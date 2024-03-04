@@ -1,6 +1,5 @@
 import { Avatar, Button, Card, CardContent, CssBaseline, Grid, MenuItem, Select, TextField, Typography, useMediaQuery } from "@mui/material";
 import SideNav from "../Components/Navbar";
-import { deepOrange } from "@mui/material/colors";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -9,6 +8,8 @@ import states from '../assets/states.json';
 import { isEmailValid, isPhoneNumberValid } from "../utils/validation";
 import LoadingScreen from "../Components/Loading";
 import NoDataPopup from "../Components/NoDatapop";
+import Male from '../assets/Photos/Male.jpg'
+import Female from '../assets/Photos/female.png'
 
 interface UserData {
   name: string,
@@ -93,20 +94,6 @@ const Profile = () => {
     setStatesList(states[country1] || []);
   }, [country1]);
 
-  const getInitials = (name: string): string => {
-    if (!name) {
-      return '';
-    }
-  
-    const nameParts = name.split(' ');
-    let initials = nameParts[0].charAt(0);
-  
-    if (nameParts.length > 1) {
-      initials += nameParts[1].charAt(0);
-    }
-  
-    return initials.toUpperCase();
-  };
 
   // Handle Change On Data
   const handleChange = (e: any) => {
@@ -229,12 +216,10 @@ const Profile = () => {
                             {/* Avatar */}
                             <Grid item xs={12} sm={2}>
                               <Avatar
-                                sx={{ bgcolor: deepOrange[500], height: 80, width: 80, margin: '15px' }}
-                                alt={formData.name}
-                              >
-                                {getInitials(formData.name)}
-                              </Avatar>
-                            </Grid>
+                                  sx={{ height: 100, width: 100, margin: '15px', borderRadius: 'none' }} // Add borderRadius: 'none'
+                                  src={formData.gender === 'Male' ? Male : Female}
+                              />
+                          </Grid>
 
                             {/* Form Data */}
                             <Grid item xs={12} sm={9}>
