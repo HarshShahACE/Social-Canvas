@@ -11,7 +11,6 @@ import Popover from '@mui/material/Popover';
 import MenuList from '@mui/material/MenuList';
 import PersonIcon from '@mui/icons-material/Person';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
-import { LightModeOutlined } from '@mui/icons-material';
 
 const drawerWidth = 230;
 
@@ -20,12 +19,6 @@ export default function SideNav() {
     const [open, setOpen] = React.useState(!isMobile); // Start with sidebar open on larger screens
     const [anchorEl, setAnchorEl] = React.useState(null); // Anchor element for the profile menu
     const location = useLocation();
-
-    const [theme, setTheme] = useState('light');
-
-    const toggleTheme = () => {
-      setTheme(theme === 'light' ? 'dark' : 'light');
-    };
   
     const handleDrawerOpen = () => {
       setOpen(true);
@@ -73,15 +66,6 @@ export default function SideNav() {
   <div style={{ display: 'flex', alignItems: 'center', flexGrow: 1 , marginTop:'15px' }}>
     <img src="../../SitePhotos/TextLogo2.png" alt="Logo" style={{ maxWidth: '250px', maxHeight: '250px', marginTop:'10px' , margin: '0 auto' }} />
   </div>
-  <IconButton
-    color="inherit"
-    aria-label="profile"
-    edge="end"
-    onClick={toggleTheme}
-    style={{ marginLeft: 'auto' }}
-  >
-    <LightModeOutlined />
-  </IconButton>
   <IconButton
     color="inherit"
     aria-label="profile"

@@ -5,6 +5,7 @@ import SocialMediaPopup from './SocialMediaPopup';
 import LinkInputPopup from './LinkInput';
 import axios from 'axios';
 import LoadingScreen from '../Loading';
+import { useNavigate } from 'react-router-dom';
 
 interface SocialAccountData { 
   username: string;
@@ -18,6 +19,7 @@ const SocialAccount = () => {
   const [username, setUsername] = useState<string[]>([]);
   const [userPic, setUserPic] = useState<string[]>([]);
   const [platform, setPlatform] = useState<string[]>([]);
+  const Home = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -61,9 +63,46 @@ const SocialAccount = () => {
     fetchData();
   }, []);
 
-  const handleDeleteClick = (index: number) => {
+  const handleDeleteClick =  async () => {
     // Handle delete click for a specific row
-    console.log(`Delete clicked for index: ${index}`);
+
+    const idString = sessionStorage.getItem('Myid'); // Retrieve the value from localStorage
+      if (idString !== null) {
+        const id = parseInt(idString);
+    
+
+    try {
+      const response = await axios.post(`${process.env.REACT_APP_Fast_API}/s_account_remove?user_id=${id}`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+    
+      if (response.status === 200) {
+        // Handle success, e.g., redirect to a success page or show a success message
+        setLoading(false);
+        window.alert('Account Deleted Successfully');
+        window.location.reload();
+      } else {
+        console.log(response.data);
+      }
+    }  catch (error: any) { // Explicitly cast error to 'any'
+        console.error('Error occurred:', error);
+        if (error.response && error.response.status === 400) {
+          const responseData = error.response.data;
+          if (responseData.detail === "Email already exists") {
+            window.alert('Email Already Registered. Please Enter Another Email Address');
+          } else if (responseData.detail === "Phone number already exists") {
+            window.alert('Phone Number Already Registered. Please Enter Another Phone Number');
+          } else {
+            // Handle other 400 status cases if needed
+          }
+        } else {
+          // Handle other errors
+          window.alert('An error occurred while Deleting the profile. Please try again later.');
+        }
+      }
+    }  
   };
 
   const [socialMediaPopupOpen, setSocialMediaPopupOpen] = useState(false);
@@ -148,7 +187,7 @@ const SocialAccount = () => {
                       <TableCell>{user}</TableCell>
                       <TableCell>{platform[index]}</TableCell>
                       <TableCell>
-                        <Button variant="contained" startIcon={<DeleteIcon />} onClick={() => handleDeleteClick(index)}>Delete</Button>
+                        <Button variant="contained" startIcon={<DeleteIcon />} onClick={() => handleDeleteClick()}>Delete</Button>
                       </TableCell>
                     </TableRow>
                   ))

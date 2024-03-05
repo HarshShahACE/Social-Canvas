@@ -16,8 +16,8 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   const Logout = () => {
-    setLoading(true);
-    console.log("logging out");
+      setLoading(true);
+      console.log("logging out");
       sessionStorage.clear();
       // Redirect to the login page
       setLoading(false);

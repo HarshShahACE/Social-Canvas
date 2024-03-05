@@ -14,6 +14,7 @@ import React from "react";
 import SchedulePopup from "../Components/Schedule_Post/Schedule_Time";
 import axios from "axios";
 import Picker from 'emoji-picker-react';
+import LoadingScreen from "../Components/Loading";
 
 const platforms = [
     { name: "LinkedIn", value: "linkedin" , imageUrl:linkedin },
@@ -22,6 +23,7 @@ const platforms = [
     // Add more platforms as needed
 ];
 
+// File Preview Interface
 type FilePreview = {
       file: File;
       previewUrl: string;
@@ -32,6 +34,7 @@ export default function Schedule_Post(){
     
     const isMobile = useMediaQuery('(max-width:600px)');
     const defaultImagePath = process.env.REACT_APP_DEFAULT_APP_IMAGE;
+    const [loading, setLoading] = useState(false);
     const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
     const [content, setContent] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
@@ -172,6 +175,15 @@ export default function Schedule_Post(){
         postData();
     };
 
+    const [isOpen, setIsOpen] = useState(false);
+    const handleScheduleOpen = () => {
+        setIsOpen(true);
+    };
+
+    const handleClose = () => {
+        setIsOpen(false);
+    };
+
 
     const postData = async () => {
         const idString = sessionStorage.getItem('Myid');
@@ -182,6 +194,7 @@ export default function Schedule_Post(){
         }
     
         try {
+            setLoading(true);
             const formData = new FormData();
             // Append platform_name if platforms are selected
             if (selectedPlatforms.length > 0) {
@@ -228,7 +241,16 @@ export default function Schedule_Post(){
             );
     
             console.log('Post created successfully:', response.data);
-            alert(`Post For  ${scheduleType} Successfully`)
+            if(scheduleType === 'schedule'){
+                alert(`Your Content Is For selected Plateform By Given Time is Scheduled Successfully`)
+                setLoading(false)
+                setIsOpen(false)
+            }
+            else{
+                alert('Your Content Will Posted On Selected Plateform In Some Time.')
+                setLoading(false)
+            }
+            
             // Reset form fields after successful post creation
             setContent('');
             setSelectedPlatforms([]);
@@ -240,15 +262,6 @@ export default function Schedule_Post(){
             // Handle error
             //console.error('Error creating post:', error.message);
         }
-    };
-
-    const [isOpen, setIsOpen] = useState(false);
-    const handleScheduleOpen = () => {
-        setIsOpen(true);
-    };
-
-    const handleClose = () => {
-        setIsOpen(false);
     };
 
     const [previewPageIndex, setPreviewPageIndex] = useState(0);
@@ -267,6 +280,7 @@ export default function Schedule_Post(){
         <div style={{ display: 'flex' , backgroundImage: `url(${defaultImagePath})`, backgroundSize:'contain',
             backgroundRepeat:'no-repeat',
             backgroundPosition:'bottom right'  , height:'100vh' }}>
+            {loading && <LoadingScreen />}
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             <CssBaseline />
             {/* Sidebar */}

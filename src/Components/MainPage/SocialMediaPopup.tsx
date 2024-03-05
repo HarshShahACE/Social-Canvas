@@ -21,8 +21,20 @@ const SocialMediaPopup: React.FC<SocialMediaPopupProps> = ({ isOpen, onClose, on
     onSelect(selectedPlatform);
   };
 
+  const handleCloseButtonClick = (event : any) => {
+    // Prevent event propagation to prevent the popup from closing
+    event.stopPropagation();
+    // Call the onClose function to close the popup
+    onClose();
+  };
+
+  const handlePopupClick = (event : any) => {
+    // Prevent event propagation to prevent the popup from closing
+    event.stopPropagation();
+  };
+
   return (
-    <div className={isOpen ? 'popup' : 'popup hidden'}>
+    <div className={isOpen ? 'popup' : 'popup hidden'} onClick={handlePopupClick}>
       <div className="popup-inner">
         <h2>Select Social Media Platform</h2>
         <Box marginBottom={2}>
@@ -40,7 +52,7 @@ const SocialMediaPopup: React.FC<SocialMediaPopupProps> = ({ isOpen, onClose, on
           </Select>
         </Box>
         <Button variant="contained" onClick={handleLinkOpen}>Open Link</Button>
-        <Button variant="contained" style={{margin:'10px'}} onClick={onClose}>Close</Button>
+        <Button variant="contained" style={{margin:'10px'}} onClick={handleCloseButtonClick}>Close</Button>
       </div>
     </div>
   );
