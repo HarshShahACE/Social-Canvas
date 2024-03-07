@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogContent, Avatar } from '@mui/material';
+import { Card, CardContent, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogContent, Avatar, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SocialMediaPopup from './SocialMediaPopup';
 import LinkInputPopup from './LinkInput';
 import axios from 'axios';
 import LoadingScreen from '../Loading';
 import { useNavigate } from 'react-router-dom';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 interface SocialAccountData { 
   username: string;
@@ -165,10 +166,10 @@ const SocialAccount = () => {
         <CardContent>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h2>Social Media Accounts</h2>
-            <Button variant="contained" onClick={handleSocialMediaPopupOpen}>Add</Button>
+            <Button variant="contained" onClick={handleSocialMediaPopupOpen} startIcon={<AddCircleIcon/>}>Add</Button>
           </div>
           <TableContainer>
-            <Table>
+            <Table style={{fontFamily:'sans-serif' , fontSize:'10px'}}>
               <TableHead>
                 <TableRow>
                   <TableCell>ID</TableCell>
@@ -187,7 +188,9 @@ const SocialAccount = () => {
                       <TableCell>{user}</TableCell>
                       <TableCell>{platform[index]}</TableCell>
                       <TableCell>
-                        <Button variant="contained" startIcon={<DeleteIcon />} onClick={() => handleDeleteClick()}>Delete</Button>
+                      <IconButton style={{backgroundColor:'#1565C0' ,borderRadius:'5px' , color:'white' }} onClick={() => handleDeleteClick()}>
+                        <DeleteIcon />
+                      </IconButton>
                       </TableCell>
                     </TableRow>
                   ))

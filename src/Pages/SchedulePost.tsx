@@ -5,23 +5,14 @@ import LinkedInPostLayout from "../Components/Schedule_Post/Linkedin";
 import {  AddPhotoAlternateRounded, InsertEmoticonRounded } from "@mui/icons-material";
 import TwitterPostLayout from "../Components/Schedule_Post/Twitter";
 import FacebookPostLayout from "../Components/Schedule_Post/Facebook";
-import { NavigateBefore, NavigateNext } from '@mui/icons-material';
-import linkedin from '../assets/Photos/Linkedin.png'
-import twitter from '../assets/Photos/twitter.jpg'
-import facebook from '../assets/Photos/FBLogo.png'
+import { NavigateBefore, NavigateNext } from '@mui/icons-material'; 
 import DeleteIcon from '@mui/icons-material/Delete';
 import React from "react";
 import SchedulePopup from "../Components/Schedule_Post/Schedule_Time";
 import axios from "axios";
 import Picker from 'emoji-picker-react';
 import LoadingScreen from "../Components/Loading";
-
-const platforms = [
-    { name: "LinkedIn", value: "linkedin" , imageUrl:linkedin },
-    { name: "Twitter", value: "twitter" , imageUrl: twitter },
-    { name: "Facebook", value: "facebook" , imageUrl: facebook},
-    // Add more platforms as needed
-];
+import { platforms } from "../Components/platefroms";
 
 // File Preview Interface
 type FilePreview = {
@@ -245,10 +236,12 @@ export default function Schedule_Post(){
                 alert(`Your Content Is For selected Plateform By Given Time is Scheduled Successfully`)
                 setLoading(false)
                 setIsOpen(false)
+                window.location.reload();
             }
             else{
                 alert('Your Content Will Posted On Selected Plateform In Some Time.')
                 setLoading(false)
+                window.location.reload();
             }
             
             // Reset form fields after successful post creation

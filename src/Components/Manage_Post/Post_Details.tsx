@@ -1,6 +1,7 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, IconButton } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
+import { Close } from "@mui/icons-material";
 
 interface Media {
   id: number;
@@ -13,6 +14,10 @@ interface Props {
   open: boolean;
   onClose: () => void;
 }
+
+const capitalizeFirstLetter = (str: string) => {
+  return str.replace(/\b\w/g, (char) => char.toUpperCase());
+};
 
 const EventDetailsDialog: React.FC<Props> = ({ eventId, open, onClose }) => {
   const [eventDetails, setEventDetails] = useState<any>(null);
@@ -64,7 +69,15 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, open, onClose }) => {
 
   return (
     <Dialog open={open} onClose={onClose}>
-      <DialogTitle align="center" style={{ marginTop: '10px', marginBottom: '0' }}>Post_Details</DialogTitle>
+      <DialogTitle
+        align="center"
+        style={{ marginTop: '10px', marginBottom: '0', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}
+      >
+        Post_Details
+        <IconButton onClick={onClose}>
+          <Close />
+        </IconButton>
+      </DialogTitle>
         <DialogContent style={{ marginTop: '0', marginBottom: '0' }}>
         {eventDetails && (
           <>
@@ -77,19 +90,19 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, open, onClose }) => {
             <TextField
               style={{ marginBottom: 20 }}
               label="Platform"
-              value={eventDetails.platform_name}
+              value={capitalizeFirstLetter(eventDetails.platform_name)}
               fullWidth
             />
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 <TextField
                 style={{ flex: 1, marginBottom: 20 }}
                 label="Post Type"
-                value={eventDetails.post_type}
+                value={capitalizeFirstLetter(eventDetails.post_type)}
                 />
                 <TextField
                 style={{flex: 1, marginBottom: 20, marginLeft: 10}}
                 label="Schedule Type"
-                value={eventDetails.sch_type}
+                value={capitalizeFirstLetter(eventDetails.sch_type) }
                 />
             </div>
             <div style={{ display: 'flex', alignItems: 'center' }}>

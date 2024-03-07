@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Pie } from 'react-chartjs-2';
 import { Chart, ArcElement } from 'chart.js/auto';
-import locationData from '../../assets/UserJSON/profileConnection1.json'; // Importing JSON file
+import locationData from '../../assets/UserJSON/profileConnection2.json'; // Importing JSON file
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody, TablePagination } from '@mui/material';
 
 Chart.register(ArcElement);
@@ -99,28 +99,28 @@ const PieChart = () => {
 
   return (
     <div style={{ display: 'flex', alignItems: 'flex-start', width: '100%' }}>
-      <div style={{ height: '350px', width: '50%', marginRight: '20px' }}>
+      <div style={{ height: '450px', width:'50%', marginRight: '20px' }}>
         {data.length > 0 && <Pie data={generateChartData()} options={chartOptions} />}
       </div>
 
       <div
         ref={tableRef}
         onScroll={handleScroll}
-        style={{ overflowY: 'scroll', width: '50%', height: '300px' }}
+        style={{ overflowY: 'scroll', width: '30%', height: '400px' }}
       >
          <TableContainer component={Paper} style={{ background: '#f9f9f9', border: '1px solid #ddd' }}>
   <Table>
     <TableHead>
       <TableRow>
-        <TableCell style={{ background: '#eaeaea', borderBottom: '1px solid #ddd', fontSize: '14px', fontWeight: 'bold' }}>Location</TableCell>
-        <TableCell style={{ background: '#eaeaea', borderBottom: '1px solid #ddd', fontSize: '14px', fontWeight: 'bold' }}>Value</TableCell>
+        <TableCell style={{ background: '#eaeaea', borderBottom: '1px solid #ddd', fontSize: '20px', fontWeight: 'bold' }}>Location</TableCell>
+        <TableCell style={{ background: '#eaeaea', borderBottom: '1px solid #ddd', fontSize: '20px', fontWeight: 'bold' }}>Value</TableCell>
       </TableRow>
     </TableHead>
     <TableBody>
       {generateTableData().map((item, index) => (
         <TableRow key={index}>
-          <TableCell style={{ borderBottom: '1px solid #ddd', padding: '8px', fontSize: '12px' }}>{item.location}</TableCell>
-          <TableCell style={{ borderBottom: '1px solid #ddd', padding: '8px', fontSize: '12px' }}>{item.value}</TableCell>
+          <TableCell style={{ borderBottom: '1px solid #ddd', padding: '8px', fontSize: '16px' }}>{item.location}</TableCell>
+          <TableCell style={{ borderBottom: '1px solid #ddd', padding: '8px', fontSize: '16px' }}>{item.value}</TableCell>
         </TableRow>
       ))}
     </TableBody>

@@ -1,25 +1,45 @@
-// MapComponent.tsx
 import React, { useState, useEffect } from 'react';
 import { ComposableMap, Geographies, Geography, Marker } from 'react-simple-maps';
 
 interface LocationData {
+  urn_id: string;
+  distance: string | number;
+  jobtitle: string | null;
   location: string;
-  // Add other data properties here as needed
+  name: string;
+  latitude: number; // Add latitude property
+  longitude: number; // Add longitude property
 }
 
 const MapComponent: React.FC = () => {
   const [locations, setLocations] = useState<LocationData[]>([]);
 
+  const geoUrl =
+  "https://raw.githubusercontent.com/deldersveld/topojson/master/world-countries.json";
+
   useEffect(() => {
-    // Load location data from JSON file
+    // Load location data from JSON file (replace with your actual data source)
     const fetchLocations = async () => {
       try {
-        const response = await fetch('url(../../assets/UserJSON/profileConnection1.json)');
-        if (!response.ok) {
-          throw new Error('Failed to fetch location data');
-        }
-        const data: LocationData[] = await response.json();
-        setLocations(data);
+        // Fetch your data here (e.g., from an API or local JSON file)
+        // Example: const response = await fetch('/api/locations');
+        // const data: LocationData[] = await response.json();
+        // setLocations(data);
+
+        // For demonstration purposes, using static data
+        const staticData: LocationData[] = [
+          {
+            urn_id: '1',
+            distance: 10,
+            jobtitle: 'Engineer',
+            location: 'Sample Location',
+            name: 'John Doe',
+            latitude: 22.3053263,
+            longitude: 70.8028377,
+          },
+          // Add more location entries as needed
+        ];
+        setLocations(staticData);
       } catch (error) {
         console.error('Error fetching location data:', error);
       }
@@ -31,7 +51,7 @@ const MapComponent: React.FC = () => {
   return (
     <div style={{ width: '100%', height: '500px' }}>
       <ComposableMap projection="geoMercator" projectionConfig={{ scale: 100 }}>
-        <Geographies geography="geojson/world-110m.json">
+        <Geographies geography={geoUrl}>
           {({ geographies }) =>
             geographies.map((geo) => (
               <Geography key={geo.rsmKey} geography={geo} fill="#EAEAEC" stroke="#D6D6DA" />
@@ -39,7 +59,10 @@ const MapComponent: React.FC = () => {
           }
         </Geographies>
         {locations.map((location, index) => (
-          <Marker key={index} coordinates={[Math.random() * 360 - 180, Math.random() * 180 - 90]}>
+          <Marker
+            key={index}
+            coordinates={[location.longitude, location.latitude]} // Swap longitude and latitude
+          >
             <circle r={3} fill="#F00" />
             <text x="-6" y="6" fontSize="10px" fill="#5D5A6D">
               {location.location}

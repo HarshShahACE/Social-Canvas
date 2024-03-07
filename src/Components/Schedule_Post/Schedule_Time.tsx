@@ -17,6 +17,12 @@ interface SchedulePopupProps {
 const SchedulePopup: React.FC<SchedulePopupProps> = ({ isOpen, onClose, selectedDate, handleDateChange, selectedTime, handleTimeChange, selectedTimezone, setSelectedTimezone, handleScheduleClick }) => {
 
     const currentDate = new Date().toISOString().split('T')[0];
+
+    // Calculate one month from today
+    const oneMonthFromNow = new Date();
+    oneMonthFromNow.setMonth(oneMonthFromNow.getMonth() + 1);
+    const oneMonthFromNowString = oneMonthFromNow.toISOString().split('T')[0];
+
     const isMobile = useMediaQuery('(max-width:600px)');
 
     return (
@@ -31,6 +37,7 @@ const SchedulePopup: React.FC<SchedulePopupProps> = ({ isOpen, onClose, selected
                         style={{ marginRight: '10px', width: '150px' }}
                         inputProps={{
                             min: currentDate, // Set the min attribute to the current date
+                            max :  oneMonthFromNowString // Set the max attribute
                         }}
                     />
                     <TextField

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Bar } from 'react-chartjs-2';
-import locationData from '../../assets/UserJSON/profileConnection1.json'; // Importing JSON file
+import locationData from '../../assets/UserJSON/profileConnection2.json'; // Importing JSON file
 import { ChartOptions } from 'chart.js/auto';
 
 // Define the type for the data
@@ -35,7 +35,7 @@ const BarChart: React.FC = () => {
     // Sort the grouped data by count in descending order
     const sortedData = Object.entries(groupedData)
       .sort(([, countA], [, countB]) => countB - countA)
-      .slice(0, 10); // Take the top 5 job roles
+      .slice(0, 10); // Take the top 15 job roles
   
     // Extract labels and values from the sorted data
     const labels = sortedData.map(([jobTitle]) => jobTitle);
@@ -59,7 +59,7 @@ const BarChart: React.FC = () => {
       x: {
         beginAtZero: true,
         min: 1, // Set minimum value on x-axis to 1
-        max: 60, // Set maximum value on x-axis to 10
+        max: 60, // Set maximum value on x-axis to 60
         title: {
           display: true,
           text: 'Count',
@@ -88,7 +88,7 @@ const BarChart: React.FC = () => {
   };
 
   return (
-    <div style={{ margin: 'auto' }}>
+    <div style={{ margin: 'auto', height: '600px' }}> {/* Set the width and height of the chart container */}
       <h2>Job Titles</h2>
       {data.length > 0 && <Bar data={generateChartData()} options={options} />}
     </div>
