@@ -4,8 +4,8 @@ import moment from 'moment';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import { useMediaQuery } from "@mui/material";
 import axios from "axios";
-import SideNav from "../Components/Navbar";
-import Post_Details from "../Components/Manage_Post/Post_Details";
+import SideNav from "../Components/Common/Navbar";
+import PostDetails from "../Components/Manage_Post/Post_Details";
 
 const localizer = momentLocalizer(moment);
 
@@ -130,7 +130,7 @@ const ManagePost = () => {
                 </main>
             </div>
             {/* Event details dialog */}
-            <Post_Details eventId={selectedEvent?.id ?? null} open={openDialog} onClose={handleCloseDialog} />
+            <PostDetails eventId={selectedEvent?.id ?? null} open={openDialog} onClose={handleCloseDialog} />
         </div>
     );
 };

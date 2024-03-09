@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import SideNav from '../Components/Navbar';
+import React, { useEffect, useState } from 'react';
+import SideNav from '../Components/Common/Navbar';
 import { CssBaseline, useMediaQuery } from '@mui/material';
 import GrowthCard from '../Components/MainPage/MainPage_cards';
 import SocialAccount from '../Components/MainPage/MainPage_Table';
@@ -11,7 +11,9 @@ import fifth from '../assets/Photos/5th.png'
 import linkedin from '../assets/Photos/Linkedin.png'
 import twitter from '../assets/Photos/twitter.jpg'
 import facebook from '../assets/Photos/FBLogo.png'
-import SelectComponent from '../Components/Selectfield';
+import SelectComponent from '../Components/Fields/Selectfield';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 // Plateform Selection Options
 const options = [
@@ -28,6 +30,59 @@ export default function HomePage() {
 
   // Selected Paterforms
   const [selectedPlatform, setSelectedPlatform] = useState("linkedin");
+  const [loading,setLoading]  = useState(false);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchData = async (urlParamsString: string, publicurl: string) => {
+      try {
+        const idString = sessionStorage.getItem('Myid');
+        if (idString !== null) {
+          const id = parseInt(idString);
+          console.log(urlParamsString, publicurl, id);
+          const response = await axios.post(`${process.env.REACT_APP_Fast_API}/generate_linkedin_access_token`, {
+            authorization_code: urlParamsString,
+            publiclink: publicurl,
+            userid: id
+          }, {
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+  
+          if (response.status === 200) {
+            // Handle success, e.g., redirect to a success page or show a success message
+            setLoading(false);
+            window.alert('Account Added Successfully');
+            navigate("/Dashboard");
+          } else {
+            console.log(response.data);
+            if (response.data) {
+              if (response.status === 500) {
+                setLoading(false);
+                window.alert(response.data.detail);
+                navigate("/Dashboard");
+              }
+            }
+          }
+        }
+      } catch (error) {
+        console.error('Error occurred:', error);
+      }
+    };
+  
+    // Check if Lpublicurl is present in session storage
+    
+    const publicurl = sessionStorage.getItem("Lpublicurl");
+    if (publicurl !== null) {
+      // If Lpublicurl is present, convert URLSearchParams to string and call fetchData
+      setLoading(true);
+      const urlParams = window.location.href;
+      fetchData(urlParams, publicurl);
+    } else {
+      console.log('Lpublicurl is not present in session storage. Skipping fetchData.');
+    }
+  }, []); // Empty dependency array to run once on component mount
 
   // Chnage On Selected Plaeform
   const handlePlatformChange = (event : string) => {

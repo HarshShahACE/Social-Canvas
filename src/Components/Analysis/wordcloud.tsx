@@ -48,16 +48,16 @@ interface LocationData {
       };
     return (
       <div style={{ margin: 'auto' }}>
-        <h2>Job Titles Word Cloud</h2>
-        {data.length > 0 && (
-          <ReactD3Cloud
-            data={generateWordCloudData()}
-            fontSize={fontSizeMapper} // Use your fontSizeMapper function here
-            width={600}
-            height={400}
-          />
-        )}
-      </div>
+      <h2>All Job Titles</h2>
+      {data.length > 0 && (
+        <ReactD3Cloud
+          data={generateWordCloudData()}
+          fontSize={fontSizeMapper} // Use your fontSizeMapper function here
+          width={600}
+          height={400}
+        />
+      )}
+    </div>
     );
 };
   

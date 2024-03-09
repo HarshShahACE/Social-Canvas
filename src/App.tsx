@@ -8,7 +8,7 @@ import ManagePost from './Pages/ManagePost';
 import Analysis from './Pages/Analysis';
 import PrivateRoute from './Components/Authentication/Private_Route';
 import { useState } from 'react';
-import LoadingScreen from './Components/Loading';
+import LoadingScreen from './Components/Common/Loading';
 
 
 function App() {

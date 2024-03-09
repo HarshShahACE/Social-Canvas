@@ -1,13 +1,13 @@
 import { Avatar, Box, Divider, Typography, useMediaQuery } from "@mui/material";
 import { CssBaseline } from "@mui/material"
-import SideNav from "../Components/Navbar";
+import SideNav from "../Components/Common/Navbar";
 import PieChart from "../Components/Analysis/PieChart";
 import BubbleChart from "../Components/Analysis/BarChart";
 import MapChart from "../Components/Analysis/Mapchart";
-import { platforms } from "../Components/platefroms";
+import { platforms } from "../Components/Common/platefroms";
 import { useEffect, useState } from "react";
 import WordCloudComponent from "../Components/Analysis/wordcloud";
-import LoadingScreen from "../Components/Loading";
+import LoadingScreen from "../Components/Common/Loading";
 
 const Analysis = () => {
     const isMobile = useMediaQuery('(max-width:600px)');

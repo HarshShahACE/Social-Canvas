@@ -1,13 +1,13 @@
 import { Avatar, Button, Card, CardContent, CssBaseline, Grid, MenuItem, Select, TextField, Typography, useMediaQuery } from "@mui/material";
-import SideNav from "../Components/Navbar";
+import SideNav from "../Components/Common/Navbar";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import countries from '../assets/country.json';
 import states from '../assets/states.json';
 import { isEmailValid, isPhoneNumberValid } from "../utils/validation";
-import LoadingScreen from "../Components/Loading";
-import NoDataPopup from "../Components/NoDatapop";
+import LoadingScreen from "../Components/Common/Loading";
+import NoDataPopup from "../Components/Common/NoDatapop";
 import Male from '../assets/Photos/Male.jpg'
 import Female from '../assets/Photos/female.png'
 

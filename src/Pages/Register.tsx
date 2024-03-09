@@ -19,9 +19,9 @@ import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 import ContactPhoneRoundedIcon from '@mui/icons-material/ContactPhoneRounded';
 import axios, { AxiosError } from "axios";
 import { isEmailValid , isPhoneNumberValid , isPasswordValid } from '../utils/validation';
-import Copyright from '../Components/Copyright';
-import TextFieldComponent from '../Components/Textfield';
-import SelectComponent from '../Components/Selectfield';
+import Copyright from '../Components/Common/Copyright';
+import TextFieldComponent from '../Components/Fields/Textfield';
+import SelectComponent from '../Components/Fields/Selectfield';
 import { LocationCity } from '@mui/icons-material';
 
 export default function Register() {

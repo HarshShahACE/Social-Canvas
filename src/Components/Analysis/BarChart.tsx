@@ -89,7 +89,7 @@ const BarChart: React.FC = () => {
 
   return (
     <div style={{ margin: 'auto', height: '600px' }}> {/* Set the width and height of the chart container */}
-      <h2>Job Titles</h2>
+      <h2>Top 10 Job Titles</h2>
       {data.length > 0 && <Bar data={generateChartData()} options={options} />}
     </div>
   );

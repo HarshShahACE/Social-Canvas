@@ -1,4 +1,4 @@
-import Logo from '../assets/Photos/SCLOGO.png';
+import Logo from '../../assets/Photos/SCLOGO.png';
 
 const LoadingScreen = () => {
   return (

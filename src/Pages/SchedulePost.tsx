@@ -1,5 +1,5 @@
 import { Avatar, Box, Button, Card, CardContent, CssBaseline,  Dialog,  DialogContent,  DialogTitle,  Divider,  Grid,  IconButton, useMediaQuery } from "@mui/material";
-import SideNav from "../Components/Navbar";
+import SideNav from "../Components/Common/Navbar";
 import { useState } from "react";
 import LinkedInPostLayout from "../Components/Schedule_Post/Linkedin";
 import {  AddPhotoAlternateRounded, InsertEmoticonRounded } from "@mui/icons-material";
@@ -11,8 +11,8 @@ import React from "react";
 import SchedulePopup from "../Components/Schedule_Post/Schedule_Time";
 import axios from "axios";
 import Picker from 'emoji-picker-react';
-import LoadingScreen from "../Components/Loading";
-import { platforms } from "../Components/platefroms";
+import LoadingScreen from "../Components/Common/Loading";
+import { platforms } from "../Components/Common/platefroms";
 
 // File Preview Interface
 type FilePreview = {

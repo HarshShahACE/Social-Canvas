@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogContent, Avatar, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
+import AddCircleIcon from '@mui/icons-material/AddCircle';
+import LoadingScreen from '../Common/Loading';
+import axios from 'axios';
 import SocialMediaPopup from './SocialMediaPopup';
 import LinkInputPopup from './LinkInput';
-import axios from 'axios';
-import LoadingScreen from '../Loading';
-import { useNavigate } from 'react-router-dom';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
+import TwitterLink from './TwitterLink';
 
 interface SocialAccountData { 
   username: string;
@@ -14,13 +14,11 @@ interface SocialAccountData {
   platform: string;
 }
 
-
 const SocialAccount = () => {
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState<string[]>([]);
   const [userPic, setUserPic] = useState<string[]>([]);
   const [platform, setPlatform] = useState<string[]>([]);
-  const Home = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -46,13 +44,14 @@ const SocialAccount = () => {
               setUsername(jsonData.map((item: SocialAccountData) => item.username));
               setUserPic(jsonData.map((item: SocialAccountData) => item.profile_pic_url));
               setPlatform(jsonData.map((item: SocialAccountData) => item.platform));
+              setLoading(false);
             } else {
               setUsername([jsonData.username]);
               setUserPic([jsonData.profile_pic_url]);
               setPlatform([jsonData.platform]);
-            setLoading(false);
-          }
-        } else {
+              setLoading(false);
+            }
+          } else {
             console.log('Error:', response.statusText);
           }
         } catch (error) {
@@ -64,50 +63,54 @@ const SocialAccount = () => {
     fetchData();
   }, []);
 
-  const handleDeleteClick =  async () => {
+  const handleDeleteClick = async () => {
     // Handle delete click for a specific row
-
     const idString = sessionStorage.getItem('Myid'); // Retrieve the value from localStorage
-      if (idString !== null) {
-        const id = parseInt(idString);
-    
-
-    try {
-      const response = await axios.post(`${process.env.REACT_APP_Fast_API}/s_account_remove?user_id=${id}`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-    
-      if (response.status === 200) {
-        // Handle success, e.g., redirect to a success page or show a success message
-        setLoading(false);
-        window.alert('Account Deleted Successfully');
-        window.location.reload();
-      } else {
-        console.log(response.data);
-      }
-    }  catch (error: any) { // Explicitly cast error to 'any'
-        console.error('Error occurred:', error);
-        if (error.response && error.response.status === 400) {
-          const responseData = error.response.data;
-          if (responseData.detail === "Email already exists") {
-            window.alert('Email Already Registered. Please Enter Another Email Address');
-          } else if (responseData.detail === "Phone number already exists") {
-            window.alert('Phone Number Already Registered. Please Enter Another Phone Number');
+    if (idString !== null) {
+      const id = parseInt(idString);
+      // Display confirmation dialog
+      const confirmed = window.confirm('Are you sure you want to delete your account?');
+      if (confirmed) {
+        try {
+          const response = await axios.post(`${process.env.REACT_APP_Fast_API}/s_account_remove?user_id=${id}`, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          if (response.status === 200) {
+            // Handle success, e.g., redirect to a success page or show a success message
+            setLoading(false);
+            window.alert('Account Deleted Successfully');
+            window.location.reload();
           } else {
-            // Handle other 400 status cases if needed
+            console.log(response.data);
           }
-        } else {
-          // Handle other errors
-          window.alert('An error occurred while Deleting the profile. Please try again later.');
+        } catch (error: any) { // Explicitly cast error to 'any'
+          console.error('Error occurred:', error);
+          if (error.response && error.response.status === 400) {
+            const responseData = error.response.data;
+            if (responseData.detail === "Email already exists") {
+              window.alert('Email Already Registered. Please Enter Another Email Address');
+            } else if (responseData.detail === "Phone number already exists") {
+              window.alert('Phone Number Already Registered. Please Enter Another Phone Number');
+            } else {
+              // Handle other 400 status cases if needed
+            }
+          } else {
+            // Handle other errors
+            window.alert('An error occurred while Deleting the profile. Please try again later.');
+          }
         }
+      } else {
+        // If not confirmed, do nothing or show a message
+        console.log('Deletion cancelled.');
       }
-    }  
+    }
   };
 
   const [socialMediaPopupOpen, setSocialMediaPopupOpen] = useState(false);
   const [linkInputPopupOpen, setLinkInputPopupOpen] = useState(false);
+  const [tlinkInputPopupOpen, settLinkInputPopupOpen] = useState(false);
 
   const handleSocialMediaPopupOpen = () => {
     setSocialMediaPopupOpen(true);
@@ -118,34 +121,55 @@ const SocialAccount = () => {
     setLinkInputPopupOpen(false);
   };
 
-  const handleLinkSubmit = (link : any) => {
+  const handleLinkSubmit = (link: any) => {
     console.log('Submitted link:', link);
     window.alert("Account Added Successfully");
     setSocialMediaPopupOpen(false);
     setLinkInputPopupOpen(false);
   };
 
-  const handlePlatformSelectAndOpen = (platform : any) => {
+  const handlePlatformSelectAndOpen = (platform: any) => {
     if (platform === '') {
       window.alert("Please select a Social Media Platform");
     } else {
       switch (platform) {
         case 'linkedin':
-          window.open(`${process.env.REACT_APP_LINKEDIN_API}`, '_blank');
-          break;
-        case 'facebook':
-          window.open('https://www.facebook.com', '_blank');
+          setLinkInputPopupOpen(true);
           break;
         case 'twitter':
-          window.open('https://www.twitter.com', '_blank');
+          const fetchData = async () => {
+            setLoading(true);
+            try {
+              const response = await axios.get(`${process.env.REACT_APP_Fast_API}/twitter_authorization_url`, {
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+              });
+              if (response.status === 200) {
+                const jsonData = response.data;
+                console.log(jsonData);
+                const url = jsonData;
+                sessionStorage.setItem("Twitter",url);
+                window.open(url, '_Blank');
+                settLinkInputPopupOpen(true);
+                setLoading(false);
+              } else {
+                console.log('Error:', response.statusText);
+              }
+            } catch (error) {
+              console.error('Error fetching data:', error);
+            }
+          };
+      
+          fetchData();
           break;
         default:
           break;
       }
       setSocialMediaPopupOpen(false);
-      setLinkInputPopupOpen(true);
+      
     }
-  }
+  };
 
   console.log(username,userPic,platform)
 
@@ -161,6 +185,11 @@ const SocialAccount = () => {
           <LinkInputPopup isOpen={linkInputPopupOpen} onClose={handleCloseAllPopups} onSubmit={handleLinkSubmit} />
         </DialogContent>
       </Dialog>
+      <Dialog open={tlinkInputPopupOpen} onClose={handleCloseAllPopups}>
+        <DialogContent>
+          <TwitterLink isOpen={tlinkInputPopupOpen} onClose={handleCloseAllPopups} onSubmit={handleLinkSubmit} />
+        </DialogContent>
+      </Dialog>
       {loading && <LoadingScreen />}
       <Card sx={{ maxWidth:'80%' , margin:'10px' , borderRadius:'20px' , padding:'20px' , background: 'rgba(255, 255, 255 , 0.8)' , boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.5)' }}>
         <CardContent>
@@ -169,28 +198,28 @@ const SocialAccount = () => {
             <Button variant="contained" onClick={handleSocialMediaPopupOpen} startIcon={<AddCircleIcon/>}>Add</Button>
           </div>
           <TableContainer>
-            <Table style={{fontFamily:'sans-serif' , fontSize:'10px'}}>
+            <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell>ID</TableCell>
-                  <TableCell></TableCell>
-                  <TableCell>Username</TableCell>
-                  <TableCell>Platform Name</TableCell>
-                  <TableCell>Actions</TableCell>
+                  <TableCell style={{fontSize:'20px'}}>ID</TableCell>
+                  <TableCell style={{fontSize:'20px'}}></TableCell>
+                  <TableCell style={{fontSize:'20px'}}>Username</TableCell>
+                  <TableCell style={{fontSize:'20px'}}>Platform Name</TableCell>
+                  <TableCell style={{fontSize:'20px'}}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {username.length > 0 ? (
                   username.map((user, index) => (
                     <TableRow key={index}>
-                      <TableCell>{index + 1}</TableCell>
-                      <TableCell><Avatar alt="User" src={userPic[index]} /></TableCell>
-                      <TableCell>{user}</TableCell>
-                      <TableCell>{platform[index]}</TableCell>
+                      <TableCell style={{fontSize:'16px'}}>{index + 1}</TableCell>
+                      <TableCell style={{fontSize:'16px'}}><Avatar alt="User" src={userPic[index]} /></TableCell>
+                      <TableCell style={{fontSize:'16px'}}>{user}</TableCell>
+                      <TableCell style={{fontSize:'16px'}}>{platform[index]}</TableCell>
                       <TableCell>
-                      <IconButton style={{backgroundColor:'#1565C0' ,borderRadius:'5px' , color:'white' }} onClick={() => handleDeleteClick()}>
-                        <DeleteIcon />
-                      </IconButton>
+                        <IconButton style={{backgroundColor:'#1565C0' ,borderRadius:'5px' , color:'white' }} onClick={() => handleDeleteClick()}>
+                          <DeleteIcon />
+                        </IconButton>
                       </TableCell>
                     </TableRow>
                   ))

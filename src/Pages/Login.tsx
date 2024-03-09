@@ -13,11 +13,11 @@ import { useState } from 'react';
 import { IconButton } from '@mui/material';
 import {  EmailRounded, PasswordRounded } from '@mui/icons-material';
 import { isEmailValid, handlepasswordcheck } from '../utils/validation';
-import Copyright from '../Components/Copyright';
+import Copyright from '../Components/Common/Copyright';
 import axios, { AxiosError } from 'axios';
-import TextFieldComponent from '../Components/Textfield';
+import TextFieldComponent from '../Components/Fields/Textfield';
 import { useNavigate } from 'react-router-dom';
-import LoadingScreen from '../Components/Loading';
+import LoadingScreen from '../Components/Common/Loading';
 
 export default function Login() {
   
