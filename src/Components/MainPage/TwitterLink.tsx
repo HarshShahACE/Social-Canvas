@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, TextField, Button, Box, Typography } from '@mui/material';
-import LinkedInguide from '../../assets/Photos/Linkedin_Guide.png';
+import { Dialog, DialogContent, TextField, Box, Typography } from '@mui/material';
 import axios from 'axios';
+import ButtonComponent from '../Fields/Buttonfield';
 
 
 interface LinkInputPopupProps {
@@ -64,7 +64,7 @@ const TwitterLink: React.FC<LinkInputPopupProps> = ({ isOpen, onClose }) => {
           />
           <Typography style={{marginTop:'10px'}}>Copy the Link After Authorization And Paste In Above Field.</Typography>
         </Box>
-        <Button variant="contained" onClick={handleSubmit} fullWidth>Submit</Button>
+        <ButtonComponent variant="contained" onClick={handleSubmit} fullWidth>Submit</ButtonComponent>
       </DialogContent>
     </Dialog>
   );

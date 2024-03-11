@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, TextField, Button, Box, Typography } from '@mui/material';
+import { Dialog, DialogContent, TextField, Box, Typography } from '@mui/material';
 import LinkedInguide from '../../assets/Photos/Linkedin_Guide.png';
+import ButtonComponent from '../Fields/Buttonfield';
 
 
 interface LinkInputPopupProps {
@@ -37,7 +38,7 @@ const LinkInputPopup: React.FC<LinkInputPopupProps> = ({ isOpen, onClose }) => {
           <Typography style={{marginTop:'10px'}}>Go To Your Profile And Copy Link Shown in below Image Copy That link and Paste in above Field.</Typography>
           <img src={LinkedInguide} alt='Linkedin' style={{marginTop:'10px'}}></img>
         </Box>
-        <Button variant="contained" onClick={handleSubmit} fullWidth>Submit</Button>
+        <ButtonComponent variant="contained" onClick={handleSubmit} fullWidth>Submit</ButtonComponent>
       </DialogContent>
     </Dialog>
   );

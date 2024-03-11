@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -18,6 +17,7 @@ import axios, { AxiosError } from 'axios';
 import TextFieldComponent from '../Components/Fields/Textfield';
 import { useNavigate } from 'react-router-dom';
 import LoadingScreen from '../Components/Common/Loading';
+import ButtonComponent from '../Components/Fields/Buttonfield';
 
 export default function Login() {
   
@@ -142,20 +142,20 @@ export default function Login() {
                 label="Remember me"
                 sx={{ display: 'flex', alignItems: 'center', marginLeft: '-8px' }}
               />
-              <Button
+              <ButtonComponent
                 type="submit"
                 fullWidth
                 variant="contained"
-                sx={{ mt: 3, mb: 2 }}
+                style={{ marginTop: '10px', marginBottom: '10px' }}
               >
                 Sign In
-              </Button>
+              </ButtonComponent>
               <Grid container>
                 <Grid item xs>
-                  <Button href='/'>Forgot Password</Button>
+                  <ButtonComponent variant='text' href='/'>Forgot Password</ButtonComponent>
                 </Grid>
                 <Grid item>
-                  <Button href='/Register'> Don't Have Account? Sign Up </Button>
+                  <ButtonComponent variant='text' href='/Register'> Don't Have Account? Sign Up </ButtonComponent>
                 </Grid>
               </Grid>
               <Copyright sx={{ mt: 5 }} />

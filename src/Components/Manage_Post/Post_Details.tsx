@@ -1,7 +1,9 @@
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button, TextField, IconButton } from "@mui/material";
+import { Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from "@mui/material";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Close } from "@mui/icons-material";
+import TextFieldComponent from "../Fields/Textfield";
+import ButtonComponent from "../Fields/Buttonfield";
 
 interface Media {
   id: number;
@@ -81,32 +83,30 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, open, onClose }) => {
         <DialogContent style={{ marginTop: '0', marginBottom: '0' }}>
         {eventDetails && (
           <>
-            <TextField
+            <TextFieldComponent
               style={{ marginBottom: 20 , marginTop:10 }}
               label="Content"
               value={eventDetails.content}
-              fullWidth
             />
-            <TextField
+            <TextFieldComponent
               style={{ marginBottom: 20 }}
               label="Platform"
               value={capitalizeFirstLetter(eventDetails.platform_name)}
-              fullWidth
             />
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <TextField
+                <TextFieldComponent
                 style={{ flex: 1, marginBottom: 20 }}
                 label="Post Type"
                 value={capitalizeFirstLetter(eventDetails.post_type)}
                 />
-                <TextField
+                <TextFieldComponent
                 style={{flex: 1, marginBottom: 20, marginLeft: 10}}
                 label="Schedule Type"
                 value={capitalizeFirstLetter(eventDetails.sch_type) }
                 />
             </div>
             <div style={{ display: 'flex', alignItems: 'center' }}>
-                <TextField
+                <TextFieldComponent
                 style={{ flex: 1, marginBottom: 20 }}
                 label="Date"
                 value={date}
@@ -114,7 +114,7 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, open, onClose }) => {
                     readOnly: true,
                 }}
                 />
-                <TextField
+                <TextFieldComponent
                 style={{ flex: 1, marginBottom: 20, marginLeft: 10 }}
                 label="Time"
                 value={time}
@@ -139,8 +139,8 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, open, onClose }) => {
       <DialogActions style={{ margin: '0 auto', paddingBottom: '30px' }}>
         {eventDetails && eventDetails.sch_type === "schedule" && !isDateTimePassed(eventDetails.sch_user_time) && (
             <>
-            <Button variant="contained" onClick={handleCloseDialog}>Update</Button>
-            <Button variant="contained" onClick={handleCloseDialog}>Delete</Button>
+            <ButtonComponent variant="contained" onClick={handleCloseDialog}>Update</ButtonComponent>
+            <ButtonComponent variant="contained" onClick={handleCloseDialog}>Delete</ButtonComponent>
             </>
         )}
         </DialogActions>

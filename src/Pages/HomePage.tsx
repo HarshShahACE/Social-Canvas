@@ -90,7 +90,7 @@ export default function HomePage() {
   };
 
   return (
-    <div style={{ display: 'flex' , backgroundImage: `url(${defaultImagePath})`, backgroundSize:'contain',
+    <div style={{ display: 'flex' , backgroundImage: `url(${defaultImagePath})`, backgroundSize:'contain', width:'100%',
     backgroundRepeat:'no-repeat',
     backgroundPosition:'bottom right'  , height:'100vh' }}>
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>

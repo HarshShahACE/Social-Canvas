@@ -17,50 +17,32 @@ interface LinkedInPostProps {
     content: string;
     media?: FilePreview;
   }
-
-  interface SocialAccountData { 
-    username: string;
-    profile_pic_url: string;
-    platform: string;
-  }
   
-
 const LinkedInPost:React.FC<LinkedInPostProps> = ({ content, media }) => {
 
-  const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState<string[]>([]);
   const [userPic, setUserPic] = useState<string[]>([]);
-  const [platform, setPlatform] = useState<string[]>([]);
 
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true);
       const idString = sessionStorage.getItem('Myid');
       if (idString !== null) {
         const id = parseInt(idString);
         try {
-          const timeoutId = setTimeout(() => {
-            setLoading(false);
-          }, 2000);
-
           const response = await axios.post(`${process.env.REACT_APP_Fast_API}/s_account_list?user_id=`+id, {
             headers: {
               'Content-Type': 'application/json',
             },
           });
-
-          clearTimeout(timeoutId);
           if (response.status === 200) {
             const jsonData = response.data;
             if (Array.isArray(jsonData)) {
-              setUsername(jsonData.map((item: SocialAccountData) => item.username));
-              setUserPic(jsonData.map((item: SocialAccountData) => item.profile_pic_url));
-              setPlatform(jsonData.map((item: SocialAccountData) => item.platform));
+              const linkedinData = jsonData.filter(item => item.platform === "LinkedIn");
+              setUsername(linkedinData.map(item => item.username));
+              setUserPic(linkedinData.map(item => item.profile_pic_url));
             } else {
               setUsername([jsonData.username]);
               setUserPic([jsonData.profile_pic_url]);
-              setPlatform([jsonData.platform]);
-            setLoading(false);
           }
         } else {
             console.log('Error:', response.statusText);

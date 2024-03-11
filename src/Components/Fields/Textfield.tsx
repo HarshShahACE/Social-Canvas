@@ -6,11 +6,13 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 interface TextFieldProps {
   label?: string;
   value: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: () => void;
   startAdornment?: JSX.Element;
   type?: string;
   maxLength?: number;
+  style?: React.CSSProperties;
+  InputProps?:any;
 }
 
 const TextFieldComponent: React.FC<TextFieldProps> = ({
@@ -21,6 +23,7 @@ const TextFieldComponent: React.FC<TextFieldProps> = ({
   startAdornment,
   type = 'text',
   maxLength,
+  style,
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -54,6 +57,7 @@ const TextFieldComponent: React.FC<TextFieldProps> = ({
         endAdornment: endAdornmentComponent,
       }}
       inputProps={{ maxLength }}
+      style={style}
     />
   );
 };

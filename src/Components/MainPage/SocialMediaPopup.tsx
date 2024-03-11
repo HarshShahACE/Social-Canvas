@@ -1,7 +1,8 @@
 import React from 'react';
-import { Button, Box, IconButton } from '@mui/material';
-import { LinkedIn, Facebook, Twitter, Close } from '@mui/icons-material';
+import { Box, IconButton } from '@mui/material';
+import { LinkedIn, Twitter, Close } from '@mui/icons-material';
 import FacebookLoginButton from './FaceBook';
+import ButtonComponent from '../Fields/Buttonfield';
 
 interface SocialMediaPopupProps {
   isOpen: boolean;
@@ -32,13 +33,13 @@ const SocialMediaPopup: React.FC<SocialMediaPopupProps> = ({ isOpen, onClose, on
         </IconButton>
         </Box>
         <Box marginBottom={2} display="flex">
-          <Button onClick={() => handleLinkOpen('linkedin')}>
+          <ButtonComponent onClick={() => handleLinkOpen('linkedin')}>
             <LinkedIn />
-          </Button>
+          </ButtonComponent>
           <FacebookLoginButton/>
-          <Button onClick={() => handleLinkOpen('twitter')}>
+          <ButtonComponent onClick={() => handleLinkOpen('twitter')}>
             <Twitter />
-          </Button>
+          </ButtonComponent>
           {/* Add more icon buttons for other platforms as needed */}
         </Box>
       </div>

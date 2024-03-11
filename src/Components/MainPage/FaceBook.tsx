@@ -1,6 +1,6 @@
 import { Facebook } from '@mui/icons-material';
-import { Button } from '@mui/material';
 import React, { useEffect } from 'react';
+import ButtonComponent from '../Fields/Buttonfield';
 
 declare global {
   interface Window {
@@ -55,9 +55,9 @@ const FacebookLoginButton: React.FC = () => {
 
   return (
     <div>
-      <Button onClick={() => handleFacebookLogin()}>
+      <ButtonComponent onClick={() => handleFacebookLogin()}>
             <Facebook />
-          </Button>
+          </ButtonComponent>
     </div>
   );
 };

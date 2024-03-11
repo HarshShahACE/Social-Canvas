@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogContent, Avatar, IconButton } from '@mui/material';
+import { Card, CardContent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogContent, Avatar, IconButton } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import LoadingScreen from '../Common/Loading';
@@ -7,6 +7,7 @@ import axios from 'axios';
 import SocialMediaPopup from './SocialMediaPopup';
 import LinkInputPopup from './LinkInput';
 import TwitterLink from './TwitterLink';
+import ButtonComponent from '../Fields/Buttonfield';
 
 interface SocialAccountData { 
   username: string;
@@ -195,7 +196,7 @@ const SocialAccount = () => {
         <CardContent>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' }}>
             <h2>Social Media Accounts</h2>
-            <Button variant="contained" onClick={handleSocialMediaPopupOpen} startIcon={<AddCircleIcon/>}>Add</Button>
+            <ButtonComponent variant="contained" onClick={handleSocialMediaPopupOpen} startIcon={<AddCircleIcon/>}>Add</ButtonComponent>
           </div>
           <TableContainer>
             <Table>

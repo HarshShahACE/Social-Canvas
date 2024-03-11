@@ -1,6 +1,7 @@
 import React from 'react';
-import { Modal, Box, TextField, Button, useMediaQuery } from '@mui/material';
+import { Modal, Box, TextField, useMediaQuery } from '@mui/material';
 import timezonedata from '../../assets/timezones.json';
+import ButtonComponent from '../Fields/Buttonfield';
 
 interface SchedulePopupProps {
     isOpen: boolean;
@@ -70,9 +71,9 @@ const SchedulePopup: React.FC<SchedulePopupProps> = ({ isOpen, onClose, selected
                         ))}
                     </select>
                 
-                <Button variant="contained" style={{ margin: '20px auto', display: 'block'}} onClick={handleScheduleClick}>
+                <ButtonComponent variant="contained" style={{ margin: '20px auto', display: 'block'}} onClick={handleScheduleClick}>
                     Submit
-                </Button>
+                </ButtonComponent>
             </Box>
         </Modal>
     );

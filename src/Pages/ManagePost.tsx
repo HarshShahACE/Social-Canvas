@@ -6,6 +6,8 @@ import { useMediaQuery } from "@mui/material";
 import axios from "axios";
 import SideNav from "../Components/Common/Navbar";
 import PostDetails from "../Components/Manage_Post/Post_Details";
+import LoadingScreen from "../Components/Common/Loading";
+import NoDataPopup from "../Components/Common/NoDatapop";
 
 const localizer = momentLocalizer(moment);
 
@@ -21,16 +23,27 @@ interface Event extends CalendarEvent {
 const ManagePost = () => {
     const isMobile = useMediaQuery('(max-width:600px)');
     const defaultImagePath = process.env.REACT_APP_DEFAULT_APP_IMAGE;
+    const [loading,setloading] = useState(false);
 
     const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
     const [openDialog, setOpenDialog] = useState(false);
     const [events, setEvents] = useState<Event[]>([]); // Store events received from API
+    const [showPopup, setShowPopup] = useState(false);
+
+    const handlePopupClose = () => {
+        setShowPopup(false);
+    };
 
     const idString = sessionStorage.getItem('Myid'); // Retrieve the value from localStorage
     const id = idString ? parseInt(idString) : undefined;
 
     useEffect(() => {
+        setloading(true);
         const fetchData = async () => {
+            const timeoutId = setTimeout(() => {
+                setloading(false);
+                setShowPopup(true);
+                }, 2000);
             try {
                 if (id !== undefined) {
                     const response = await axios.get(`${process.env.REACT_APP_Fast_API}/scheduled_posts/${id}`, {
@@ -38,6 +51,7 @@ const ManagePost = () => {
                             'Content-Type': 'application/json',
                         },
                     });
+                    clearTimeout(timeoutId);
                     if (response.status === 200) {
                         const jsonData = response.data;
 
@@ -66,8 +80,10 @@ const ManagePost = () => {
                         });
 
                         setEvents(formattedEvents);
+                        setloading(false);
                     } else {
                         console.log('Error:', response.statusText);
+                        window.alert("No Data Found");
                     }
                 }
             } catch (error) {
@@ -92,6 +108,8 @@ const ManagePost = () => {
         <div style={{ display: 'flex', backgroundImage: `url(${defaultImagePath})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'bottom right', height: '100vh' }}>
             {/* Sidebar */}
             <SideNav />
+            <NoDataPopup isOpen={showPopup} onClose={handlePopupClose} />
+            {loading && <LoadingScreen />}
             {/* Main content */}
             <div style={{ flex: 1 }}>
                 <main style={{ flexGrow: 1, padding: 3, marginTop: '70px', marginLeft: isMobile ? '20px' : '240px' }}>

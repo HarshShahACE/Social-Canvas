@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Card, CardContent, CssBaseline,  Dialog,  DialogContent,  DialogTitle,  Divider,  Grid,  IconButton, useMediaQuery } from "@mui/material";
+import { Avatar, Box, Card, CardContent, CssBaseline,  Dialog,  DialogContent,  DialogTitle,  Divider,  Grid,  IconButton, Typography, useMediaQuery } from "@mui/material";
 import SideNav from "../Components/Common/Navbar";
 import { useState } from "react";
 import LinkedInPostLayout from "../Components/Schedule_Post/Linkedin";
@@ -13,6 +13,7 @@ import axios from "axios";
 import Picker from 'emoji-picker-react';
 import LoadingScreen from "../Components/Common/Loading";
 import { platforms } from "../Components/Common/platefroms";
+import ButtonComponent from "../Components/Fields/Buttonfield";
 
 // File Preview Interface
 type FilePreview = {
@@ -294,45 +295,46 @@ export default function Schedule_Post(){
                                     </Avatar>
                                 ))}
                             </Box>
+                            <Typography style={{color:'red' , marginTop:'10px'}}>Twitter And Facebook Are Currently unavailable For Posting.</Typography>
                             <Divider style={{ margin: '10px 0' }} />
 
                             {/* Content Textarea with Emoji Picker */}
                             <Box position="relative" width="100%" marginBottom={5}>
-      <textarea
-        rows={10}
-        value={content}
-        onChange={handleContentChange}
-        placeholder="Write something..."
-        style={{ width: '100%', resize: 'none', padding: '10px' }}
-      />
-      <Box
-        style={{
-          position: 'absolute',
-          bottom: '5px',
-          left: '0',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <p style={{ fontSize: '14px', color: 'black', marginLeft:'10px' }}>
-          {`${content.length}/250`}
-        </p>
-        <IconButton onClick={() => setEmojiPickerOpen(!emojiPickerOpen)}>
-          <InsertEmoticonRounded />
-        </IconButton>
-        <Dialog open={emojiPickerOpen} onClose={() => setEmojiPickerOpen(false)} fullWidth maxWidth="xs" PaperProps={{ style: { position: 'absolute', left: '0', bottom: '60px' } }}>
-          <DialogTitle>Choose an emoji</DialogTitle>
-          <DialogContent>
-            <Picker
-              onEmojiClick={(emojiObject) => {
-                setContent((prevContent) => prevContent + emojiObject.emoji);
-                setEmojiPickerOpen(false);
-              }}
-            />
-          </DialogContent>
-        </Dialog>
-      </Box>
-    </Box>
+                                <textarea
+                                    rows={10}
+                                    value={content}
+                                    onChange={handleContentChange}
+                                    placeholder="Write something..."
+                                    style={{ width: '100%', resize: 'none', padding: '10px' }}
+                                />
+                                <Box
+                                    style={{
+                                    position: 'absolute',
+                                    bottom: '5px',
+                                    left: '0',
+                                    display: 'flex',
+                                    alignItems: 'center',
+                                    }}
+                                >
+                                    <p style={{ fontSize: '14px', color: 'black', marginLeft:'10px' }}>
+                                    {`${content.length}/250`}
+                                    </p>
+                                    <IconButton onClick={() => setEmojiPickerOpen(!emojiPickerOpen)}>
+                                    <InsertEmoticonRounded />
+                                    </IconButton>
+                                    <Dialog open={emojiPickerOpen} onClose={() => setEmojiPickerOpen(false)} fullWidth maxWidth="xs" PaperProps={{ style: { position: 'absolute', left: '0', bottom: '60px' } }}>
+                                    <DialogTitle>Choose an emoji</DialogTitle>
+                                    <DialogContent>
+                                        <Picker
+                                        onEmojiClick={(emojiObject) => {
+                                            setContent((prevContent) => prevContent + emojiObject.emoji);
+                                            setEmojiPickerOpen(false);
+                                        }}
+                                        />
+                                    </DialogContent>
+                                    </Dialog>
+                                </Box>
+                            </Box>
                             {/* Media Upload */}
                             <Box display="flex" alignItems="center" mt={2}>
                                 <input
@@ -373,8 +375,8 @@ export default function Schedule_Post(){
 
                             {/* Buttons */}
                             <Box display="flex" mt={4} mb={0}>
-                                <Button variant="contained" onClick={handlePostNow}>Post Now</Button>
-                                <Button variant="contained" onClick={handleScheduleOpen} style={{marginLeft:'10px'}}>Schedule</Button>
+                                <ButtonComponent variant="contained" onClick={handlePostNow}>Post Now</ButtonComponent>
+                                <ButtonComponent variant="contained" onClick={handleScheduleOpen} style={{marginLeft:'10px'}}>Schedule</ButtonComponent>
                             </Box>
                             </CardContent>  
                         </Card>

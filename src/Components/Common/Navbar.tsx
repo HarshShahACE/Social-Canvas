@@ -51,7 +51,7 @@ export default function SideNav() {
   return (
     <Box sx={{ display: 'flex' }}>
       <AppBar position="fixed" sx={{ zIndex: 1, top: 0 }}>
-      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+      <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', backgroundColor:'#0E508C' }}>
   {isMobile && (
     <IconButton
       color="inherit"
@@ -127,7 +127,7 @@ export default function SideNav() {
   >
     <Box sx={{ backgroundColor: 'inherit' }}> {/* This box ensures that the background color doesn't override the selected item color */}
   <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 2 }}>
-    <img src="../../SitePhotos/SCLOGO.png" alt="Logo" style={{ maxWidth: '50px', maxHeight: '50px' }} />
+    <img src="../../SitePhotos/img1.png" alt="Logo" style={{ maxWidth: '50px', maxHeight: '50px' }} />
   </Box>
   <Divider />
   {sideList.map(({ id, text, icon, path }) => (

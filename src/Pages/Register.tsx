@@ -1,6 +1,5 @@
 import * as React from 'react';
 import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
@@ -23,6 +22,7 @@ import Copyright from '../Components/Common/Copyright';
 import TextFieldComponent from '../Components/Fields/Textfield';
 import SelectComponent from '../Components/Fields/Selectfield';
 import { LocationCity } from '@mui/icons-material';
+import ButtonComponent from '../Components/Fields/Buttonfield';
 
 export default function Register() {
 
@@ -277,12 +277,12 @@ export default function Register() {
                 label="I Agree to the Terms and Conditions"
                 sx={{ display: 'flex', alignItems: 'center', marginLeft: '-8px', mt:2}}
               />
-              <Button type="submit" fullWidth variant="contained" sx={{ mt: 2, mb: 2 }}>
+              <ButtonComponent type="submit" variant="contained" fullWidth style={{ marginTop: '10px', marginBottom: '10px' }}>
                 Sign In
-              </Button>
+              </ButtonComponent>
               <Grid container>
                 <Grid item>
-                  <Button href='/Login' style={{textAlign:'end'}}>Already Have An Account? Sign In</Button>
+                  <ButtonComponent href='/Login' style={{textAlign:'end'}} variant='text'>Already Have An Account? Sign In</ButtonComponent>
                 </Grid>
               </Grid>
               <Copyright sx={{ mt: 1 }} />

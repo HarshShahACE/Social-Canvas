@@ -1,6 +1,7 @@
 import React from 'react';
-import { IconButton, Button } from '@mui/material';
+import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import ButtonComponent from '../Fields/Buttonfield';
 
 interface NoDataPopupProps {
   isOpen: boolean;
@@ -21,7 +22,7 @@ const NoDataPopup: React.FC<NoDataPopupProps> = ({ isOpen, onClose }) => {
             <h2>No Data Found</h2>
           </div>
           <div className="button-container">
-            <Button variant="contained" onClick={onClose}>OK</Button>
+            <ButtonComponent variant="contained" onClick={onClose}>OK</ButtonComponent>
           </div>
         </div>
       </div>

@@ -3,11 +3,11 @@ import { CssBaseline } from "@mui/material"
 import SideNav from "../Components/Common/Navbar";
 import PieChart from "../Components/Analysis/PieChart";
 import BubbleChart from "../Components/Analysis/BarChart";
-import MapChart from "../Components/Analysis/Mapchart";
 import { platforms } from "../Components/Common/platefroms";
 import { useEffect, useState } from "react";
 import WordCloudComponent from "../Components/Analysis/wordcloud";
 import LoadingScreen from "../Components/Common/Loading";
+import axios from "axios";
 
 const Analysis = () => {
     const isMobile = useMediaQuery('(max-width:600px)');
@@ -26,11 +26,39 @@ const Analysis = () => {
         }
     };
 
+    const [jsonData, setJsonData] = useState(null);
+
+    const idString = sessionStorage.getItem('Myid'); // Retrieve the value from localStorage
+      if (idString !== null) {
+        var id = parseInt(idString);
+    }
+
     useEffect(() => {
         // Simulate loading for 10 seconds
         const timer = setTimeout(() => {
           setLoading(false);
         }, 1000);
+
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_Fast_API}/fetch_linkedin_data/${id}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                });
+                if (response.status === 200) {
+                const data = await response.data;
+                console.log("Analysis Data : ",+data);
+                setJsonData(data);
+              } else {
+                throw new Error('Failed to fetch data');
+              }
+            } catch (error) {
+              console.error('Error fetching data:', error);
+            }
+          };
+
+        fetchData();
     
         // Clear the timer on unmount or if loading is completed early
         return () => clearTimeout(timer);
@@ -69,18 +97,18 @@ const Analysis = () => {
                             <div style={{ height: '600px' ,width:'90%', borderRadius:'20px' ,padding: '20px', backgroundColor: 'rgba(250,250,250,0.8)', border: '1px solid #ddd' }} >
                                 <h2>LinkedIn Connection Details</h2>
                                 <div>
-                                    <PieChart />
+                                    <PieChart locationData={jsonData || null} />
                                 </div>
                             </div>
-                        <div style={{ display: 'flex', flexDirection: 'row' }}>
-                            <div style={{ width: '50%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(250,250,250,0.8)', border: '1px solid #ddd' }} >
+                            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                <div style={{ width: '50%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(250,250,250,0.8)', border: '1px solid #ddd' }} >
                                 <div>
-                                    <WordCloudComponent />
+                                    <WordCloudComponent locationData={jsonData || null} />
                                 </div>
                             </div>
                             <div style={{ width: '50%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(250,250,250,0.8)', border: '1px solid #ddd' }} >
                                 <div>
-                                    <BubbleChart />
+                                    <BubbleChart locationData={jsonData || null} />
                                 </div>
                             </div>
                         </div>

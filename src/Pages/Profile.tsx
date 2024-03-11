@@ -1,4 +1,4 @@
-import { Avatar, Button, Card, CardContent, CssBaseline, Grid, MenuItem, Select, TextField, Typography, useMediaQuery } from "@mui/material";
+import { Avatar, Card, CardContent, CssBaseline, Grid, MenuItem, Select, TextField, Typography, useMediaQuery } from "@mui/material";
 import SideNav from "../Components/Common/Navbar";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -10,6 +10,7 @@ import LoadingScreen from "../Components/Common/Loading";
 import NoDataPopup from "../Components/Common/NoDatapop";
 import Male from '../assets/Photos/Male.jpg'
 import Female from '../assets/Photos/female.png'
+import ButtonComponent from "../Components/Fields/Buttonfield";
 
 interface UserData {
   name: string,
@@ -340,12 +341,12 @@ const Profile = () => {
                                   </Grid>
                                 </Grid>
                                 <Grid item xs={12} style={{marginTop:'10px'}}>
-                                  <Button type="submit" variant="contained" color="primary">
+                                  <ButtonComponent type="submit" variant="contained">
                                     Save
-                                  </Button>
-                                  <Button type="submit" onClick={handlecancel} variant="contained" color="primary" style={{marginLeft:'10px'}}>
+                                  </ButtonComponent>
+                                  <ButtonComponent type="submit" onClick={handlecancel} variant="contained" style={{marginLeft:'10px'}}>
                                     Cancel
-                                  </Button>
+                                  </ButtonComponent>
                                 </Grid>
                               </form>
                             </Grid>
