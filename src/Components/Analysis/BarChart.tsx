@@ -68,12 +68,19 @@ const BarChart: React.FC<Props> = ({ locationData }) => {
           display: true,
           text: 'Count',
         },
+        ticks: {
+          color: 'white', // Set font color of x-axis labels to red
+          font: {
+            size: 10, // Set font size to 10
+          },
+        },
       },
       y: {
         title: {
           display: true,
         },
         ticks: {
+          color:'white',
           font: {
             size: 10, // Set font size to 10
           },
@@ -89,6 +96,16 @@ const BarChart: React.FC<Props> = ({ locationData }) => {
         },
       },
     },
+    elements: {
+      bar: {
+        backgroundColor: 'rgba(33, 150, 243, 0.8)', // Darker blue color with transparency
+        borderColor: 'white', // Set border color of the bars to white
+        borderWidth: 1,
+      },
+    },
+    // Set the background color of the chart area to white
+    backgroundColor: 'white',
+    borderColor:'white'
   };
 
   return (

@@ -25,19 +25,19 @@ const GrowthCard: React.FC<GrowthCardProps> = ({ title, currentValue, previousVa
                 position: 'relative',
                 overflow: 'hidden',
                 borderRadius: 5,
-                backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0.5)), url(${backgroundImage})`,
+                backgroundImage: `linear-gradient(rgba(25, 28, 36, 0.1), rgba(25, 28, 36, 0.1)), url(${backgroundImage})`,
                 backgroundSize: 'cover',
                 backgroundPosition: 'center',
-                margin: '20px 30px 20px 0px'
+                margin: '20px 40px 20px 0px'
             }}>
-                <CardContent style={{ position: 'relative', zIndex: 1, color: '#000', textAlign: 'center' }}>
-                    <Typography variant="h5" component="div">
+                <CardContent style={{ position: 'relative', zIndex: 1, color: '#FFF', textAlign: 'center' }}>
+                    <Typography variant="h5" component="div" >
                         {title}
                     </Typography>
                     <Typography variant="h6">
                         {currentValue}
                     </Typography>
-                    <Typography variant="body2" color={growthPercentage > 0 ? 'green' : 'red'}>
+                    <Typography variant="body2" color={growthPercentage > 0 ? '#00BD52' : 'red'}>
                         {growthPercentage > 0 ? <ArrowDropUpIcon sx={{ fontSize: 16, verticalAlign: 'middle' }} /> : <ArrowDropDownIcon sx={{ fontSize: 16, verticalAlign: 'middle' }}/>}
                         {`${absGrowthPercentage.toFixed(2)}%`}
                     </Typography>

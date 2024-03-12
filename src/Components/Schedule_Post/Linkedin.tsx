@@ -64,7 +64,7 @@ const LinkedInPost:React.FC<LinkedInPostProps> = ({ content, media }) => {
           Linkedin
         </Typography>
       </div>
-      <Card style={{ maxWidth: 400, margin:'20px', boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.5)' }}>
+      <Card style={{ maxWidth: 400, margin:'20px',border: '1px solid rgba(255, 255, 255, 0.7)' }}>
         <CardHeader
           avatar={
             <Avatar alt="User" src={userPic[0]} />

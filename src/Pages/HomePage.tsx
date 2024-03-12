@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import SideNav from '../Components/Common/Navbar';
-import { CssBaseline, useMediaQuery } from '@mui/material';
+import { Avatar, Box, CssBaseline, Typography, useMediaQuery } from '@mui/material';
 import GrowthCard from '../Components/MainPage/MainPage_cards';
 import SocialAccount from '../Components/MainPage/MainPage_Table';
 import first from '../assets/Photos/1st.png'
@@ -14,6 +14,7 @@ import facebook from '../assets/Photos/FBLogo.png'
 import SelectComponent from '../Components/Fields/Selectfield';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { platforms } from '../Components/Common/platefroms';
 
 // Plateform Selection Options
 const options = [
@@ -90,7 +91,7 @@ export default function HomePage() {
   };
 
   return (
-    <div style={{ display: 'flex' , backgroundImage: `url(${defaultImagePath})`, backgroundSize:'contain', width:'100%',
+    <div style={{ display: 'flex' ,backgroundColor:'#020202' ,backgroundImage: `url(${defaultImagePath})`, backgroundSize:'contain', width:'100%',
     backgroundRepeat:'no-repeat',
     backgroundPosition:'bottom right'  , height:'100vh' }}>
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -103,14 +104,16 @@ export default function HomePage() {
             {/* Main content */}
               <div style={{marginLeft: "20px", justifyContent: "flex-start"}}>
                 {/* Dropdown for selecting platform */}
-                <div style={{width:'50%' , marginTop:'10px'}}>
-                  <SelectComponent
-                    label="Platform"
-                    value={selectedPlatform}
-                    onChange={handlePlatformChange}
-                    options={options}
-                  />
-                </div>
+                <Box display="flex" alignItems="center" mt={2}>
+                  {platforms.map(platform => (
+                    <Box key={platform.value} style={{ display: 'flex', alignItems: 'center',  backgroundColor: selectedPlatform === platform.value ? '#FFFFFF' : '#283141', borderRadius: '10px', boxShadow: '0px 4px 8px rgba(67, 131, 197, 0.9)', marginRight: '20px' , padding:'5px' }}>
+                      <Avatar style={{ cursor: 'pointer' }} onClick={() => handlePlatformChange(platform.value)}>
+                        <img src={platform.imageUrl} alt={platform.name} style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
+                      </Avatar>
+                      <Typography variant="subtitle1" style={{ marginLeft: '5px', marginRight: '30px', fontSize: '18px', color: selectedPlatform === platform.value ? '#000000' : '#FFFFFF' }}>{platform.name}</Typography>
+                    </Box>
+                  ))}
+                </Box>
                 {/* Growth Cards */}
                 <div
                   style={{
@@ -118,6 +121,7 @@ export default function HomePage() {
                     flexDirection: isMobile ? "column" : "row",
                     justifyContent: "",
                     alignItems: "flex-start",
+                    width:'80%'
                   }}
                 >
                   {/* Conditional rendering of GrowthCard components based on selected platform */}
@@ -129,21 +133,11 @@ export default function HomePage() {
                       <GrowthCard title="New Connections" currentValue={30} previousValue={35} backgroundImage={fifth} />
                     </div>
                   )}
-                  {selectedPlatform === "facebook" && (
-                    <div style={{ display: 'flex' , flexDirection: isMobile? 'column' : 'row' }}>
-                      <GrowthCard title="Posts" currentValue={500} previousValue={450} backgroundImage={first} />
-                      <GrowthCard title="Likes" currentValue={1000} previousValue={980} backgroundImage={second} />
-                      <GrowthCard title="Comments" currentValue={300} previousValue={275} backgroundImage={third} />
-                      <GrowthCard title="Share" currentValue={150} previousValue={130} backgroundImage={fourth} />
-                      <GrowthCard title="New Followers" currentValue={30} previousValue={35} backgroundImage={fifth} />
-                    </div>
-                  )}
                   {selectedPlatform === "twitter" && (
                     <div style={{ display: 'flex', flexDirection: isMobile? 'column' : 'row' }}>
                       <GrowthCard title="Posts" currentValue={500} previousValue={450} backgroundImage={first} />
                       <GrowthCard title="Likes" currentValue={1000} previousValue={980} backgroundImage={second} />
                       <GrowthCard title="Comments" currentValue={300} previousValue={275} backgroundImage={third} />
-                      <GrowthCard title="Share" currentValue={140} previousValue={160} backgroundImage={fourth} />
                       <GrowthCard title="New Followers" currentValue={30} previousValue={35} backgroundImage={fifth} />
                     </div>
                   )}

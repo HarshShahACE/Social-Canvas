@@ -173,7 +173,7 @@ export default function Register() {
     <Grid container component="main" sx={{}}>
       <CssBaseline />
       <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square style={{border:'none', 
-      margin:'20px' , borderRadius:'20px' , background:'rgba(255, 255, 255, 0.7)'}}>
+      margin:'20px' , borderRadius:'20px' , background:'#191C24'}}>
         <Box
           sx={{
             my: 4,
@@ -196,14 +196,14 @@ export default function Register() {
               label="Name"
               value={name1}
               onChange={(e) => setname(e.target.value)}
-              startAdornment={<IconButton disabled><Person2Rounded style={{ color: '#707070' }} /></IconButton>}
+              startAdornment={<IconButton disabled><Person2Rounded style={{ color: '#FFFFFF' }} /></IconButton>}
             />
             <TextFieldComponent
               label="Phone Number"
               value={phone1}
               onChange={e=>setphone(e.target.value)}
               onBlur={handlephoneBlur}
-              startAdornment={<IconButton disabled><ContactPhoneRoundedIcon style={{color:'#707070'}} /></IconButton>}
+              startAdornment={<IconButton disabled><ContactPhoneRoundedIcon style={{color:'#FFFFFF'}} /></IconButton>}
               maxLength={10}
             />
             <TextFieldComponent
@@ -211,7 +211,7 @@ export default function Register() {
               value={email1}
               onChange={e=>setemail(e.target.value)}
               onBlur={handleemailBlur}
-              startAdornment={<IconButton disabled><EmailRounded style={{color:'#707070'}} /></IconButton>}
+              startAdornment={<IconButton disabled><EmailRounded style={{color:'#FFFFFF'}} /></IconButton>}
             />
             <TextFieldComponent
               label="Password"
@@ -219,7 +219,7 @@ export default function Register() {
               value={password1}
               onChange={e=>setpassword(e.target.value)}
               onBlur={handlepasswordBlur}
-              startAdornment={<IconButton><PasswordRounded style={{color:'#707070'}} /></IconButton>}
+              startAdornment={<IconButton><PasswordRounded style={{color:'#FFFFFF'}} /></IconButton>}
             />
             <p style={{ textAlign: 'left', fontSize: 12 , marginBottom: 0 , marginTop:0 }}>
               Password Field Contains at least 8 character : 1 UpperCase , 1 LowerCase </p>
@@ -230,7 +230,7 @@ export default function Register() {
             value={confirmpassword}
             onChange={e=>setconfirmpassword(e.target.value)}
             onBlur={handlecpasswordBlur}
-            startAdornment={<IconButton><PasswordRounded style={{color:'#707070'}} /></IconButton>}
+            startAdornment={<IconButton><PasswordRounded style={{color:'#FFFFFF'}} /></IconButton>}
             />
               
             {/*Select Gender*/}
@@ -241,7 +241,7 @@ export default function Register() {
                 onChange={e=>setgender(e)}
                 startAdornment={
                   <IconButton>
-                    <PersonRoundedIcon style={{ color: '#707070' }} />
+                    <PersonRoundedIcon style={{ color: '#FFFFFF' }} />
                   </IconButton>
                 }
                 options={[
@@ -258,7 +258,7 @@ export default function Register() {
                   label="Country"
                   value={country1}
                   onChange={handleCountryChange}
-                  startAdornment={<IconButton><PublicRoundedIcon style={{ color: '#707070' }} /></IconButton>}
+                  startAdornment={<IconButton><PublicRoundedIcon style={{ color: '#FFFFFF' }} /></IconButton>}
                   options={countries.map((country) => ({ value: country, label: country }))}
                 />
               </Grid>
@@ -267,7 +267,7 @@ export default function Register() {
                   label="State"
                   value={state1}
                   onChange={handleStateChange}
-                  startAdornment={<IconButton><LocationCity style={{ color: '#707070' }} /></IconButton>}
+                  startAdornment={<IconButton><LocationCity style={{ color: '#FFFFFF' }} /></IconButton>}
                   options={statesList.map((state) => ({ value: state, label: state }))}
                 />
               </Grid>
@@ -278,7 +278,7 @@ export default function Register() {
                 sx={{ display: 'flex', alignItems: 'center', marginLeft: '-8px', mt:2}}
               />
               <ButtonComponent type="submit" variant="contained" fullWidth style={{ marginTop: '10px', marginBottom: '10px' }}>
-                Sign In
+                register
               </ButtonComponent>
               <Grid container>
                 <Grid item>

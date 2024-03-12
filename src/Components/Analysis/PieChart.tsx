@@ -88,12 +88,12 @@ const PieChart: React.FC<fetchData> = ({ locationData }) => {
         ref={tableRef}
         style={{ overflowY: 'scroll', width: '30%', height: '400px' }}
       >
-        <TableContainer component={Paper} style={{ background: '#f9f9f9', border: '1px solid #ddd' }}>
+        <TableContainer component={Paper} style={{ background: '#3B3C45', border: '1px solid #ddd' }}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell style={{ background: '#eaeaea', borderBottom: '1px solid #ddd', fontSize: '20px', fontWeight: 'bold' }}>Location</TableCell>
-                <TableCell style={{ background: '#eaeaea', borderBottom: '1px solid #ddd', fontSize: '20px', fontWeight: 'bold' }}>Value</TableCell>
+                <TableCell style={{ background: '#494A52', borderBottom: '1px solid #ddd', fontSize: '20px', fontWeight: 'bold' }}>Location</TableCell>
+                <TableCell style={{ background: '#494A52', borderBottom: '1px solid #ddd', fontSize: '20px', fontWeight: 'bold' }}>Value</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

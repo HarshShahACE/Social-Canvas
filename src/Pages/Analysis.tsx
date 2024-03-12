@@ -8,6 +8,8 @@ import { useEffect, useState } from "react";
 import WordCloudComponent from "../Components/Analysis/wordcloud";
 import LoadingScreen from "../Components/Common/Loading";
 import axios from "axios";
+import TopFivePieChart from "../Components/Analysis/top5piechart";
+import BottomFivePieChart from "../Components/Analysis/bottom5chart";
 
 const Analysis = () => {
     const isMobile = useMediaQuery('(max-width:600px)');
@@ -65,7 +67,7 @@ const Analysis = () => {
       }, []);
 
     return (
-        <div style={{ display: 'flex', backgroundImage: `url(${defaultImagePath})`, backgroundSize:'contain', backgroundRepeat:'no-repeat', backgroundPosition:'bottom right', height:'100vh' }}>
+        <div style={{ display: 'flex', backgroundColor:'#020202' , backgroundImage: `url(${defaultImagePath})`, backgroundSize:'contain', backgroundRepeat:'no-repeat', backgroundPosition:'bottom right', height:'100vh' }}>
             <CssBaseline />
             {loading && <LoadingScreen/>}
             {/* Sidebar */}
@@ -75,43 +77,47 @@ const Analysis = () => {
                 <main style={{ flexGrow: 1, padding: 3, marginTop: '70px', marginLeft: isMobile ? '20px' : '240px', display: 'flex', flexDirection: 'column' }}>
                     {/* First row */}
                     <Box display="flex" alignItems="center" mt={2}>
-                        {platforms.map(platform => (
-                            <>
-                            <Avatar key={platform.value} style={{ cursor: 'pointer', backgroundColor: selectedPlatform === platform.value ? '#007bff' : '#FFFFFF' , marginRight:'5px' }} onClick={() => handlePlatformChange(platform.value)}>
-                                <img src={platform.imageUrl} alt={platform.name} style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
-                            </Avatar>
-                            <Typography variant="subtitle1" style={{marginRight:'30px', fontSize:'18px'}}>{platform.name}</Typography>
-                            </>
-                        ))}
+                  {platforms.map(platform => (
+                    <Box key={platform.value} style={{ display: 'flex', alignItems: 'center',  backgroundColor: selectedPlatform === platform.value ? '#FFFFFF' : '#283141', borderRadius: '10px', boxShadow: '0px 4px 8px rgba(67, 131, 197, 0.9)', marginRight: '20px' , padding:'5px' }}>
+                      <Avatar style={{ cursor: 'pointer' }} onClick={() => handlePlatformChange(platform.value)}>
+                        <img src={platform.imageUrl} alt={platform.name} style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
+                      </Avatar>
+                      <Typography variant="subtitle1" style={{ marginLeft: '5px', marginRight: '30px', fontSize: '18px', color: selectedPlatform === platform.value ? '#000000' : '#FFFFFF' }}>{platform.name}</Typography>
                     </Box>
+                  ))}
+                </Box>
                     <Divider style={{ margin: '10px 0' }} />
                     {/* Render charts based on the selected platform */}
                     {selectedPlatform === 'linkedin' ? (
                         <>
-                        {/* <div style={{ height: '600px' ,width:'90%', borderRadius:'20px' ,padding: '20px', backgroundColor: 'rgba(250,250,250,0.8)', border: '1px solid #ddd' }} >
-                                <h2>LinkedIn Connection Details</h2>
-                                <div>
-                                    <MapComponent />
-                                </div>
-                            </div> */}
-                            <div style={{ height: '600px' ,width:'90%', borderRadius:'20px' ,padding: '20px', backgroundColor: 'rgba(250,250,250,0.8)', border: '1px solid #ddd' }} >
-                                <h2>LinkedIn Connection Details</h2>
-                                <div>
-                                    <PieChart locationData={jsonData || null} />
-                                </div>
-                            </div>
+                            {/* Connection Location Details */}
                             <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                <div style={{ width: '50%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(250,250,250,0.8)', border: '1px solid #ddd' }} >
-                                <div>
-                                    <WordCloudComponent locationData={jsonData || null} />
+                                    <div style={{ width: '50%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(25, 28, 36, 0.8)', border: '1px solid #ddd' }} >
+                                    <div>
+                                        <h3>Top 5 Location Of Connections</h3>
+                                        <TopFivePieChart locationData={jsonData || null} />
+                                    </div>
+                                </div>
+                                <div style={{ width: '50%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(25, 28, 36, 0.8)', border: '1px solid #ddd' }} >
+                                    <div>
+                                        <h3>Bottom 5 Location Of Connections</h3>
+                                        <BottomFivePieChart locationData={jsonData || null} />
+                                    </div>
                                 </div>
                             </div>
-                            <div style={{ width: '50%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(250,250,250,0.8)', border: '1px solid #ddd' }} >
-                                <div>
-                                    <BubbleChart locationData={jsonData || null} />
+                            {/*  Second Row - Word Cloud Chart and Bar Chart Table*/}
+                            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                    <div style={{ width: '50%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(25, 28, 36, 0.8)', border: '1px solid #ddd' }} >
+                                    <div>
+                                        <WordCloudComponent locationData={jsonData || null} />
+                                    </div>
+                                </div>
+                                <div style={{ width: '50%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(25, 28, 36, 0.8)', border: '1px solid #ddd' }} >
+                                    <div>
+                                        <BubbleChart locationData={jsonData || null} />
+                                    </div>
                                 </div>
                             </div>
-                        </div>
                         </>
                     ) : selectedPlatform ? (
                         <div style={{ textAlign: 'center', marginTop: '50px' }}>

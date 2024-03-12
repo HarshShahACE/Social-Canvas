@@ -35,7 +35,7 @@ const SchedulePopup: React.FC<SchedulePopupProps> = ({ isOpen, onClose, selected
                         type="date"
                         value={selectedDate}
                         onChange={handleDateChange}
-                        style={{ marginRight: '10px', width: '150px' }}
+                        style={{ marginRight: '10px', width: '150px' , color:'white' }}
                         inputProps={{
                             min: currentDate, // Set the min attribute to the current date
                             max :  oneMonthFromNowString // Set the max attribute
@@ -45,12 +45,12 @@ const SchedulePopup: React.FC<SchedulePopupProps> = ({ isOpen, onClose, selected
                         type="time"
                         value={selectedTime}
                         onChange={handleTimeChange}
-                        style={{ marginRight: '10px', width: '150px' , marginTop: isMobile? '10px' : '0px' }}
+                        style={{ marginRight: '10px', width: '150px' , marginTop: isMobile? '10px' : '0px' , color:'white' }}
+                        
                     />
                 </Box>
                     <select
                         id="timezone"
-                        
                         value={selectedTimezone}
                         onChange={(e) => setSelectedTimezone(e.target.value)}
                         style={{
@@ -58,8 +58,8 @@ const SchedulePopup: React.FC<SchedulePopupProps> = ({ isOpen, onClose, selected
                             fontSize: '16px',
                             borderRadius: '5px',
                             border: '1px solid #ccc',
-                            backgroundColor: '#fff',
-                            color: '#333',
+                            backgroundColor: '#333',
+                            color: '#fff',
                             height:'50px',
                             width: '310px',
                             marginTop: '10px',

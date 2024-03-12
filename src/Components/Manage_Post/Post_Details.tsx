@@ -59,8 +59,27 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, open, onClose }) => {
 
   const [date, time] = eventDetails?.sch_user_time ? eventDetails.sch_user_time.split('T') : ['', ''];
 
-  const handleCloseDialog = () => {
-    // Handle close dialog logic here
+
+  const handlepostupdate = () => {
+    
+  }
+
+
+  const handlepostdelete = async() => {
+    try{
+      if (eventId !== null) {
+        const response = await axios.post(`${process.env.REACT_APP_Fast_API}/remove_schedule_post/${eventId}`);
+        if (response.status === 200) {
+          window.alert("Post Removed Successfully");
+          window.location.reload();
+        } else {
+          console.error('Error:', response.statusText);
+          window.alert("Error in Removing Post");
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching event details:', error);
+    }
   };
 
   const isDateTimePassed = (dateTimeString: string | number | Date) => {
@@ -139,8 +158,8 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, open, onClose }) => {
       <DialogActions style={{ margin: '0 auto', paddingBottom: '30px' }}>
         {eventDetails && eventDetails.sch_type === "schedule" && !isDateTimePassed(eventDetails.sch_user_time) && (
             <>
-            <ButtonComponent variant="contained" onClick={handleCloseDialog}>Update</ButtonComponent>
-            <ButtonComponent variant="contained" onClick={handleCloseDialog}>Delete</ButtonComponent>
+            <ButtonComponent variant="contained" onClick={handlepostupdate}>Update</ButtonComponent>
+            <ButtonComponent variant="contained" onClick={handlepostdelete}>Delete</ButtonComponent>
             </>
         )}
         </DialogActions>

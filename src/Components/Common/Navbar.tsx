@@ -114,12 +114,11 @@ export default function SideNav() {
     sx={{
       '& .MuiDrawer-paper': { 
         width: drawerWidth,
-        backgroundColor: '#f0f0f0', // Light background color
+        backgroundColor: '#191C24', // Light background color
       },
       ...(isMobile && {
         '& .MuiDrawer-paper': {
           boxSizing: 'border-box',
-          width: drawerWidth,
         },
       }),
       paddingLeft: '10px',
@@ -129,14 +128,17 @@ export default function SideNav() {
   <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', p: 2 }}>
     <img src="../../SitePhotos/img1.png" alt="Logo" style={{ maxWidth: '50px', maxHeight: '50px' }} />
   </Box>
-  <Divider />
+  <Divider style={{background:'#FFFFFF' , marginBottom:'20px'}}/>
   {sideList.map(({ id, text, icon, path }) => (
   <React.Fragment key={id}>
     <ListItem
       disablePadding
       onClick={handleDrawerClose}
       sx={{ 
-        backgroundColor: location.pathname === path ? '#E3F2FD80' : 'transparent', // Light blue color with reduced opacity 
+        backgroundColor: location.pathname === path ? '#0F1015' : 'transparent', // Light blue color with reduced opacity 
+        borderTopRightRadius: location.pathname === path ? '20px' : 0, // Add curved edges for the selected item
+        borderBottomRightRadius: location.pathname === path ? '20px' : 0, // Add curved edges for the selected item
+        paddingRight: location.pathname === path ? '20px' : 0,
       }}
     >
       <ListItemButton 
@@ -144,15 +146,16 @@ export default function SideNav() {
         to={path} 
         sx={{ 
           borderLeft: location.pathname === path ? '4px solid #1D8AFF' : '4px solid transparent',
+          paddingRight: '20px',
         }}
       >
-        <ListItemIcon sx={{ margin: 0, color: location.pathname === path ? '#1D8AFF' : '#494F55', minWidth: 0 }}>
+        <ListItemIcon sx={{ margin: 0, color: location.pathname === path ? '#4694E0' : '#FFFFFF', minWidth: 0 }}>
           {icon}
         </ListItemIcon>
         <ListItemText 
           primary={text} 
           sx={{ 
-            color: location.pathname === path ? '#1D8AFF' : 'inherit', 
+            color: location.pathname === path ? '#4694E0' : '#FFFFFF', 
             marginLeft: 1,
           }} 
         />

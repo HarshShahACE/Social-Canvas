@@ -33,7 +33,7 @@ export default function Schedule_Post(){
     const [selectedTime, setSelectedTime] = useState('');
     const [selectedTimezone, setSelectedTimezone] = useState<string>('');
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
-    let scheduleType = ''
+    let scheduleType = '';
 
     const [selectedFiles, setSelectedFiles] = useState<FilePreview[]>([]);
     const [firstSelectedFileType, setFirstSelectedFileType] = useState<string | null>(null);
@@ -271,7 +271,7 @@ export default function Schedule_Post(){
     const reversedPlatforms = selectedPlatforms.slice().reverse();
 
     return(
-        <div style={{ display: 'flex' , backgroundImage: `url(${defaultImagePath})`, backgroundSize:'contain',
+        <div style={{ display: 'flex' , backgroundColor:'#020202' , backgroundImage: `url(${defaultImagePath})`, backgroundSize:'contain',
             backgroundRepeat:'no-repeat',
             backgroundPosition:'bottom right'  , height:'100vh' }}>
             {loading && <LoadingScreen />}
@@ -285,7 +285,7 @@ export default function Schedule_Post(){
                     {/* Main content */}
                     <Grid container spacing={2}>
                         <Grid md={6}>
-                    <Card style={{background: 'rgba(255, 255, 255, 0.7)' , margin:'20px', borderRadius:'20px' ,  boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.3)' }}>
+                    <Card style={{background: '#191C24' , margin:'20px', borderRadius:'20px' ,  boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.3)' }}>
                         <CardContent>
                             {/* Drop Down For Plateform Selection */}
                             <Box display="flex" alignItems="center" mt={2}>
@@ -295,18 +295,26 @@ export default function Schedule_Post(){
                                     </Avatar>
                                 ))}
                             </Box>
-                            <Typography style={{color:'red' , marginTop:'10px'}}>Twitter And Facebook Are Currently unavailable For Posting.</Typography>
+                            <Typography style={{color:'red' , marginTop:'10px'}}>Twitter Is Currently unavailable For Posting.</Typography>
                             <Divider style={{ margin: '10px 0' }} />
 
                             {/* Content Textarea with Emoji Picker */}
                             <Box position="relative" width="100%" marginBottom={5}>
-                                <textarea
-                                    rows={10}
-                                    value={content}
-                                    onChange={handleContentChange}
-                                    placeholder="Write something..."
-                                    style={{ width: '100%', resize: 'none', padding: '10px' }}
-                                />
+                            <textarea
+        rows={7}
+        value={content}
+        onChange={handleContentChange}
+        placeholder="Write something..."
+        style={{ width: '100%',
+        resize: 'none',
+        padding: '15px',
+        height: 'auto', // Set height to auto to allow dynamic resizing
+        minHeight: '60px', // Minimum height of the textarea
+        maxHeight: '120px',
+        color:'white',
+        borderRadius:'20px',
+        backgroundColor:'#191C24'}} // Maximum height of the textarea }}
+      />
                                 <Box
                                     style={{
                                     position: 'absolute',
@@ -316,10 +324,10 @@ export default function Schedule_Post(){
                                     alignItems: 'center',
                                     }}
                                 >
-                                    <p style={{ fontSize: '14px', color: 'black', marginLeft:'10px' }}>
+                                    <p style={{ fontSize: '14px', marginLeft:'20px' }}>
                                     {`${content.length}/250`}
                                     </p>
-                                    <IconButton onClick={() => setEmojiPickerOpen(!emojiPickerOpen)}>
+                                    <IconButton onClick={() => setEmojiPickerOpen(!emojiPickerOpen)} >
                                     <InsertEmoticonRounded />
                                     </IconButton>
                                     <Dialog open={emojiPickerOpen} onClose={() => setEmojiPickerOpen(false)} fullWidth maxWidth="xs" PaperProps={{ style: { position: 'absolute', left: '0', bottom: '60px' } }}>
@@ -347,7 +355,7 @@ export default function Schedule_Post(){
                                 />
                                 <label htmlFor="media-upload">
                                     <IconButton component="span">
-                                        <AddPhotoAlternateRounded />
+                                        <AddPhotoAlternateRounded style={{color:'white'}} />
                                     </IconButton>
                                 </label>
                                 {selectedFiles.map((file, index) => (
@@ -394,7 +402,7 @@ export default function Schedule_Post(){
                     />
                     <Grid md={6} style={{ marginTop: isMobile ? '20px' : '0px' }}>
                     {selectedPlatforms.length > 0 && (
-                        <Card style={{ background: 'rgba(255, 255, 255, 0.9)', margin: '20px', borderRadius: '20px', boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.8)' , width: '70%' }}>
+                        <Card style={{ background: '#191C24', margin: '20px', borderRadius: '20px', boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.8)' , width: '70%' }}>
                             <CardContent>
                                 <div style={{display: 'flex', justifyContent: 'end', alignItems: 'center'}}>
                             <IconButton onClick={handlePrevPreviewPage}>

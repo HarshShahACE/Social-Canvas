@@ -105,7 +105,7 @@ const ManagePost = () => {
     };
 
     return (
-        <div style={{ display: 'flex', backgroundImage: `url(${defaultImagePath})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'bottom right', height: '100vh' }}>
+        <div style={{ display: 'flex', backgroundColor:'#020202' , backgroundImage: `url(${defaultImagePath})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'bottom right', height: '100vh' }}>
             {/* Sidebar */}
             <SideNav />
             <NoDataPopup isOpen={showPopup} onClose={handlePopupClose} />
@@ -124,7 +124,7 @@ const ManagePost = () => {
                             selectable
                             onSelectEvent={handleEventClick}
                             defaultView="month"
-                            views={['month', 'day', 'agenda']}
+                            views={['month', 'agenda']}
                             // Render multiple events for the same time slot
                             eventPropGetter={(event, start, end, isSelected) => {
                                 const backgroundColor = event.color;
