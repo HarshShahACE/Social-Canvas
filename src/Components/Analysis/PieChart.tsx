@@ -83,12 +83,8 @@ const PieChart: React.FC<fetchData> = ({ locationData }) => {
       <div style={{ height: '450px', width: '50%', marginRight: '20px' }}>
         {locationData && locationData.length > 0 && <Pie data={generateChartData()} options={chartOptions} />}
       </div>
-
-      <div
-        ref={tableRef}
-        style={{ overflowY: 'scroll', width: '30%', height: '400px' }}
-      >
-        <TableContainer component={Paper} style={{ background: '#3B3C45', border: '1px solid #ddd' }}>
+      <div>
+        <TableContainer component={Paper} style={{ background: '#3B3C45', border: '1px solid #ddd' , width:'50%' }}>
           <Table>
             <TableHead>
               <TableRow>

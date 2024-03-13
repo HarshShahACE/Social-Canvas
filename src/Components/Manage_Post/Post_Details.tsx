@@ -4,6 +4,7 @@ import axios from "axios";
 import { Close } from "@mui/icons-material";
 import TextFieldComponent from "../Fields/Textfield";
 import ButtonComponent from "../Fields/Buttonfield";
+import SchedulePopup from "../Schedule_Post/Schedule_Time";
 
 interface Media {
   id: number;
@@ -24,6 +25,34 @@ const capitalizeFirstLetter = (str: string) => {
 const EventDetailsDialog: React.FC<Props> = ({ eventId, open, onClose }) => {
   const [eventDetails, setEventDetails] = useState<any>(null);
   const [media, setMedia] = useState<Media[]>([]);
+  const [selectedDate, setSelectedDate] = useState('');
+  const [selectedTime, setSelectedTime] = useState('');
+  const [selectedTimezone, setSelectedTimezone] = useState<string>('');
+
+  const handleTimeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!selectedDate) {
+          window.alert("Please select a date first.");
+          return;
+      }
+
+      // Parse the selected time value to extract hours, minutes, and seconds
+      const [hours, minutes] = event.target.value.split(':');
+      
+      // Format the time as HH:MM:SS
+      const formattedTime = `${hours}:${minutes}:00`;
+
+      const selectedDateTime = new Date(`${selectedDate}T${formattedTime}`);
+      const tenMinutesLater = new Date();
+      tenMinutesLater.setMinutes(tenMinutesLater.getMinutes() + 10);
+
+      // Check if the selected time is at least 10 minutes ahead of the current time
+      if (selectedDateTime >= tenMinutesLater) {
+          setSelectedTime(formattedTime); // Use formatted time
+      } else {
+          // Show error message if the selected time is not valid
+          window.alert("Selected time must be at least 10 minutes ahead of the current time.");
+      }
+  };
 
   useEffect(() => {
     const fetchEventDetails = async () => {
@@ -60,9 +89,39 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, open, onClose }) => {
   const [date, time] = eventDetails?.sch_user_time ? eventDetails.sch_user_time.split('T') : ['', ''];
 
 
-  const handlepostupdate = () => {
-    
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handlepostupdatepopup = () => {
+    setIsOpen(true);
   }
+
+  const handleClose = () => {
+    setIsOpen(false);
+  };
+
+  const handleScheduleClick = async() => {
+    try{
+
+      const formattedTime = new Date(`${selectedDate}T${selectedTime}`).toISOString()
+
+      if (eventId !== null) {
+        const response = await axios.put(`${process.env.REACT_APP_Fast_API}/update_schedule_post/${eventId}?time=${formattedTime}&timezone=${selectedTimezone}`,{
+            headers: {
+              'Content-Type': 'application/json',
+            }
+          });
+        if (response.status === 200) {
+          window.alert("Post Updated Successfully");
+          window.location.reload();
+        } else {
+          console.error('Error:', response.statusText);
+          window.alert("Error in Removing Post");
+        }
+      }
+    } catch (error) {
+      console.error('Error fetching event details:', error);
+    }
+  };
 
 
   const handlepostdelete = async() => {
@@ -144,7 +203,7 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, open, onClose }) => {
             </div>
             {media.map(item => (
               item.type === "image" ? (
-                <img key={item.id} src={`data:image/jpeg;base64,${item.url}`} alt={`Image ${item.id}`} style={{ width: '60%', height: '60%', margin: 5 }} />
+                <img key={item.id} src={`data:image/jpeg;base64,${item.url}`} alt={`${item.id}`} style={{ width: '60%', height: '60%', margin: 5 }} />
               ) : (
                 <video key={item.id} controls style={{ width: '60%', height: '60%', margin: 5 }}>
                 <source src={`data:video/mp4;base64,${item.url}`} type="video/mp4" />
@@ -158,11 +217,23 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, open, onClose }) => {
       <DialogActions style={{ margin: '0 auto', paddingBottom: '30px' }}>
         {eventDetails && eventDetails.sch_type === "schedule" && !isDateTimePassed(eventDetails.sch_user_time) && (
             <>
-            <ButtonComponent variant="contained" onClick={handlepostupdate}>Update</ButtonComponent>
+            <ButtonComponent variant="contained" onClick={handlepostupdatepopup}>Update</ButtonComponent>
             <ButtonComponent variant="contained" onClick={handlepostdelete}>Delete</ButtonComponent>
             </>
         )}
         </DialogActions>
+        <SchedulePopup
+            value="Update Time For Post"
+            isOpen={isOpen}
+            onClose={handleClose}
+            selectedDate={selectedDate}
+            handleDateChange={e => setSelectedDate(e.target.value)}
+            selectedTime={selectedTime}
+            handleTimeChange={handleTimeChange}
+            selectedTimezone={selectedTimezone}
+            setSelectedTimezone={setSelectedTimezone}
+            handleScheduleClick={handleScheduleClick}
+        />
     </Dialog>
   );
 };

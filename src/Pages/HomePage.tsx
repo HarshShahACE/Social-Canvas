@@ -125,27 +125,16 @@ export default function HomePage() {
                   }}
                 >
                   {/* Conditional rendering of GrowthCard components based on selected platform */}
-                  {selectedPlatform === "linkedin" && (
-                    <div style={{ display: 'flex' , flexDirection: isMobile? 'column' : 'row' }}>
-                      <GrowthCard title="Posts" currentValue={500} previousValue={450} backgroundImage={first} />
-                      <GrowthCard title="Likes" currentValue={1000} previousValue={980} backgroundImage={second} />
-                      <GrowthCard title="Comments" currentValue={300} previousValue={275} backgroundImage={third} />
-                      <GrowthCard title="New Connections" currentValue={30} previousValue={35} backgroundImage={fifth} />
-                    </div>
-                  )}
-                  {selectedPlatform === "twitter" && (
-                    <div style={{ display: 'flex', flexDirection: isMobile? 'column' : 'row' }}>
-                      <GrowthCard title="Posts" currentValue={500} previousValue={450} backgroundImage={first} />
-                      <GrowthCard title="Likes" currentValue={1000} previousValue={980} backgroundImage={second} />
-                      <GrowthCard title="Comments" currentValue={300} previousValue={275} backgroundImage={third} />
-                      <GrowthCard title="New Followers" currentValue={30} previousValue={35} backgroundImage={fifth} />
+                  {selectedPlatform && (
+                    <div style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row' }}>
+                      <GrowthCard platform={selectedPlatform} />
                     </div>
                   )}
                 </div>
               </div>
 
               {/* Social Account Component */}
-              <div style={{ margin: "10px", justifyContent: "flex-start" }}>
+              <div style={{ margin: "20px 10px", justifyContent: "flex-start" }}>
                 <SocialAccount />
               </div>
             </main>  

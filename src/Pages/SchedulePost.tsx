@@ -390,6 +390,7 @@ export default function Schedule_Post(){
                         </Card>
                     </Grid>
                     <SchedulePopup
+                        value="Select Time For Post"
                         isOpen={isOpen}
                         onClose={handleClose}
                         selectedDate={selectedDate}

@@ -10,6 +10,7 @@ import LoadingScreen from "../Components/Common/Loading";
 import axios from "axios";
 import TopFivePieChart from "../Components/Analysis/top5piechart";
 import BottomFivePieChart from "../Components/Analysis/bottom5chart";
+import DoubleLineGraph from "../Components/Analysis/double_line";
 
 const Analysis = () => {
     const isMobile = useMediaQuery('(max-width:600px)');
@@ -28,7 +29,8 @@ const Analysis = () => {
         }
     };
 
-    const [jsonData, setJsonData] = useState(null);
+    const [connectionData, setconnectiondata] = useState(null);
+    const [postdata , setPostData] = useState(null);
 
     const idString = sessionStorage.getItem('Myid'); // Retrieve the value from localStorage
       if (idString !== null) {
@@ -44,21 +46,26 @@ const Analysis = () => {
         const fetchData = async () => {
             try {
                 const response = await axios.get(`${process.env.REACT_APP_Fast_API}/fetch_linkedin_data/${id}`, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
                 });
                 if (response.status === 200) {
-                const data = await response.data;
-                console.log("Analysis Data : ",+data);
-                setJsonData(data);
-              } else {
-                throw new Error('Failed to fetch data');
-              }
+                    const { connection_data, post_data } = await response.data;
+        
+                    // Assuming connection_data and post_data are properties of the response data object
+        
+                    setconnectiondata(connection_data); // Set connection data in state
+                    setPostData(post_data); // Set post data in state
+        
+                } else {
+                    throw new Error('Failed to fetch data');
+                }
             } catch (error) {
-              console.error('Error fetching data:', error);
+                console.error('Error fetching data:', error);
             }
-          };
+        };
+        
 
         fetchData();
     
@@ -90,18 +97,28 @@ const Analysis = () => {
                     {/* Render charts based on the selected platform */}
                     {selectedPlatform === 'linkedin' ? (
                         <>
+                            {/* Post Data Charts */}
+                            <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                    <div style={{ width: '100%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(25, 28, 36, 0.8)', border: '1px solid #ddd' }} >
+                                    <div>
+                                        <h3>Top Post Based On Likes And Comments</h3>
+                                        <DoubleLineGraph postData={postdata || null} />
+                                    </div>
+                                </div>
+                                
+                            </div>
                             {/* Connection Location Details */}
                             <div style={{ display: 'flex', flexDirection: 'row' }}>
                                     <div style={{ width: '50%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(25, 28, 36, 0.8)', border: '1px solid #ddd' }} >
                                     <div>
                                         <h3>Top 5 Location Of Connections</h3>
-                                        <TopFivePieChart locationData={jsonData || null} />
+                                        <TopFivePieChart locationData={connectionData || null} />
                                     </div>
                                 </div>
                                 <div style={{ width: '50%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(25, 28, 36, 0.8)', border: '1px solid #ddd' }} >
                                     <div>
                                         <h3>Bottom 5 Location Of Connections</h3>
-                                        <BottomFivePieChart locationData={jsonData || null} />
+                                        <BottomFivePieChart locationData={connectionData || null} />
                                     </div>
                                 </div>
                             </div>
@@ -109,12 +126,12 @@ const Analysis = () => {
                             <div style={{ display: 'flex', flexDirection: 'row' }}>
                                     <div style={{ width: '50%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(25, 28, 36, 0.8)', border: '1px solid #ddd' }} >
                                     <div>
-                                        <WordCloudComponent locationData={jsonData || null} />
+                                        <WordCloudComponent locationData={connectionData || null} />
                                     </div>
                                 </div>
                                 <div style={{ width: '50%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(25, 28, 36, 0.8)', border: '1px solid #ddd' }} >
                                     <div>
-                                        <BubbleChart locationData={jsonData || null} />
+                                        <BubbleChart locationData={connectionData || null} />
                                     </div>
                                 </div>
                             </div>

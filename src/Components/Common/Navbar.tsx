@@ -70,8 +70,9 @@ export default function SideNav() {
     color="inherit"
     aria-label="profile"
     edge="end"
+    size='large'
     onClick={handleProfileClick}
-    style={{ marginLeft: 'auto' }}
+    style={{ marginLeft: 'auto'  }}
   >
     <AccountCircleIcon />
   </IconButton>

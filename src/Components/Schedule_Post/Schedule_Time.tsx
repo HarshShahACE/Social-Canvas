@@ -4,6 +4,7 @@ import timezonedata from '../../assets/timezones.json';
 import ButtonComponent from '../Fields/Buttonfield';
 
 interface SchedulePopupProps {
+    value : string;
     isOpen: boolean;
     onClose: () => void;
     selectedDate: string;
@@ -15,7 +16,7 @@ interface SchedulePopupProps {
     handleScheduleClick: () => void;
 }
 
-const SchedulePopup: React.FC<SchedulePopupProps> = ({ isOpen, onClose, selectedDate, handleDateChange, selectedTime, handleTimeChange, selectedTimezone, setSelectedTimezone, handleScheduleClick }) => {
+const SchedulePopup: React.FC<SchedulePopupProps> = ({ value, isOpen, onClose, selectedDate, handleDateChange, selectedTime, handleTimeChange, selectedTimezone, setSelectedTimezone, handleScheduleClick }) => {
 
     const currentDate = new Date().toISOString().split('T')[0];
 
@@ -28,9 +29,9 @@ const SchedulePopup: React.FC<SchedulePopupProps> = ({ isOpen, onClose, selected
 
     return (
         <Modal open={isOpen} onClose={onClose}>
-            <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: 'background.paper', p: 4, width: 'fit-content', borderRadius: '20px'}}>
+            <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: '#696969', p: 4, width: 'fit-content', borderRadius: '20px'}}>
                 <Box sx={{ marginBottom: '10px' }}>
-                    <h2 style={{marginBottom:'20px' , fontSize:'20px' , textAlign:'center'}}>Select Time For Post</h2>
+                    <h2 style={{marginBottom:'20px' , fontSize:'20px' , textAlign:'center' , color:'#FFFFFF'}}>{value}</h2>
                     <TextField
                         type="date"
                         value={selectedDate}
@@ -58,7 +59,7 @@ const SchedulePopup: React.FC<SchedulePopupProps> = ({ isOpen, onClose, selected
                             fontSize: '16px',
                             borderRadius: '5px',
                             border: '1px solid #ccc',
-                            backgroundColor: '#333',
+                            backgroundColor: '#696969',
                             color: '#fff',
                             height:'50px',
                             width: '310px',

@@ -14,7 +14,6 @@ const localizer = momentLocalizer(moment);
 interface Event extends CalendarEvent {
     id: number; // Include id property
     Details: string;
-    color: string;
     sch_user_time: string; // Add sch_user_time property
     platform_name: string; // Add platform_name property
     content: string; // Add content property
@@ -119,7 +118,7 @@ const ManagePost = () => {
                             events={events}
                             startAccessor="start"
                             endAccessor="end"
-                            style={{ background: 'rgba(255,255,255,0.8)' }}
+                            style={{ background: 'rgba(250,250,250,0.7)' , padding:'20px' , border:'2px solid blue' }}
                             onSelectSlot={(slotInfo) => console.log(slotInfo)}
                             selectable
                             onSelectEvent={handleEventClick}
@@ -127,7 +126,7 @@ const ManagePost = () => {
                             views={['month', 'agenda']}
                             // Render multiple events for the same time slot
                             eventPropGetter={(event, start, end, isSelected) => {
-                                const backgroundColor = event.color;
+                                const backgroundColor = '#';
                                 return { style: { backgroundColor } };
                             }}
                             // Show all events in day cells
