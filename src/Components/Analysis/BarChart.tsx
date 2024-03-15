@@ -1,60 +1,110 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Bar } from 'react-chartjs-2';
 import { ChartOptions } from 'chart.js/auto';
+import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 
-// Define the type for the data
 interface LocationData {
   urn_id: string;
   distance: string | number;
   jobtitle: string | null;
   location: string;
   name: string;
+  type: string;
+}
+
+interface TwitterData {
+  tweetLink: string;
+  tweetDate: string;
+  commentCount: number;
+  retweetCount: number;
+  quoteCount: number;
+  likeCount: number;
+  twitterId: number;
+  handle: string;
+  text: string;
+  profileUser: string;
+  mediaUrl: string;
+  timestamp: string;
+  query: string;
+  type: string;
 }
 
 interface Props {
-  locationData: LocationData[] | null;
+  socialData: (LocationData | TwitterData)[] | null;
+  dataType: 'linkedin' | 'twitter';
 }
 
-const BarChart: React.FC<Props> = ({ locationData }) => {
-  const [data, setData] = useState<LocationData[]>([]);
+const BarChart: React.FC<Props> = ({ socialData, dataType }) => {
+  const [data, setData] = useState<(LocationData | TwitterData)[]>([]);
+  const tableRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    if (locationData) {
-      setData(locationData);
+    if (socialData) {
+      setData(socialData);
+      console.log(socialData);
+      console.log(dataType);
     }
-  }, [locationData]);
+  }, [socialData]);
 
-  const generateChartData = () => {
-    if (!data) return { labels: [], datasets: [] }; // Return empty data if no data available
-
-    // Group data by job title and count occurrences of each job title
+  const generateLinkedInChartData = (filteredData: LocationData[]): { labels: string[], datasets: any[] } => {
     const groupedData: { [key: string]: number } = {};
-    data.forEach(item => {
+    filteredData.forEach(item => {
       const jobTitle = item.jobtitle || 'Unknown';
-      if (!groupedData[jobTitle]) {
-        groupedData[jobTitle] = 0;
-      }
-      groupedData[jobTitle]++;
+      groupedData[jobTitle] = (groupedData[jobTitle] || 0) + 1;
     });
 
-    // Sort the grouped data by count in descending order
     const sortedData = Object.entries(groupedData)
       .sort(([, countA], [, countB]) => countB - countA)
-      .slice(0, 10); // Take the top 15 job roles
+      .slice(0, 10);
 
-    // Extract labels and values from the sorted data
     const labels = sortedData.map(([jobTitle]) => jobTitle);
     const values = sortedData.map(([, count]) => count);
 
     const dataset = {
       label: 'Job Titles',
       data: values,
-      backgroundColor: `rgba(33, 150, 243, 0.8)`, // Darker blue color with transparency
-      borderColor: `rgba(33, 150, 243, 1)`, // Darker blue color
+      backgroundColor: `rgba(51, 153, 51, 0.8)`,
+      borderColor: `rgba(255, 99, 132, 1)`,
       borderWidth: 1,
     };
 
     return { labels, datasets: [dataset] };
+  };
+
+  const generateTwitterChartData = (filteredData: TwitterData[]): { labels: string[], datasets: any[] } => {
+    console.log("Inside Twitter")
+    const sortedData = filteredData
+      .sort((a, b) => b.retweetCount - a.retweetCount)
+      .slice(0, 10);
+
+    const labels = sortedData.map(item => item.tweetDate);
+    const values = sortedData.map(item => item.retweetCount);
+
+    const dataset = {
+      label: 'Retweet Count',
+      data: values,
+      backgroundColor: `rgba(51, 153, 51, 0.8)`,
+      borderColor: `rgba(255, 99, 132, 1)`,
+      borderWidth: 1,
+    };
+
+    return { labels, datasets: [dataset] };
+  };
+
+  const generateChartData = () => {
+    if (!data || data.length === 0) return { labels: [], datasets: [] };
+
+    let filteredData: (LocationData | TwitterData)[] = [];
+
+    if (dataType === 'linkedin') {
+      filteredData = data.filter((item): item is LocationData => 'jobtitle' in item);
+      return generateLinkedInChartData(filteredData as LocationData[]);
+    } else if (dataType === 'twitter') {
+      filteredData = data.filter((item): item is TwitterData => 'retweetCount' in item);
+      return generateTwitterChartData(filteredData as TwitterData[]);
+    }
+
+    return { labels: [], datasets: [] };
   };
 
   const options: ChartOptions<'bar'> = {
@@ -62,16 +112,14 @@ const BarChart: React.FC<Props> = ({ locationData }) => {
     scales: {
       x: {
         beginAtZero: true,
-        min: 1, // Set minimum value on x-axis to 1
-        max: 60, // Set maximum value on x-axis to 60
         title: {
           display: true,
           text: 'Count',
         },
         ticks: {
-          color: 'white', // Set font color of x-axis labels to red
+          color: 'black',
           font: {
-            size: 10, // Set font size to 10
+            size: 10,
           },
         },
       },
@@ -80,9 +128,9 @@ const BarChart: React.FC<Props> = ({ locationData }) => {
           display: true,
         },
         ticks: {
-          color:'white',
+          color: 'black',
           font: {
-            size: 10, // Set font size to 10
+            size: 10,
           },
         },
       },
@@ -91,28 +139,95 @@ const BarChart: React.FC<Props> = ({ locationData }) => {
       legend: {
         labels: {
           font: {
-            size: 10, // Set font size to 10
+            size: 10,
           },
         },
       },
     },
     elements: {
       bar: {
-        backgroundColor: 'rgba(33, 150, 243, 0.8)', // Darker blue color with transparency
-        borderColor: 'white', // Set border color of the bars to white
+        backgroundColor: 'rgba(33, 150, 243, 0.8)',
+        borderColor: 'white',
         borderWidth: 1,
       },
     },
-    // Set the background color of the chart area to white
     backgroundColor: 'white',
-    borderColor:'white'
+    borderColor: 'black',
+  };
+
+  const generateTableData = () => {
+    if (!data || data.length === 0) return [];
+  
+    let twitterData: TwitterData[] = [];
+  
+    // Filter out Twitter data
+    data.forEach(item => {
+      if ('retweetCount' in item) {
+        twitterData.push(item);
+      }
+    });
+  
+    // Sort Twitter data by retweet count in descending order
+    twitterData.sort((a, b) => b.retweetCount - a.retweetCount);
+  
+    // Take only the top 10 records
+    twitterData = twitterData.slice(0, 10);
+  
+    return twitterData.map((item, index) => ({
+      id: index + 1,
+      content: item.text,
+      retweets: item.retweetCount,
+      date: item.tweetDate,
+    }));
   };
 
   return (
-    <div style={{ margin: 'auto', height: '600px' }}> {/* Set the width and height of the chart container */}
-      <h2>Top 10 Job Titles</h2>
-      {data.length > 0 && <Bar data={generateChartData()} options={options} />}
-    </div>
+    <>
+      {dataType === 'linkedin' && data && data.length > 0 && (
+        <div>
+         <Bar data={generateChartData()} options={options} />
+        </div>
+      )}
+      <div style={{ display: 'flex', alignItems: 'flex-start' }}>
+        {dataType === 'twitter' && data && data.length > 0 && (
+          <>
+            <div style={{ marginRight: '10px', flex: 1 }}>
+              <h2>Top 10 Twitter Repost Data</h2>
+              <div style={{ height: '400px' }}>
+                <Bar data={generateChartData()} options={options} />
+              </div>
+            </div>
+            <div
+              ref={tableRef}
+              style={{ overflowY: 'scroll', flex: 1, height: '400px', marginBottom: '20px' }}
+            >
+              <TableContainer component={Paper} style={{ background: '#f9f9f9', border: '1px solid #ddd' }}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell style={{ background: '#eaeaea', borderBottom: '1px solid #ddd', fontSize: '16px', fontWeight: 'bold' }}>ID</TableCell>
+                      <TableCell style={{ background: '#eaeaea', borderBottom: '1px solid #ddd', fontSize: '16px', fontWeight: 'bold' }}>Content</TableCell>
+                      <TableCell style={{ background: '#eaeaea', borderBottom: '1px solid #ddd', fontSize: '16px', fontWeight: 'bold' }}>Retweets</TableCell>
+                      <TableCell style={{ background: '#eaeaea', borderBottom: '1px solid #ddd', fontSize: '16px', fontWeight: 'bold' }}>Date</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {generateTableData().map((item) => (
+                      <TableRow key={item.id}>
+                        <TableCell style={{ borderBottom: '1px solid #ddd', padding: '8px', fontSize: '14px' }}>{item.id}</TableCell>
+                        <TableCell style={{ borderBottom: '1px solid #ddd', padding: '8px', fontSize: '14px' }}>{item.content}</TableCell>
+                        <TableCell style={{ borderBottom: '1px solid #ddd', padding: '8px', fontSize: '14px' }}>{item.retweets}</TableCell>
+                        <TableCell style={{ borderBottom: '1px solid #ddd', padding: '8px', fontSize: '14px' }}>{item.date}</TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            </div>
+          </>
+        )}
+      </div>
+    </>
   );
 };
 

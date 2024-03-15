@@ -70,7 +70,7 @@ const TwitterPostLayout: React.FC<TwitterProps> = ({ content, media }) => {
           Twitter
         </Typography>
       </div>
-      <Card style={{ maxWidth: 400, margin:'20px', border: '1px solid rgba(255, 255, 255, 0.7)' }}>
+      <Card style={{ maxWidth: 400, margin:'20px', border: '1px solid rgba(0, 0, 0, 0.7)' }}>
         <CardHeader
           avatar={
             <Avatar alt="User" src={userPic[0]} />

@@ -49,13 +49,17 @@ const GrowthCard: React.FC<GrowthCardProps> = ({ platform }) => {
     const getBackgroundImage = (key: string) => {
         switch (key) {
             case 'Posts':
-                return first;
+            case 'Following Count':
+                return first; // Use the same image as 'Posts' for Twitter
             case 'Total Likes':
-                return second;
+            case 'Likes Count':
+                return second; // Use the same image as 'Total Likes' for Twitter
             case 'Total Comments':
-                return third;
-            case 'Total  Connections':
-                return fourth;
+            case 'Tweets Count':
+                return third; // Use the same image as 'Total Comments' for Twitter
+            case 'Total Connections':
+            case 'Followers Count':
+                return fourth; // Use the same image as 'Total Connections' for Twitter
             default:
                 return ''; // Default background image if key doesn't match
         }
@@ -70,12 +74,13 @@ const GrowthCard: React.FC<GrowthCardProps> = ({ platform }) => {
                     position: 'relative',
                     overflow: 'hidden',
                     borderRadius: 5,
-                    backgroundImage: `linear-gradient(rgba(32, 33, 40, 0.1), rgba(32, 33, 40, 0.1)), url(${getBackgroundImage(key)})`, // Assuming you have a function to get the appropriate background image based on the key
+                    backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url(${getBackgroundImage(key)})`, // Assuming you have a function to get the appropriate background image based on the key
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
-                    margin: '20px 40px 20px 0px'
+                    margin: '20px 40px 20px 0px',
+                    boxShadow: '6px 6px 6px rgba(0, 0, 0, 0.5)'
                 }}>
-                    <CardContent style={{ position: 'relative', zIndex: 1, color: '#FFF', textAlign: 'center' }}>
+                    <CardContent style={{ position: 'relative', zIndex: 1, color: '#000', textAlign: 'center' }}>
                         <Typography variant="h5" component="div" >
                             {key}
                         </Typography>

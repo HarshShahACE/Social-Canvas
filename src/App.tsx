@@ -9,9 +9,6 @@ import Analysis from './Pages/Analysis';
 import PrivateRoute from './Components/Authentication/Private_Route';
 import { useState } from 'react';
 import LoadingScreen from './Components/Common/Loading';
-import { createTheme } from '@mui/material';
-import { ThemeProvider } from '@emotion/react';
-
 
 function App() {
 
@@ -31,16 +28,8 @@ function App() {
     )
   }
 
-  const darkTheme = createTheme({
-    palette: {
-      mode: 'dark',
-    },
-  });
-
-
   return (
     <div className="App">
-      <ThemeProvider theme={darkTheme}>
       <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
       <Routes>
         {/* Public Routes */}
@@ -56,7 +45,6 @@ function App() {
         <Route path='/Manage_Post' element={<PrivateRoute element={ManagePost}/>} />
         <Route path='/Analysis' element={<PrivateRoute element={Analysis}/>} />
       </Routes>
-      </ThemeProvider>
     </div>
   );
 }

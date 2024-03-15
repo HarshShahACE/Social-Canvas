@@ -80,7 +80,9 @@ export default function Login() {
               if (response.status === 200) {
                 const data = response.data;
                 const id = data.user_id;
+                const name = data.user_name;
                 sessionStorage.setItem('Myid', id);
+                sessionStorage.setItem('Uname',name);
                 setLoading(false);
                 navigate("/Dashboard", { replace: true });
               }
@@ -111,7 +113,7 @@ export default function Login() {
       <CssBaseline/>
       {loading && <LoadingScreen />}
       <Grid container component="main" style={{ height: '100vh'}}>
-        <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square style={{border:'none', borderRadius:'20px' , margin:'20px' ,boxShadow:'none', background: '#191C24'}} >
+        <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square style={{border:'none', borderRadius:'20px' , margin:'20px' ,boxShadow:'none', background: 'rgba(225, 225, 225, 0.7)'}} >
           <Box sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
             <Box sx={{display: 'flex',flexDirection: 'row',alignItems: 'center',}}>
             <Avatar sx={{ m:1, bgcolor: 'primary.main' }}>
@@ -127,7 +129,7 @@ export default function Login() {
                 value={username}
                 onChange={e=>setusername(e.target.value)}
                 onBlur={handleemailBlur}
-                startAdornment={<IconButton disabled><EmailRounded style={{color:'#FFFFFF'}} /></IconButton>}
+                startAdornment={<IconButton disabled><EmailRounded style={{color:'#707070'}} /></IconButton>}
               />
               <TextFieldComponent
                 label="Password"
@@ -135,7 +137,7 @@ export default function Login() {
                 value={password1}
                 onChange={e=>setpassword(e.target.value)}
                 onBlur={handlepasswordBlur}
-                startAdornment={<IconButton disabled><PasswordRounded style={{color:'#FFFFFF'}} /></IconButton>}
+                startAdornment={<IconButton disabled><PasswordRounded style={{color:'#707070'}}/></IconButton>}
               />
               <FormControlLabel
                 control={<Checkbox value="remember" color="primary"/>}

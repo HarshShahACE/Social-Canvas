@@ -271,7 +271,7 @@ export default function Schedule_Post(){
     const reversedPlatforms = selectedPlatforms.slice().reverse();
 
     return(
-        <div style={{ display: 'flex' , backgroundColor:'#020202' , backgroundImage: `url(${defaultImagePath})`, backgroundSize:'contain',
+        <div style={{ display: 'flex' , backgroundColor:'#FFFFFF' , backgroundImage: `url(${defaultImagePath})`, backgroundSize:'contain',
             backgroundRepeat:'no-repeat',
             backgroundPosition:'bottom right'  , height:'100vh' }}>
             {loading && <LoadingScreen />}
@@ -285,7 +285,7 @@ export default function Schedule_Post(){
                     {/* Main content */}
                     <Grid container spacing={2}>
                         <Grid md={6}>
-                    <Card style={{background: '#191C24' , margin:'20px', borderRadius:'20px' ,  boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.3)' }}>
+                    <Card style={{background: '#FFFFFF' , margin:'20px', borderRadius:'20px' ,  boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.3)' }}>
                         <CardContent>
                             {/* Drop Down For Plateform Selection */}
                             <Box display="flex" alignItems="center" mt={2}>
@@ -311,9 +311,8 @@ export default function Schedule_Post(){
         height: 'auto', // Set height to auto to allow dynamic resizing
         minHeight: '60px', // Minimum height of the textarea
         maxHeight: '120px',
-        color:'white',
-        borderRadius:'20px',
-        backgroundColor:'#191C24'}} // Maximum height of the textarea }}
+        color:'black',
+        borderRadius:'20px',}} 
       />
                                 <Box
                                     style={{
@@ -355,7 +354,7 @@ export default function Schedule_Post(){
                                 />
                                 <label htmlFor="media-upload">
                                     <IconButton component="span">
-                                        <AddPhotoAlternateRounded style={{color:'white'}} />
+                                        <AddPhotoAlternateRounded />
                                     </IconButton>
                                 </label>
                                 {selectedFiles.map((file, index) => (
@@ -403,7 +402,7 @@ export default function Schedule_Post(){
                     />
                     <Grid md={6} style={{ marginTop: isMobile ? '20px' : '0px' }}>
                     {selectedPlatforms.length > 0 && (
-                        <Card style={{ background: '#191C24', margin: '20px', borderRadius: '20px', boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.8)' , width: '70%' }}>
+                        <Card style={{ background: '#FFFFFF', margin: '20px', borderRadius: '20px', boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.8)' , width: '70%' }}>
                             <CardContent>
                                 <div style={{display: 'flex', justifyContent: 'end', alignItems: 'center'}}>
                             <IconButton onClick={handlePrevPreviewPage}>

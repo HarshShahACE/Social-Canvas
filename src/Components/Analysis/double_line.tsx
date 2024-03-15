@@ -222,7 +222,7 @@ const DoubleLineGraph: React.FC<Props> = ({ postData }) => {
               scales: {
                 x: {
                   ticks: {
-                    color: 'white'
+                    color: ' black'
                   }
                 },
                 likes: {
@@ -232,10 +232,10 @@ const DoubleLineGraph: React.FC<Props> = ({ postData }) => {
                   title: {
                     display: true,
                     text: 'Likes',
-                    color: 'white'
+                    color: ' black'
                   },
                   ticks: {
-                    color: 'white'
+                    color: ' black'
                   }
                 },
                 comments: {
@@ -245,17 +245,17 @@ const DoubleLineGraph: React.FC<Props> = ({ postData }) => {
                   title: {
                     display: true,
                     text: 'Comments',
-                    color: 'white'
+                    color: ' black'
                   },
                   ticks: {
-                    color: 'white'
+                    color: ' black'
                   }
                 }
               },
               plugins: {
                 legend: {
                   labels: {
-                    color: 'white'
+                    color: ' black'
                   }
                 }
               }
@@ -279,21 +279,22 @@ const DoubleLineGraph: React.FC<Props> = ({ postData }) => {
   };
 
   return (
-    <div style={{ display: 'flex' }}>
-      <div style={{ height: '450px', minWidth: '50%', marginRight: '20px' }}>
-        <canvas id="doubleLineGraph" width="500" height="200" color='white'></canvas>
+    <div style={{ display: 'flex' , alignItems: 'flex-start' }}>
+      <div style={{ height: '450px', minWidth: '50%', marginRight: '20px' , flex: 1 }}>
+        <h2>Top Post Based On Likes And Comments</h2>
+        <canvas id="doubleLineGraph" width="500" height="200" color=' black'></canvas>
       </div>
       <div
         ref={tableRef}
-        style={{ overflowY: 'scroll', width: '50%', height: '400px' }}
+        style={{ overflowY: 'scroll', flex:'1' ,  width: '50%', height: '400px', marginBottom: '20px' }}
       >
-        <TableContainer component={Paper} style={{ background: '#3B3C45', border: '1px solid #ddd' }}>
+        <TableContainer component={Paper} style={{ background: '#f9f9f9', border: '1px solid #ddd' }}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell style={{ background: '#494A52', borderBottom: '1px solid #ddd', fontSize: '16px', fontWeight: 'bold' }}>ID</TableCell>
-                <TableCell style={{ background: '#494A52', borderBottom: '1px solid #ddd', fontSize: '16px', fontWeight: 'bold' }}>Post Type</TableCell>
-                <TableCell style={{ background: '#494A52', borderBottom: '1px solid #ddd', fontSize: '16px', fontWeight: 'bold' }}>Post Content</TableCell>
+                <TableCell style={{ background: '#eaeaea', borderBottom: '1px solid #ddd', fontSize: '16px', fontWeight: 'bold' }}>ID</TableCell>
+                <TableCell style={{ background: '#eaeaea', borderBottom: '1px solid #ddd', fontSize: '16px', fontWeight: 'bold' }}>Post Type</TableCell>
+                <TableCell style={{ background: '#eaeaea', borderBottom: '1px solid #ddd', fontSize: '16px', fontWeight: 'bold' }}>Post Content</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>

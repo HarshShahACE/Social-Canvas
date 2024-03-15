@@ -194,7 +194,7 @@ const Profile = () => {
 
     return(
       <>
-        <div style={{ display: 'flex' , backgroundColor:'#020202' , backgroundImage: `url(${defaultImagePath})`, backgroundSize:'contain',
+        <div style={{ display: 'flex' , backgroundColor:'#FFFFFF' , backgroundImage: `url(${defaultImagePath})`, backgroundSize:'contain',
             backgroundRepeat:'no-repeat',
             backgroundPosition:'bottom right'  , height:'100vh' }}>
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -211,20 +211,20 @@ const Profile = () => {
                       <Typography variant="h5" gutterBottom style={{ margin:'10px' }}>
                         User Profile
                       </Typography>
-                      <Card sx={{ borderRadius: '20px', background: '#191C24', fontWeight: 'bold' , boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.5)' }}>
+                      <Card sx={{ borderRadius: '20px', background: 'rgba(255,255,255,0.7)', fontWeight: 'bold' , boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.5)' }}>
                         <CardContent sx={{ color: 'black', padding: '20px' }}>
                           <Grid container spacing={2} alignItems="flex-start">
                             {/* Avatar */}
                             <Grid item xs={12} sm={2}>
                               <Avatar
                                   sx={{ height: 100, width: 100, margin: '15px', borderRadius: 'none' }} // Add borderRadius: 'none'
-                                  src={formData.gender === 'Male' ? Male : Female}
+                                  src={formData.gender === 'Female' ? Female : Male}
                               />
                           </Grid>
 
                             {/* Form Data */}
                             <Grid item xs={12} sm={9}>
-                              <form onSubmit={handleSubmit} style={{color:'white'}}>
+                              <form onSubmit={handleSubmit}>
                                 <Grid container spacing={2}>
                                   {/* User Details */}
                                   <Grid item xs={12}>

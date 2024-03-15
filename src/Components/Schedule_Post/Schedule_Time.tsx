@@ -29,14 +29,14 @@ const SchedulePopup: React.FC<SchedulePopupProps> = ({ value, isOpen, onClose, s
 
     return (
         <Modal open={isOpen} onClose={onClose}>
-            <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: '#696969', p: 4, width: 'fit-content', borderRadius: '20px'}}>
+            <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: '#F2F2F2', p: 4, width: 'fit-content', borderRadius: '20px'}}>
                 <Box sx={{ marginBottom: '10px' }}>
-                    <h2 style={{marginBottom:'20px' , fontSize:'20px' , textAlign:'center' , color:'#FFFFFF'}}>{value}</h2>
+                    <h2 style={{marginBottom:'20px' , fontSize:'20px' , textAlign:'center' , color:'#000000'}}>{value}</h2>
                     <TextField
                         type="date"
                         value={selectedDate}
                         onChange={handleDateChange}
-                        style={{ marginRight: '10px', width: '150px' , color:'white' }}
+                        style={{ marginRight: '10px', width: '150px' }}
                         inputProps={{
                             min: currentDate, // Set the min attribute to the current date
                             max :  oneMonthFromNowString // Set the max attribute
@@ -46,7 +46,7 @@ const SchedulePopup: React.FC<SchedulePopupProps> = ({ value, isOpen, onClose, s
                         type="time"
                         value={selectedTime}
                         onChange={handleTimeChange}
-                        style={{ marginRight: '10px', width: '150px' , marginTop: isMobile? '10px' : '0px' , color:'white' }}
+                        style={{ marginRight: '10px', width: '150px' , marginTop: isMobile? '10px' : '0px' }}
                         
                     />
                 </Box>
@@ -59,8 +59,8 @@ const SchedulePopup: React.FC<SchedulePopupProps> = ({ value, isOpen, onClose, s
                             fontSize: '16px',
                             borderRadius: '5px',
                             border: '1px solid #ccc',
-                            backgroundColor: '#696969',
-                            color: '#fff',
+                            backgroundColor: '#fff',
+                            color: '#333',
                             height:'50px',
                             width: '310px',
                             marginTop: '10px',

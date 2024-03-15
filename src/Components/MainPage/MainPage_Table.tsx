@@ -135,6 +135,7 @@ const SocialAccount = () => {
     } else {
       switch (platform) {
         case 'linkedin':
+          window.open(`${process.env.REACT_APP_LINKEDIN_API}`, '_Blank');
           setLinkInputPopupOpen(true);
           break;
         case 'twitter':
@@ -192,9 +193,9 @@ const SocialAccount = () => {
         </DialogContent>
       </Dialog>
       {loading && <LoadingScreen />}
-      <Card sx={{ maxWidth:'75%' , margin:'10px' , borderRadius:'20px' , padding:'20px' , backgroundColor:'rgba(25, 28, 36, 0.8)' , boxShadow: '6px 6px 6px rgba(255, 255, 255, 0.5)' }}>
+      <Card sx={{ maxWidth:'75%' , margin:'10px' , borderRadius:'20px' , padding:'20px' , backgroundColor:'rgba(255, 255, 255, 0.8)' , boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.5)' }}>
         <CardContent>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' , color:'white' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' ,   }}>
             <h2>Social Media Accounts</h2>
             <ButtonComponent variant="contained" onClick={handleSocialMediaPopupOpen} startIcon={<AddCircleIcon/>}>Add</ButtonComponent>
           </div>
@@ -202,23 +203,23 @@ const SocialAccount = () => {
             <Table>
               <TableHead>
                 <TableRow>
-                  <TableCell style={{fontSize:'20px' , color:'white'}}>ID</TableCell>
-                  <TableCell style={{fontSize:'20px', color:'white'}}></TableCell>
-                  <TableCell style={{fontSize:'20px', color:'white'}}>Username</TableCell>
-                  <TableCell style={{fontSize:'20px', color:'white'}}>Platform Name</TableCell>
-                  <TableCell style={{fontSize:'20px', color:'white'}}>Actions</TableCell>
+                  <TableCell style={{fontSize:'20px'}}>ID</TableCell>
+                  <TableCell style={{fontSize:'20px',  }}></TableCell>
+                  <TableCell style={{fontSize:'20px',  }}>Username</TableCell>
+                  <TableCell style={{fontSize:'20px',  }}>Platform Name</TableCell>
+                  <TableCell style={{fontSize:'20px',  }}>Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {username.length > 0 ? (
                   username.map((user, index) => (
                     <TableRow key={index}>
-                      <TableCell style={{fontSize:'16px', color:'white'}}>{index + 1}</TableCell>
-                      <TableCell style={{fontSize:'16px', color:'white'}}><Avatar alt="User" src={userPic[index]} /></TableCell>
-                      <TableCell style={{fontSize:'16px', color:'white'}}>{user}</TableCell>
-                      <TableCell style={{fontSize:'16px', color:'white'}}>{platform[index]}</TableCell>
+                      <TableCell style={{fontSize:'16px',  }}>{index + 1}</TableCell>
+                      <TableCell style={{fontSize:'16px',  }}><Avatar alt="User" src={userPic[index]} /></TableCell>
+                      <TableCell style={{fontSize:'16px',  }}>{user}</TableCell>
+                      <TableCell style={{fontSize:'16px',  }}>{platform[index]}</TableCell>
                       <TableCell>
-                        <IconButton style={{backgroundColor:'#1565C0' ,borderRadius:'5px' , color:'white' }} onClick={() => handleDeleteClick()}>
+                        <IconButton style={{backgroundColor:'#1565C0' ,borderRadius:'5px' ,   }} onClick={() => handleDeleteClick()}>
                           <DeleteIcon />
                         </IconButton>
                       </TableCell>

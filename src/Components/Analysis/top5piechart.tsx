@@ -79,7 +79,7 @@ const TopFivePieChart: React.FC<PieChartProps> = ({ locationData }) => {
     plugins: {
       legend: {
         labels: {
-          color: 'white', // Change the color of the labels
+          color: 'black', // Change the color of the labels
           font: {
             size: 14 // Adjust the font size of the labels
           }
@@ -94,12 +94,12 @@ const TopFivePieChart: React.FC<PieChartProps> = ({ locationData }) => {
       <div style={{ height: '450px', width: '50%', marginRight: '20px' }}>
         <Pie data={chartData} options={options} />
       </div>
-      <TableContainer component={Paper} style={{ background: '#3B3C45', border: '1px solid #ddd', width: '50%', height: '40%' }}>
+      <TableContainer component={Paper} style={{ background: '#f9f9f9', border: '1px solid #ddd', width: '50%', height: '40%' }}>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell style={{ background: '#494A52', borderBottom: '1px solid #ddd', fontSize: '20px', fontWeight: 'bold' }}>Location</TableCell>
-              <TableCell style={{ background: '#494A52', borderBottom: '1px solid #ddd', fontSize: '20px', fontWeight: 'bold' }}>Value</TableCell>
+              <TableCell style={{ background: '#eaeaea', borderBottom: '1px solid #ddd', fontSize: '20px', fontWeight: 'bold' }}>Location</TableCell>
+              <TableCell style={{ background: '#eaeaea', borderBottom: '1px solid #ddd', fontSize: '20px', fontWeight: 'bold' }}>Value</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
