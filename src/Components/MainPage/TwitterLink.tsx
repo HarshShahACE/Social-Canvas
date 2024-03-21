@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, TextField, Box, Typography } from '@mui/material';
+import { Dialog, DialogContent, TextField, Box, Typography, IconButton } from '@mui/material';
 import axios from 'axios';
 import ButtonComponent from '../Fields/Buttonfield';
+import { Close } from '@mui/icons-material';
 
 
 interface LinkInputPopupProps {
@@ -37,7 +38,6 @@ const TwitterLink: React.FC<LinkInputPopupProps> = ({ isOpen, onClose }) => {
               });
           if (response.status === 200) {
             const jsonData = response.data;
-            console.log(jsonData);
             window.alert("Account Added Successfully");
           } else {
             console.log('Error:', response.statusText);
@@ -53,7 +53,12 @@ const TwitterLink: React.FC<LinkInputPopupProps> = ({ isOpen, onClose }) => {
   return (
     <Dialog open={isOpen} onClose={onClose}>
       <DialogContent>
-        <h2>Enter Link</h2>
+        <div style={{display:'flex' , justifyContent:'space-between'}}>
+          <h2>Enter Link</h2>
+          <IconButton onClick={onClose} style={{marginLeft:'20px'}}> 
+          <Close />
+        </IconButton>
+        </div>
         <Box marginBottom={2}>
           <TextField
             fullWidth

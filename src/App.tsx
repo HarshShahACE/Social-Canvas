@@ -30,21 +30,21 @@ function App() {
 
   return (
     <div className="App">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-      <Routes>
-        {/* Public Routes */}
-        <Route path='/' element={<Navigate to="/Login" replace />} />
-        <Route path='/Login' element={<Login/>} />
-        <Route path='/Register' element={<Register/>} />
-        <Route path='/Logout' element={<Logout/>} />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <Routes>
+          {/* Public Routes */}
+          <Route path='/' element={<Navigate to="/Login" replace />} />
+          <Route path='/Login' element={<Login/>} />
+          <Route path='/Register' element={<Register/>} />
+          <Route path='/Logout' element={<Logout/>} />
 
-        {/* Private Routes */}
-        <Route path='/Dashboard' element={<PrivateRoute element={Homepage}/>} />
-        <Route path='/Profile' element={<PrivateRoute element={Profile}/>} />
-        <Route path='/Schedule_Post' element={<PrivateRoute element={Schedule_Post}/>} />
-        <Route path='/Manage_Post' element={<PrivateRoute element={ManagePost}/>} />
-        <Route path='/Analysis' element={<PrivateRoute element={Analysis}/>} />
-      </Routes>
+          {/* Private Routes */}
+          <Route path='/Dashboard' element={<PrivateRoute element={Homepage}/>} />
+          <Route path='/Profile' element={<PrivateRoute element={Profile}/>} />
+          <Route path='/Schedule_Post' element={<PrivateRoute element={Schedule_Post}/>} />
+          <Route path='/Manage_Post' element={<PrivateRoute element={ManagePost}/>} />
+          <Route path='/Analysis' element={<PrivateRoute element={Analysis}/>} />
+        </Routes>
     </div>
   );
 }

@@ -76,7 +76,6 @@ const Profile = () => {
           setFormData(jsonData);
           setcountry1(jsonData.country); // Set country from API data
           setState1(jsonData.state); // Set state from API data
-          console.log(jsonData);
           setLoading(false);
         } else {
           console.log('Error:', response.statusText);

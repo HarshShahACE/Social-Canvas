@@ -118,7 +118,7 @@ const ManagePost = () => {
                             events={events}
                             startAccessor="start"
                             endAccessor="end"
-                            style={{ background: 'rgba(250,250,250,1)' , padding:'20px' , boxShadow: '0px 4px 8px rgba(67, 131, 197, 0.9)' }}
+                            style={{ background: 'rgba(250,250,250,0.7)' , padding:'20px' , boxShadow: '0px 4px 8px rgba(67, 131, 197, 0.9)' }}
                             onSelectSlot={(slotInfo) => console.log(slotInfo)}
                             selectable
                             onSelectEvent={handleEventClick}

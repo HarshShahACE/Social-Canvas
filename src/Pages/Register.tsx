@@ -23,6 +23,7 @@ import TextFieldComponent from '../Components/Fields/Textfield';
 import SelectComponent from '../Components/Fields/Selectfield';
 import { LocationCity } from '@mui/icons-material';
 import ButtonComponent from '../Components/Fields/Buttonfield';
+import LoadingScreen from '../Components/Common/Loading';
 
 export default function Register() {
 
@@ -39,6 +40,7 @@ export default function Register() {
   const [statesList, setStatesList] = useState<string[]>([]);
   const Home = useNavigate();
   const defaultImagePath = process.env.REACT_APP_DEFAULT_AUTHENTICATION_IMAGE;
+  const [loading,setloading] = useState(false);
 
   useEffect(() => {
     // Update statesList when the selected country changes
@@ -100,6 +102,11 @@ export default function Register() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    const agreeCheckbox = document.querySelector<HTMLInputElement>('input[type="checkbox"][value="Agree"]');
+    if (!agreeCheckbox || !agreeCheckbox.checked) {
+      window.alert("Please agree to the Terms and Conditions before Registering.");
+      return; // Exit the function early if terms are not agreed
+    }
     if(name1==='' || email1==='' || password1 ==='' || state1 === '' || phone1==='' || gender1 ===''){
       window.alert("Required Fields should not be empty")
     }else{
@@ -107,6 +114,8 @@ export default function Register() {
       if(isPhoneNumberValid(phone1)){
         if(isPasswordValid(password1)) {
           try {
+            setloading(true);
+
             const response = await axios.post(`${process.env.REACT_APP_Fast_API}/create`, {
               name: name1,
               email: email1,
@@ -124,12 +133,14 @@ export default function Register() {
             if (response.status === 200) {
               // Handle success, e.g., redirect to a success page or show a success message
               window.alert('Registration Successful');
+              setloading(false);
               Home("/Login");
               console.log('Registration successful!');
             } else {
               console.log(response.data);
               if (response.data) {
                 if (response.status === 400) {
+                  setloading(false);
                   window.alert(response.data.detail)
                 }
               }
@@ -145,8 +156,10 @@ export default function Register() {
                   // Use a type assertion to inform TypeScript that responseData has a 'detail' property
                   const detail = (responseData as { detail: string }).detail;
                   window.alert(detail)
+                  setloading(false)
                 }
               } else {
+                setloading(false);
                 console.error('Error occurred:', axiosError);
                 window.alert('Registration failed. Please try again later.');
               }
@@ -170,6 +183,7 @@ export default function Register() {
   return (
     <div style={{ backgroundImage: `url(${defaultImagePath})`, backgroundSize:'cover'}}>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    {loading && <LoadingScreen />}
     <Grid container component="main" sx={{}}>
       <CssBaseline />
       <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square style={{border:'none', 
@@ -199,6 +213,7 @@ export default function Register() {
               startAdornment={<IconButton disabled><Person2Rounded style={{ color: '#707070' }} /></IconButton>}
             />
             <TextFieldComponent
+              type='tel'
               label="Phone Number"
               value={phone1}
               onChange={e=>setphone(e.target.value)}
@@ -273,7 +288,7 @@ export default function Register() {
               </Grid>
             </Grid>
               <FormControlLabel
-                control={<Checkbox value="remember" color="primary" />}
+                control={<Checkbox value="Agree" color="primary" />}
                 label="I Agree to the Terms and Conditions"
                 sx={{ display: 'flex', alignItems: 'center', marginLeft: '-8px', mt:2}}
               />

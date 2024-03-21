@@ -1,7 +1,8 @@
 import React from 'react';
-import { Modal, Box, TextField, useMediaQuery } from '@mui/material';
+import { Modal, Box, TextField, useMediaQuery, IconButton } from '@mui/material';
 import timezonedata from '../../assets/timezones.json';
 import ButtonComponent from '../Fields/Buttonfield';
+import { Close } from '@mui/icons-material';
 
 interface SchedulePopupProps {
     value : string;
@@ -31,7 +32,12 @@ const SchedulePopup: React.FC<SchedulePopupProps> = ({ value, isOpen, onClose, s
         <Modal open={isOpen} onClose={onClose}>
             <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)', bgcolor: '#F2F2F2', p: 4, width: 'fit-content', borderRadius: '20px'}}>
                 <Box sx={{ marginBottom: '10px' }}>
-                    <h2 style={{marginBottom:'20px' , fontSize:'20px' , textAlign:'center' , color:'#000000'}}>{value}</h2>
+                    <div style={{display:'flex' , justifyContent:'space-between' , alignItems:'center'}}>
+                        <h2 style={{marginBottom:'20px' , fontSize:'20px' , textAlign:'center' , color:'#000000'}}>{value}</h2>
+                        <IconButton onClick={onClose} style={{marginLeft:'20px'}}> 
+                            <Close />
+                        </IconButton>
+                    </div>
                     <TextField
                         type="date"
                         value={selectedDate}
@@ -59,7 +65,7 @@ const SchedulePopup: React.FC<SchedulePopupProps> = ({ value, isOpen, onClose, s
                             fontSize: '16px',
                             borderRadius: '5px',
                             border: '1px solid #ccc',
-                            backgroundColor: '#fff',
+                            backgroundColor: '#f2f2f2',
                             color: '#333',
                             height:'50px',
                             width: '310px',

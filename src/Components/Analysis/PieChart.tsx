@@ -19,7 +19,6 @@ interface fetchData{
 }
 
 const PieChart: React.FC<fetchData> = ({ locationData }) => {
-  const tableRef = useRef<HTMLDivElement>(null);
 
   const generateChartData = () => {
     if (!locationData) return { labels: [], datasets: [] };

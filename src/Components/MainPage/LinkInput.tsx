@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
-import { Dialog, DialogContent, TextField, Box, Typography } from '@mui/material';
+import { Dialog, DialogContent, TextField, Box, Typography, IconButton } from '@mui/material';
 import LinkedInguide from '../../assets/Photos/Linkedin_Guide.png';
 import ButtonComponent from '../Fields/Buttonfield';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import LoadingScreen from '../Common/Loading';
+import { Close } from '@mui/icons-material';
 
 
 interface LinkInputPopupProps {
@@ -68,11 +69,16 @@ const LinkInputPopup: React.FC<LinkInputPopupProps> = ({ isOpen, onClose }) => {
     <Dialog open={isOpen} onClose={onClose}>
       {loading?? <LoadingScreen/>}
       <DialogContent>
-        <h2>Enter Link</h2>
+        <div style={{display:'flex' , justifyContent:'space-between'}}>
+          <h2>Enter Link</h2>
+          <IconButton onClick={onClose} style={{marginLeft:'20px'}}> 
+            <Close />
+          </IconButton>
+        </div>
         <Box marginBottom={2}>
         <TextField
             fullWidth
-            label="Public Url"
+            label="Authentication Url"
             value={authlink}
             onChange={handleauthlinkchange}
             variant="outlined"
@@ -84,6 +90,7 @@ const LinkInputPopup: React.FC<LinkInputPopupProps> = ({ isOpen, onClose }) => {
             value={Publiclink}
             onChange={handlePublicLinkChange}
             variant="outlined"
+            style={{marginTop:'20px'}}
           />
           <Typography style={{marginTop:'10px'}}>Go To Your Profile And Copy Link Shown in below Image Copy That link and Paste in above Field.</Typography>
           <img src={LinkedInguide} alt='Linkedin' style={{marginTop:'10px'}}></img>

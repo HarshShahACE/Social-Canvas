@@ -64,43 +64,42 @@ const SocialAccount = () => {
     fetchData();
   }, []);
 
-  const handleDeleteClick = async () => {
-    // Handle delete click for a specific row
-    const idString = sessionStorage.getItem('Myid'); // Retrieve the value from localStorage
+  const handleDeleteClick = async (platform: string) => {
+    const idString = sessionStorage.getItem('Myid'); // Retrieve the value from sessionStorage
     if (idString !== null) {
       const id = parseInt(idString);
       // Display confirmation dialog
       const confirmed = window.confirm('Are you sure you want to delete your account?');
       if (confirmed) {
         try {
-          const response = await axios.post(`${process.env.REACT_APP_Fast_API}/s_account_remove?user_id=${id}`, {
+          let apiUrl = '';
+          switch (platform) {
+            case 'Linkedin':
+              apiUrl = `${process.env.REACT_APP_Fast_API}/s_linkedin_account_remove?user_id=${id}`;
+              break;
+            case 'Twitter':
+              apiUrl = `${process.env.REACT_APP_Fast_API}/s_twitter_account_remove?user_id=${id}`;
+              break;
+            // Add cases for other platforms if needed
+            default:
+              break;
+          }
+          // Make the API call
+          const response = await axios.post(apiUrl, {
             headers: {
               'Content-Type': 'application/json',
             },
           });
           if (response.status === 200) {
-            // Handle success, e.g., redirect to a success page or show a success message
-            setLoading(false);
+            // Handle success, e.g., reload data or show a success message
             window.alert('Account Deleted Successfully');
-            window.location.reload();
+            window.location.reload(); // Reload the page to reflect changes
           } else {
             console.log(response.data);
           }
         } catch (error: any) { // Explicitly cast error to 'any'
           console.error('Error occurred:', error);
-          if (error.response && error.response.status === 400) {
-            const responseData = error.response.data;
-            if (responseData.detail === "Email already exists") {
-              window.alert('Email Already Registered. Please Enter Another Email Address');
-            } else if (responseData.detail === "Phone number already exists") {
-              window.alert('Phone Number Already Registered. Please Enter Another Phone Number');
-            } else {
-              // Handle other 400 status cases if needed
-            }
-          } else {
-            // Handle other errors
-            window.alert('An error occurred while Deleting the profile. Please try again later.');
-          }
+          // Handle errors if needed
         }
       } else {
         // If not confirmed, do nothing or show a message
@@ -123,7 +122,6 @@ const SocialAccount = () => {
   };
 
   const handleLinkSubmit = (link: any) => {
-    console.log('Submitted link:', link);
     window.alert("Account Added Successfully");
     setSocialMediaPopupOpen(false);
     setLinkInputPopupOpen(false);
@@ -149,7 +147,6 @@ const SocialAccount = () => {
               });
               if (response.status === 200) {
                 const jsonData = response.data;
-                console.log(jsonData);
                 const url = jsonData;
                 sessionStorage.setItem("Twitter",url);
                 window.open(url, '_Blank');
@@ -172,8 +169,6 @@ const SocialAccount = () => {
       
     }
   };
-
-  console.log(username,userPic,platform)
 
   return (
     <>
@@ -219,7 +214,7 @@ const SocialAccount = () => {
                       <TableCell style={{fontSize:'16px',  }}>{user}</TableCell>
                       <TableCell style={{fontSize:'16px',  }}>{platform[index]}</TableCell>
                       <TableCell>
-                        <IconButton style={{backgroundColor:'#1565C0' ,borderRadius:'5px' ,   }} onClick={() => handleDeleteClick()}>
+                        <IconButton style={{backgroundColor:'#1565C0' , color:'#FFFFFF' ,borderRadius:'5px' ,   }} onClick={() => handleDeleteClick(platform[index])}>
                           <DeleteIcon />
                         </IconButton>
                       </TableCell>

@@ -186,7 +186,6 @@ export default function Schedule_Post(){
         }
     
         try {
-            setLoading(true);
             const formData = new FormData();
             // Append platform_name if platforms are selected
             if (selectedPlatforms.length > 0) {
@@ -194,7 +193,7 @@ export default function Schedule_Post(){
             } else {
                 // Handle case where no platform is selected
                 window.alert('Please select at least one platform.');
-                return;
+                window.location.reload();
             }
 
             // Set post_type to 'content' if no file is selected
@@ -222,6 +221,7 @@ export default function Schedule_Post(){
                 });
             }
     
+            setLoading(true);
             const response = await axios.post(
                 `${process.env.REACT_APP_Fast_API}/create_schedule_post/${id}`,
                 formData,
@@ -281,7 +281,7 @@ export default function Schedule_Post(){
             <SideNav/>
             {/* Main content */}
             <div style={{ flex: 1 }}>
-                <main style={{ flexGrow: 1, padding: 3, marginTop: '70px' , marginLeft: isMobile? '20px' : '240px'  }}>
+                <main style={{ flexGrow: 1, padding: 3, marginTop: '80px' , marginLeft: isMobile? '20px' : '240px'  }}>
                     {/* Main content */}
                     <Grid container spacing={2}>
                         <Grid md={6}>
@@ -290,30 +290,32 @@ export default function Schedule_Post(){
                             {/* Drop Down For Plateform Selection */}
                             <Box display="flex" alignItems="center" mt={2}>
                                 {platforms.map(platform => (
-                                    <Avatar key={platform.value} style={{ cursor: 'pointer', marginRight: '10px', backgroundColor: selectedPlatforms.includes(platform.value) ? '#007bff' : '#FFFFFF' }} onClick={() => handlePlatformChange(platform.value)}>
-                                        <img src={platform.imageUrl} alt={platform.name} style={{ width: '90%', height: '90%', borderRadius: '50%' }} />
-                                    </Avatar>
+                                    platform.value !== 'youtube' && (
+                                        <Avatar key={platform.value} style={{ cursor: 'pointer', marginRight: '10px', backgroundColor: selectedPlatforms.includes(platform.value) ? '#007bff' : '#FFFFFF' }} onClick={() => handlePlatformChange(platform.value)}>
+                                            <img src={platform.imageUrl} alt={platform.name} style={{ width: '90%', height: '90%', borderRadius: '50%' }} />
+                                        </Avatar>
+                                    )
                                 ))}
                             </Box>
-                            <Typography style={{color:'red' , marginTop:'10px'}}>Twitter Is Currently unavailable For Posting.</Typography>
+                            <Typography style={{color:'red' , marginTop:'10px'}}>Twitter Is Currently unavailable For Image And Video Posting.</Typography>
                             <Divider style={{ margin: '10px 0' }} />
 
                             {/* Content Textarea with Emoji Picker */}
                             <Box position="relative" width="100%" marginBottom={5}>
                             <textarea
-        rows={7}
-        value={content}
-        onChange={handleContentChange}
-        placeholder="Write something..."
-        style={{ width: '100%',
-        resize: 'none',
-        padding: '15px',
-        height: 'auto', // Set height to auto to allow dynamic resizing
-        minHeight: '60px', // Minimum height of the textarea
-        maxHeight: '120px',
-        color:'black',
-        borderRadius:'20px',}} 
-      />
+                                rows={7}
+                                value={content}
+                                onChange={handleContentChange}
+                                placeholder="Write something..."
+                                style={{ width: '100%',
+                                resize: 'none',
+                                padding: '15px',
+                                height: 'auto', // Set height to auto to allow dynamic resizing
+                                minHeight: '60px', // Minimum height of the textarea
+                                maxHeight: '120px',
+                                color:'black',
+                                borderRadius:'20px',}} 
+                            />
                                 <Box
                                     style={{
                                     position: 'absolute',
@@ -351,6 +353,7 @@ export default function Schedule_Post(){
                                     type="file"
                                     onChange={handleFileChange}
                                     multiple // Allow multiple file selection
+                                    disabled={selectedPlatforms.includes('twitter')}
                                 />
                                 <label htmlFor="media-upload">
                                     <IconButton component="span">

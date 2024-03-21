@@ -3,6 +3,7 @@ import { Bar } from 'react-chartjs-2';
 import { ChartOptions } from 'chart.js/auto';
 import { TableContainer, Paper, Table, TableHead, TableRow, TableCell, TableBody } from '@mui/material';
 
+// Interface For Linkedin Data
 interface LocationData {
   urn_id: string;
   distance: string | number;
@@ -12,6 +13,7 @@ interface LocationData {
   type: string;
 }
 
+// Interface For Twitter Data
 interface TwitterData {
   tweetLink: string;
   tweetDate: string;
@@ -29,30 +31,36 @@ interface TwitterData {
   type: string;
 }
 
+// Main Interface
 interface Props {
   socialData: (LocationData | TwitterData)[] | null;
   dataType: 'linkedin' | 'twitter';
 }
 
 const BarChart: React.FC<Props> = ({ socialData, dataType }) => {
+
+  // data Values
   const [data, setData] = useState<(LocationData | TwitterData)[]>([]);
   const tableRef = useRef<HTMLDivElement>(null);
 
+  // For Fetching Data
   useEffect(() => {
     if (socialData) {
       setData(socialData);
-      console.log(socialData);
-      console.log(dataType);
     }
   }, [socialData]);
 
+  // For Genrate Linkedin Graph Data
   const generateLinkedInChartData = (filteredData: LocationData[]): { labels: string[], datasets: any[] } => {
     const groupedData: { [key: string]: number } = {};
+
+    // Grouping Data Based on Job Title
     filteredData.forEach(item => {
       const jobTitle = item.jobtitle || 'Unknown';
       groupedData[jobTitle] = (groupedData[jobTitle] || 0) + 1;
     });
 
+    // Sorting Data Using Job Titles
     const sortedData = Object.entries(groupedData)
       .sort(([, countA], [, countB]) => countB - countA)
       .slice(0, 10);
@@ -71,8 +79,8 @@ const BarChart: React.FC<Props> = ({ socialData, dataType }) => {
     return { labels, datasets: [dataset] };
   };
 
+  // For Genrate Twitter Graph Data
   const generateTwitterChartData = (filteredData: TwitterData[]): { labels: string[], datasets: any[] } => {
-    console.log("Inside Twitter")
     const sortedData = filteredData
       .sort((a, b) => b.retweetCount - a.retweetCount)
       .slice(0, 10);
@@ -91,6 +99,7 @@ const BarChart: React.FC<Props> = ({ socialData, dataType }) => {
     return { labels, datasets: [dataset] };
   };
 
+  // Genrating Charts
   const generateChartData = () => {
     if (!data || data.length === 0) return { labels: [], datasets: [] };
 
@@ -155,6 +164,7 @@ const BarChart: React.FC<Props> = ({ socialData, dataType }) => {
     borderColor: 'black',
   };
 
+  // Genrating Table Data's
   const generateTableData = () => {
     if (!data || data.length === 0) return [];
   

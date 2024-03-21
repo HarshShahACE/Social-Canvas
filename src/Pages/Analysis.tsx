@@ -154,7 +154,7 @@ const Analysis = () => {
                                 </div>
                                 {/*  Second Row - Word Cloud Chart and Bar Chart Table*/}
                                 <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                    <div style={{ width: '50%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(255, 255, 255, 0.8)', border: '1px solid #000' }} >
+                                    <div style={{ width: '48%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(255, 255, 255, 0.8)', border: '1px solid #000' }} >
                                         <div>
                                             <WordCloudComponent data={connectionData || null} />
                                         </div>
@@ -191,6 +191,10 @@ const Analysis = () => {
                                         </div>
                                     </div>
                                 </div>
+                        </div>
+                    ) : selectedPlatform === 'youtube' ?  (
+                        <div style={{textAlign:'center' , marginTop:'50px'}}>
+                            <h2>Comming Soon For Youtube</h2>
                         </div>
                     ) : (
                         <div style={{ textAlign: 'center', marginTop: '50px' }}>
