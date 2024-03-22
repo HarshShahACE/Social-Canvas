@@ -9,6 +9,7 @@ import Analysis from './Pages/Analysis';
 import PrivateRoute from './Components/Authentication/Private_Route';
 import { useState } from 'react';
 import LoadingScreen from './Components/Common/Loading';
+import Youtubepost from './Pages/youtube_post';
 
 function App() {
 
@@ -44,6 +45,7 @@ function App() {
           <Route path='/Schedule_Post' element={<PrivateRoute element={Schedule_Post}/>} />
           <Route path='/Manage_Post' element={<PrivateRoute element={ManagePost}/>} />
           <Route path='/Analysis' element={<PrivateRoute element={Analysis}/>} />
+          <Route path='/Youtube_Post' element={<PrivateRoute element={Youtubepost}/>} />
         </Routes>
     </div>
   );

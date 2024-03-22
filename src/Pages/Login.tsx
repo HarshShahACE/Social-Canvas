@@ -64,18 +64,10 @@ export default function Login() {
           setLoading(true);
           // Login API 
             try {
-
-              const timeoutId = setTimeout(() => {
-                setLoading(false);
-                window.alert("Request timed out. Please try again later.");
-              }, 2000);
-
               const response = await axios.post(`${process.env.REACT_APP_Fast_API}/login`, {
                 email: username,
                 password: password1
               });
-
-              clearTimeout(timeoutId);
             
               if (response.status === 200) {
                 const data = response.data;
@@ -95,9 +87,10 @@ export default function Login() {
                     // Use a type assertion to inform TypeScript that responseData has a 'detail' property
                     const detail = (responseData as { detail: string }).detail;
                     window.alert(detail)
+                    setLoading(false);
                   }
                 } else {
-                  console.error('Error occurred:', axiosError);
+                  console.error('Error occurred:', axiosError); 
                 }
               }
             }

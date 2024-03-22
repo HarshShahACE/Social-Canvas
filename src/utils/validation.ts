@@ -22,10 +22,12 @@ export const isPasswordValid = (password :any) => {
 export const handlepasswordcheck = (value : any) => {
     if ( value.trim() === '' ) {
       window.alert('Password Should Not Be Blank');
+      return;
       }
     else{
       if(value.length <=7){
         window.alert('Password Length Should Not Be Below 8');
+        return;
       }
       else{
         return true

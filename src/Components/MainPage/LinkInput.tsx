@@ -30,9 +30,15 @@ const LinkInputPopup: React.FC<LinkInputPopupProps> = ({ isOpen, onClose }) => {
 
   // API Call For Checking User Data and Adding User Account
   const handleSubmit = async() => {
+    if (authlink.trim() === '' || Publiclink.trim() === '') {
+      // Handle validation error, fields are empty
+      window.alert('Please fill in all required fields');
+      return;
+    }
     try {
       const idString = sessionStorage.getItem('Myid');
       if (idString !== null) {
+        setLoading(true);
         const id = parseInt(idString);
         const response = await axios.post(`${process.env.REACT_APP_Fast_API}/generate_linkedin_access_token`, {
           authorization_code: authlink,
@@ -62,13 +68,15 @@ const LinkInputPopup: React.FC<LinkInputPopupProps> = ({ isOpen, onClose }) => {
       }
     } catch (error) {
       console.error('Error occurred:', error);
+      window.alert("Account Add Failed , Please try After Some Time");
+      window.location.reload();
     }
   };
 
   return (
     <Dialog open={isOpen} onClose={onClose}>
-      {loading?? <LoadingScreen/>}
       <DialogContent>
+      {loading?? <LoadingScreen/>}
         <div style={{display:'flex' , justifyContent:'space-between'}}>
           <h2>Enter Link</h2>
           <IconButton onClick={onClose} style={{marginLeft:'20px'}}> 
@@ -82,6 +90,7 @@ const LinkInputPopup: React.FC<LinkInputPopupProps> = ({ isOpen, onClose }) => {
             value={authlink}
             onChange={handleauthlinkchange}
             variant="outlined"
+            required
           />
           <Typography style={{marginTop:'10px'}}>Copy Url After Successful Login in Linkedin</Typography>
           <TextField
@@ -91,6 +100,7 @@ const LinkInputPopup: React.FC<LinkInputPopupProps> = ({ isOpen, onClose }) => {
             onChange={handlePublicLinkChange}
             variant="outlined"
             style={{marginTop:'20px'}}
+            required
           />
           <Typography style={{marginTop:'10px'}}>Go To Your Profile And Copy Link Shown in below Image Copy That link and Paste in above Field.</Typography>
           <img src={LinkedInguide} alt='Linkedin' style={{marginTop:'10px'}}></img>

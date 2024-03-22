@@ -11,7 +11,7 @@ import Popover from '@mui/material/Popover';
 import MenuList from '@mui/material/MenuList';
 import PersonIcon from '@mui/icons-material/Person';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
-import { NotificationsRounded } from '@mui/icons-material';
+import { NotificationsRounded, YouTube } from '@mui/icons-material';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import Person from '../../assets/Photos/Person.png'
 
@@ -64,6 +64,7 @@ export default function SideNav() {
   const sideList = [
     { id: 'dashboard', text: 'Dashboard', icon: <HomeIcon style={{color:'#8B5CE1'}} />, path: '/Dashboard' },
     { id: 'Schedulepost', text: 'Schedule Post', icon:<PostAddIcon style={{color:'#F8A30C'}}/> ,path: '/Schedule_Post' },
+    { id: 'youtubepost', text: 'Youtube Post', icon:<YouTube style={{color:'#FC424A'}}/> ,path: '/Youtube_Post' },
     { id: 'managepost', text: 'Manange Post', icon:<ManageHistoryIcon style={{color:'#0090E7'}}/>, path: '/Manage_Post' },
     { id: 'analysis', text: 'Insights', icon: <AnalyticsIcon style={{color:'#52D017'}}/>, path: '/Analysis' },
     { id: 'profile', text: 'My Profile', icon: <AccountCircleIcon style={{color:'#EB5406'}}/>, path: '/Profile' },

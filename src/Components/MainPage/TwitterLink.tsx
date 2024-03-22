@@ -3,6 +3,7 @@ import { Dialog, DialogContent, TextField, Box, Typography, IconButton } from '@
 import axios from 'axios';
 import ButtonComponent from '../Fields/Buttonfield';
 import { Close } from '@mui/icons-material';
+import LoadingScreen from '../Common/Loading';
 
 
 interface LinkInputPopupProps {
@@ -13,6 +14,7 @@ interface LinkInputPopupProps {
 
 const TwitterLink: React.FC<LinkInputPopupProps> = ({ isOpen, onClose }) => {
   const [Publiclink, setPublicLink] = useState('');
+  const [loading,setloading] = useState(false);
 
   const handlePublicLinkChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPublicLink(e.target.value);
@@ -20,7 +22,13 @@ const TwitterLink: React.FC<LinkInputPopupProps> = ({ isOpen, onClose }) => {
 
   // API Call For Checking User Data and Adding User Account
   const handleSubmit = () => {
+    if (Publiclink.trim() === '') {
+      // Handle validation error, fields are empty
+      window.alert('Please fill in all required fields');
+      return;
+    }
       const url = sessionStorage.getItem("Twitter");
+      setloading(true);
       const idString = sessionStorage.getItem("Myid");
         if(idString !== null){
             var id = parseInt(idString);
@@ -37,13 +45,19 @@ const TwitterLink: React.FC<LinkInputPopupProps> = ({ isOpen, onClose }) => {
                 }
               });
           if (response.status === 200) {
-            const jsonData = response.data;
             window.alert("Account Added Successfully");
+            setloading(false);
+            window.location.reload()
           } else {
             console.log('Error:', response.statusText);
+            setloading(false);
+            window.location.reload()
           }
         } catch (error) {
           console.error('Error fetching data:', error);
+          setloading(false);
+          window.alert("Account Add Failed, Try After Some Time");
+          window.location.reload()
         }
       };
   
@@ -53,6 +67,7 @@ const TwitterLink: React.FC<LinkInputPopupProps> = ({ isOpen, onClose }) => {
   return (
     <Dialog open={isOpen} onClose={onClose}>
       <DialogContent>
+      {loading?? <LoadingScreen/>}
         <div style={{display:'flex' , justifyContent:'space-between'}}>
           <h2>Enter Link</h2>
           <IconButton onClick={onClose} style={{marginLeft:'20px'}}> 
@@ -66,6 +81,7 @@ const TwitterLink: React.FC<LinkInputPopupProps> = ({ isOpen, onClose }) => {
             value={Publiclink}
             onChange={handlePublicLinkChange}
             variant="outlined"
+            required
           />
           <Typography style={{marginTop:'10px'}}>Copy the Link After Authorization And Paste In Above Field.</Typography>
         </Box>
