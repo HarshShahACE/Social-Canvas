@@ -3,13 +3,14 @@ import Register from './Pages/Register';
 import Login from './Pages/Login';
 import Homepage from './Pages/HomePage';
 import Profile from './Pages/Profile';
-import Schedule_Post from './Pages/SchedulePost';
+import Schedule_Post from './Pages/schedulePost';
 import ManagePost from './Pages/ManagePost';
 import Analysis from './Pages/Analysis';
 import PrivateRoute from './Components/Authentication/Private_Route';
 import { useState } from 'react';
 import LoadingScreen from './Components/Common/Loading';
 import Youtubepost from './Pages/youtube_post';
+import ForgotPassword from './Pages/forgotpassword';
 
 function App() {
 
@@ -36,6 +37,7 @@ function App() {
           {/* Public Routes */}
           <Route path='/' element={<Navigate to="/Login" replace />} />
           <Route path='/Login' element={<Login/>} />
+          <Route path='/Forgot_Password' element={<ForgotPassword/>} />
           <Route path='/Register' element={<Register/>} />
           <Route path='/Logout' element={<Logout/>} />
 
@@ -45,7 +47,6 @@ function App() {
           <Route path='/Schedule_Post' element={<PrivateRoute element={Schedule_Post}/>} />
           <Route path='/Manage_Post' element={<PrivateRoute element={ManagePost}/>} />
           <Route path='/Analysis' element={<PrivateRoute element={Analysis}/>} />
-          <Route path='/Youtube_Post' element={<PrivateRoute element={Youtubepost}/>} />
         </Routes>
     </div>
   );

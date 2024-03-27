@@ -14,15 +14,21 @@ interface Media {
 
 interface Props {
   eventId: number | null;
+  plateform : string | null;
   open: boolean;
   onClose: () => void;
 }
 
-const capitalizeFirstLetter = (str: string) => {
-  return str.replace(/\b\w/g, (char) => char.toUpperCase());
+const capitalizeFirstLetter = (str : string) => {
+  // Check if str is defined and not null
+  if (str && typeof str === 'string') {
+    return str.replace(/\b\w/g, (char) => char.toUpperCase());
+  } else {
+    return ''; // Return an empty string if str is undefined or null
+  }
 };
 
-const EventDetailsDialog: React.FC<Props> = ({ eventId, open, onClose }) => {
+const EventDetailsDialog: React.FC<Props> = ({ eventId, plateform , open, onClose }) => {
   const [eventDetails, setEventDetails] = useState<any>(null);
   const [media, setMedia] = useState<Media[]>([]);
   const [selectedDate, setSelectedDate] = useState('');
@@ -58,7 +64,7 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, open, onClose }) => {
     const fetchEventDetails = async () => {
       try {
         if (eventId !== null) {
-          const response = await axios.get(`${process.env.REACT_APP_Fast_API}/scheduled_details/${eventId}`);
+          const response = await axios.get(`${process.env.REACT_APP_Fast_API}/scheduled_details/${plateform}/${eventId}`);
           if (response.status === 200) {
             setEventDetails(response.data);
             const eventData = response.data;
@@ -165,21 +171,43 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, open, onClose }) => {
               style={{ marginBottom: 20 , marginTop:10 }}
               label="Content"
               value={eventDetails.content}
+              InputProps={{
+                    readOnly: true,
+                }}
             />
+            {plateform === 'YouTube' &&
+              <TextFieldComponent
+              style={{ marginBottom: 20 , marginTop:10 }}
+              label="Description"
+              value={eventDetails.description}
+              InputProps={{
+                    readOnly: true,
+                }}
+            />
+            }
             <TextFieldComponent
               style={{ marginBottom: 20 }}
               label="Platform"
               value={capitalizeFirstLetter(eventDetails.platform_name)}
+              InputProps={{
+                    readOnly: true,
+                }}
             />
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 <TextFieldComponent
                 style={{ flex: 1, marginBottom: 20 }}
                 label="Post Type"
+                InputProps={{
+                    readOnly: true,
+                }}
                 value={capitalizeFirstLetter(eventDetails.post_type)}
                 />
                 <TextFieldComponent
                 style={{flex: 1, marginBottom: 20, marginLeft: 10}}
                 label="Schedule Type"
+                InputProps={{
+                  readOnly: true,
+                }}
                 value={capitalizeFirstLetter(eventDetails.sch_type) }
                 />
             </div>
@@ -199,13 +227,14 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, open, onClose }) => {
                 InputProps={{
                     readOnly: true,
                 }}
+                
                 />
             </div>
             {media.map(item => (
               item.type === "image" ? (
                 <img key={item.id} src={`data:image/jpeg;base64,${item.url}`} alt={`${item.id}`} style={{ width: '60%', height: '60%', margin: 5 }} />
               ) : (
-                <video key={item.id} controls style={{ width: '60%', height: '60%', margin: 5 }}>
+                <video key={item.id} controls style={{ width: '500px', height: '500px' }}>
                 <source src={`data:video/mp4;base64,${item.url}`} type="video/mp4" />
                 Your browser does not support the video tag.
                 </video>

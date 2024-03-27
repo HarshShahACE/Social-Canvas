@@ -1,5 +1,5 @@
-import React from 'react';
-import { Card, CardHeader, CardContent, CardActions, Avatar, Typography, IconButton, Divider } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { CardContent, CardActions, Avatar, Typography, IconButton, Divider } from '@mui/material';
 import ThumbUpIcon from '@mui/icons-material/ThumbUp';
 import ArchiveIcon from '@mui/icons-material/Archive';
 import youtubelogo from '../../assets/Photos/Youtube.png';
@@ -7,6 +7,7 @@ import ShareIcon from '@mui/icons-material/Share';
 import DownloadIcon from '@mui/icons-material/Download';
 import { ThumbDown } from '@mui/icons-material';
 import NotificationsIcon from '@mui/icons-material/Notifications';
+import axios from 'axios';
 
 type FilePreview = {
   file: File;
@@ -16,24 +17,60 @@ type FilePreview = {
 
 
 interface youtubeprops {
-    username?: string;
     title?: string;
     content?: string;
     media?: FilePreview;
 }
 
-const Youtubepostlayout: React.FC<youtubeprops> = ({ username, title ,content, media }) => {
+const Youtubepostlayout: React.FC<youtubeprops> = ({ title ,content, media }) => {
+
+  const [username, setUsername] = useState<string[]>([]);
+  const [userPic, setUserPic] = useState<string[]>([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const idString = sessionStorage.getItem('Myid');
+      if (idString !== null) {
+        const id = parseInt(idString);
+        try {
+          const response = await axios.post(`${process.env.REACT_APP_Fast_API}/s_account_list?user_id=`+id, {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          });
+          if (response.status === 200) {
+            const jsonData = response.data;
+            if (Array.isArray(jsonData)) {
+              const linkedinData = jsonData.filter(item => item.platform === "YouTube");
+              setUsername(linkedinData.map(item => item.username));
+              setUserPic(linkedinData.map(item => item.profile_pic_url));
+            } else {
+              setUsername([jsonData.username]);
+              setUserPic([jsonData.profile_pic_url]);
+          }
+        } else {
+            console.log('Error:', response.statusText);
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+      }
+    };
+
+    fetchData();
+  }, []);
 
     return (
         <>
           <div style={{ display: 'flex', alignItems: 'center', margin: '10px' }}>
-            <img src={youtubelogo} alt={username} style={{ width: '30px', height: '30px' }} />
+            <img src={youtubelogo} alt='Youtube' style={{ width: '30px', height: '30px' }} />
             <Typography variant="body1" color="textPrimary">
               Youtube
             </Typography>
           </div>
+
           {/* Header section */}
-          <div style={{ boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.3)'}}>
+          <div style={{ boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.3)' , maxWidth:400}}>
             {/* Media */}
             {media && media.type === 'video' && (
               <CardContent>
@@ -89,13 +126,13 @@ const Youtubepostlayout: React.FC<youtubeprops> = ({ username, title ,content, m
             {/* Profile section */}
             <div style={{marginLeft:'10px' , marginBottom:'10px' , marginTop:'10px'}}>
               <div style={{display:'flex'}}>
-                <Avatar aria-label="user" />
+                <Avatar aria-label="user" src={userPic[0]}/>
                   <div style={{marginLeft:'5px'}}>
                     {username}
                     <Typography style={{fontSize:'14px'}}>500 Subscribers</Typography>
                   </div>
                   <div style={{display:'flex' , marginLeft:'50px'}}>
-                    <Typography style={{fontSize:'20px'}}>SUBSCRIBED</Typography>
+                    <Typography style={{fontSize:'18px'}}>SUBSCRIBED</Typography>
                     <NotificationsIcon style={{marginLeft:'10px'}}/> 
                   </div>
               </div>

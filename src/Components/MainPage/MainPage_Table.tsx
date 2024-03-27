@@ -80,6 +80,9 @@ const SocialAccount = () => {
             case 'Twitter':
               apiUrl = `${process.env.REACT_APP_Fast_API}/s_twitter_account_remove?user_id=${id}`;
               break;
+            case 'YouTube':
+              apiUrl = `${process.env.REACT_APP_Fast_API}/s_youtube_account_remove?user_id=${id}`;
+              break;
             // Add cases for other platforms if needed
             default:
               break;
@@ -127,6 +130,11 @@ const SocialAccount = () => {
     setLinkInputPopupOpen(false);
   };
 
+  const idString = sessionStorage.getItem('Myid'); // Retrieve the value from localStorage
+    if (idString !== null) {
+      var id = parseInt(idString);
+  }
+
   const handlePlatformSelectAndOpen = (platform: any) => {
     if (platform === '') {
       window.alert("Please select a Social Media Platform");
@@ -161,6 +169,36 @@ const SocialAccount = () => {
           };
       
           fetchData();
+          break;
+        case 'youtube':
+          const fetchYData = async () => {
+            setLoading(true);
+            try {
+              const response = await axios.post(`${process.env.REACT_APP_Fast_API}/generate_youtube_access_token`, {
+                userid: id,
+              }, {
+                headers: {
+                  'Content-Type': 'application/json',
+                }
+              });
+              if (response.status === 200) {
+                const JsonData = response.data;
+                console.log(JsonData);
+                window.alert("Account Added Successfully")
+                window.location.reload();
+              } else {
+                console.log('Error:', response.statusText);
+                setLoading(false);
+                window.alert("Error In Adding Account , Try After Some Time");
+              }
+            } catch (error) {
+              console.error('Error fetching data:', error);
+              setLoading(false);
+                window.alert("Error In Adding Account , Try After Some Time");
+            }
+          };
+      
+          fetchYData();
           break;
         default:
           break;

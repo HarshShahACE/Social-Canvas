@@ -6,12 +6,12 @@ import AnalyticsIcon from '@mui/icons-material/Analytics';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useLocation, Link, Navigate, useNavigate } from 'react-router-dom';
+import { useLocation, Link, useNavigate } from 'react-router-dom';
 import Popover from '@mui/material/Popover';
 import MenuList from '@mui/material/MenuList';
 import PersonIcon from '@mui/icons-material/Person';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
-import { NotificationsRounded, YouTube } from '@mui/icons-material';
+import { NotificationsRounded } from '@mui/icons-material';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import Person from '../../assets/Photos/Person.png'
 
@@ -23,7 +23,6 @@ export default function SideNav() {
     const [alertAnchorEl, setAlertAnchorEl] = useState(null); // Anchor element for the alert popover
     const [profileAnchorEl, setProfileAnchorEl] = useState(null); // Anchor element for the profile popover
     const location = useLocation();
-    const Navigate = useNavigate();
 
     const username = sessionStorage.getItem('Uname');
   
@@ -50,10 +49,6 @@ export default function SideNav() {
     const handleProfileClose = () => {
       setProfileAnchorEl(null); // Close the profile popover
     };
-
-    const handleNavigate = () => {
-      Navigate("/Manage_Post");
-    }
   
     const openAlert = Boolean(alertAnchorEl);
     const openProfile = Boolean(profileAnchorEl);
@@ -64,7 +59,6 @@ export default function SideNav() {
   const sideList = [
     { id: 'dashboard', text: 'Dashboard', icon: <HomeIcon style={{color:'#8B5CE1'}} />, path: '/Dashboard' },
     { id: 'Schedulepost', text: 'Schedule Post', icon:<PostAddIcon style={{color:'#F8A30C'}}/> ,path: '/Schedule_Post' },
-    { id: 'youtubepost', text: 'Youtube Post', icon:<YouTube style={{color:'#FC424A'}}/> ,path: '/Youtube_Post' },
     { id: 'managepost', text: 'Manange Post', icon:<ManageHistoryIcon style={{color:'#0090E7'}}/>, path: '/Manage_Post' },
     { id: 'analysis', text: 'Insights', icon: <AnalyticsIcon style={{color:'#52D017'}}/>, path: '/Analysis' },
     { id: 'profile', text: 'My Profile', icon: <AccountCircleIcon style={{color:'#EB5406'}}/>, path: '/Profile' },
@@ -84,6 +78,7 @@ export default function SideNav() {
           >
             <MenuIcon style={{color:'black'}}/>
           </IconButton>
+          <Typography style={{color:'black',fontSize:'18px',marginLeft:isMobile?'0px':'200px'}}>{location.pathname}</Typography>
           <IconButton
             color="inherit"
             aria-label="alert"

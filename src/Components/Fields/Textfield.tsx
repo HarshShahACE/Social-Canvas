@@ -13,6 +13,7 @@ interface TextFieldProps {
   maxLength?: number;
   style?: React.CSSProperties;
   InputProps?:any;
+  disabled? : boolean;
 }
 
 const TextFieldComponent: React.FC<TextFieldProps> = ({
@@ -24,6 +25,7 @@ const TextFieldComponent: React.FC<TextFieldProps> = ({
   type = 'text',
   maxLength,
   style,
+  disabled
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -58,6 +60,7 @@ const TextFieldComponent: React.FC<TextFieldProps> = ({
       }}
       inputProps={{ maxLength }}
       style={style}
+      disabled= {disabled || false}
     />
   );
 };

@@ -1,78 +1,44 @@
-import { Box, Card, CardContent, Dialog, DialogContent, DialogTitle, Grid, IconButton, TextField, useMediaQuery } from "@mui/material";
+import { Avatar, Box, Card, CardContent,  Dialog,  DialogContent,  DialogTitle,  Divider,  Grid,  IconButton, Typography, useMediaQuery } from "@mui/material";
 import { useState } from "react";
-import { InsertEmoticonRounded, AddPhotoAlternateRounded } from "@mui/icons-material";
-import Picker from 'emoji-picker-react';
-import ButtonComponent from "../Components/Fields/Buttonfield";
-import SchedulePopup from "../Components/Schedule_Post/Schedule_Time";
+import LinkedInPostLayout from "../Components/Schedule_Post/Linkedin";
+import {  AddPhotoAlternateRounded, InsertEmoticonRounded } from "@mui/icons-material";
+import TwitterPostLayout from "../Components/Schedule_Post/Twitter";
+import FacebookPostLayout from "../Components/Schedule_Post/Facebook";
+import { NavigateBefore, NavigateNext } from '@mui/icons-material'; 
 import DeleteIcon from '@mui/icons-material/Delete';
+import React from "react";
+import SchedulePopup from "../Components/Schedule_Post/Schedule_Time";
 import axios from "axios";
-import Youtubepostlayout from "../Components/Schedule_Post/youtube";
+import Picker from 'emoji-picker-react';
 import LoadingScreen from "../Components/Common/Loading";
-
-
-const categoriesData = [
-    { value: "1", label: "Film & Animation" },
-    { value: "2", label: "Autos & Vehicles" },
-    { value: "10", label: "Music" },
-    { value: "15", label: "Pets & Animals" },
-    { value: "17", label: "Sports" },
-    { value: "18", label: "Short Movies" },
-    { value: "19", label: "Travel & Events" },
-    { value: "20", label: "Gaming" },
-    { value: "21", label: "Videoblogging" },
-    { value: "22", label: "People & Blogs" },
-    { value: "23", label: "Comedy" },
-    { value: "24", label: "Entertainment" },
-    { value: "25", label: "News & Politics" },
-    { value: "26", label: "Howto & Style" },
-    { value: "27", label: "Education" },
-    { value: "28", label: "Science & Technology" },
-    { value: "29", label: "Nonprofits & Activism" },
-    { value: "30", label: "Movies" },
-    { value: "31", label: "Anime/Animation" },
-    { value: "32", label: "Action/Adventure" },
-    { value: "33", label: "Classics" },
-    { value: "34", label: "Comedy" },
-    { value: "35", label: "Documentary" },
-    { value: "36", label: "Drama" },
-    { value: "37", label: "Family" },
-    { value: "38", label: "Foreign" },
-    { value: "39", label: "Horror" },
-    { value: "40", label: "Sci-Fi/Fantasy" },
-    { value: "41", label: "Thriller" },
-    { value: "42", label: "Shorts" },
-    { value: "43", label: "Shows" },
-    { value: "44", label: "Trailers" }
-  ];
-  
+import { platforms } from "../Components/Common/platefroms";
+import ButtonComponent from "../Components/Fields/Buttonfield";
 
 // File Preview Interface
 type FilePreview = {
-    file: File;
-    previewUrl: string;
-    type: "image" | "video";
+      file: File;
+      previewUrl: string;
+      type: "image" | "video";
 };
 
-const Youtubepost = () =>{
-    // Check for Phone View
-  const isMobile = useMediaQuery('(max-width:600px)');
-
+export default function Linkedin_Twitter_Post(){
+    
+    const isMobile = useMediaQuery('(max-width:600px)');
     const [loading, setLoading] = useState(false);
-    const [title, settitle] = useState('');
+    const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
     const [content, setContent] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
     const [selectedTimezone, setSelectedTimezone] = useState<string>('');
     const [emojiPickerOpen, setEmojiPickerOpen] = useState(false);
-    const [selectedCategory, setSelectedCategory] = useState('');
-    const [selectedvideotype, setSelectedvideotype] = useState('');
     let scheduleType = '';
 
     const [selectedFiles, setSelectedFiles] = useState<FilePreview[]>([]);
+    const [firstSelectedFileType, setFirstSelectedFileType] = useState<string | null>(null);
 
     const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const inputContent = e.target.value;
-        if (inputContent.length <= 2000) { // Check if character count is less than or equal to 200
+        if (inputContent.length <= 250) { // Check if character count is less than or equal to 200
             setContent(inputContent);
         }
         else{
@@ -84,10 +50,16 @@ const Youtubepost = () =>{
         const files = event.target.files;
         // Check if files and files.length are not null or undefined
         if (files && files.length > 0) {
+            // If firstSelectedFileType is null, set it to the type of the first file
+            if (firstSelectedFileType === null) {
+                const firstFileType = files[0].type.startsWith("image/") ? "image" : "video";
+                setFirstSelectedFileType(firstFileType);
+            }
+    
             // Check if the total number of selected files exceeds the allowed limit
-            const maxFilesAllowed = 1; // Only allow 1 video file
+            const maxFilesAllowed = firstSelectedFileType === "image" ? 3 : 1;
             if (files.length > maxFilesAllowed) {
-                alert(`You can only upload a maximum of ${maxFilesAllowed} file.`);
+                alert(`You can only upload a maximum of ${maxFilesAllowed} files.`);
                 event.target.value = ''; // Clear the file input value
                 return;
             }
@@ -96,12 +68,26 @@ const Youtubepost = () =>{
                 (file) => ({
                     file,
                     previewUrl: URL.createObjectURL(file),
-                    type: "video",
+                    type: file.type.startsWith("image/") ? "image" : "video",
                 })
             );
     
+            // If all selected files match the type of the first selected file
+            if (firstSelectedFileType !== null) {
+                const allFilesMatchType = updatedSelectedFiles.every(
+                    (file) => (file.type === "image" && firstSelectedFileType === "image") ||
+                            (file.type === "video" && firstSelectedFileType === "video")
+                );
+    
+                if (!allFilesMatchType) {
+                    alert("Please upload files of the same type as the first selected file.");
+                    event.target.value = ''; // Clear the file input value
+                    return;
+                }
+            }
+    
             if (selectedFiles.length === maxFilesAllowed) {
-                if (window.confirm(`You have already selected ${maxFilesAllowed} file. Do you want to replace it?`)) {
+                if (window.confirm(`You have already selected ${maxFilesAllowed} files. Do you want to replace them?`)) {
                     setSelectedFiles(updatedSelectedFiles);
                 }
             } else {
@@ -120,7 +106,23 @@ const Youtubepost = () =>{
         if (fileInput) {
             fileInput.value = "";
         }
+    
+        // If no files are selected, reset post_type to a default value
+        if (updatedFiles.length === 0) {
+            setFirstSelectedFileType(null);
+        }
     };
+    
+    const handlePlatformChange = (value: string) => {
+    if (selectedPlatforms.includes(value)) {
+        // If the platform is already selected, remove it from the selectedPlatforms array
+        setSelectedPlatforms(selectedPlatforms.filter(platform => platform !== value));
+    } else {
+        // If the platform is not selected, add it to the selectedPlatforms array
+        setSelectedPlatforms([...selectedPlatforms, value]);
+    }
+    };
+
 
     const handleDateChange = (event : any) => {
         setSelectedDate(event.target.value);
@@ -180,28 +182,28 @@ const Youtubepost = () =>{
         if (idString !== null) {
             id = parseInt(idString);
         }
-
-        if(title === ""){
-            window.alert("Please Give Title For Video");
-            return;
-        }
-        if(content === ""){
-            window.alert("Give Description For Video");
-            return;
-        }
-        if(selectedFiles.length === 0){
-            window.alert("Select Video For Upload");
-            return;
-        }
     
         try {
             const formData = new FormData();
+            // Append platform_name if platforms are selected
+            if (selectedPlatforms.length > 0) {
+                formData.append('platform_name', selectedPlatforms.join(','));
+            } else {
+                // Handle case where no platform is selected
+                window.alert('Please select at least one platform.');
+                window.location.reload();
+            }
 
-            formData.append('title',title);
-            formData.append('description',content);
-            formData.append('category',selectedCategory.toString());
-            formData.append('privacy_status',selectedvideotype);
+            // Set post_type to 'content' if no file is selected
+            if (selectedFiles.length === 0) {
+                formData.append('post_type', 'content');
+            } else {
+                formData.append('post_type', firstSelectedFileType || 'content');
+            }
             formData.append('sch_type', scheduleType);
+            formData.append('content', content);
+            let Media = selectedFiles.length;
+            formData.append('MediaNo',Media.toString());
             
             if(scheduleType === 'schedule'){
                 if(selectedDate === "" || selectedTime === "" || selectedTimezone === "" ){
@@ -212,14 +214,17 @@ const Youtubepost = () =>{
                 }
                 formData.append('timezone', selectedTimezone);
             }
-
-            selectedFiles.forEach((file, index) => {
-                formData.append('video', file.file);
-            });
+    
+            // Append media files if they exist
+            if (selectedFiles.length > 0) {
+                selectedFiles.forEach((file, index) => {
+                    formData.append(`media${index + 1}`, file.file);
+                });
+            }
     
             setLoading(true);
             const response = await axios.post(
-                `${process.env.REACT_APP_Fast_API}/create_youtube_schedule_post/${id}`,
+                `${process.env.REACT_APP_Fast_API}/create_schedule_post/${id}`,
                 formData,
                 {
                     headers: {
@@ -243,6 +248,7 @@ const Youtubepost = () =>{
             
             // Reset form fields after successful post creation
             setContent('');
+            setSelectedPlatforms([]);
             setSelectedFiles([]);
             setSelectedDate('');
             setSelectedTime('');
@@ -253,30 +259,49 @@ const Youtubepost = () =>{
         }
     };
 
-  return (
-    <>
-    {loading && <LoadingScreen/>}
-      <div style={{ flex: 1 }}>
-                <main style={{ flexGrow: 1, padding: 3}}>
+    const [previewPageIndex, setPreviewPageIndex] = useState(0);
+
+    const handleNextPreviewPage = () => {
+        setPreviewPageIndex((prevIndex) => Math.min(prevIndex + 1, selectedPlatforms.length - 1));
+    };
+
+    const handlePrevPreviewPage = () => {
+        setPreviewPageIndex((prevIndex) => Math.max(prevIndex - 1, 0));
+    };
+
+    const reversedPlatforms = selectedPlatforms.slice().reverse();
+
+    return(
+        <>
+        {loading && <LoadingScreen/>}
+            {/* Main content */}
+            <div style={{ flex: 1 }}>
+                <main style={{ flexGrow: 1, padding: 3  }}>
                     {/* Main content */}
                     <Grid container spacing={2}>
                         <Grid md={6}>
                     <Card style={{background: '#FFFFFF' , margin:'20px', borderRadius:'20px' ,  boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.3)' }}>
                         <CardContent>
+                            {/* Drop Down For Plateform Selection */}
+                            <Box display="flex" alignItems="center" mt={2}>
+                                {platforms.map(platform => (
+                                    platform.value !== 'youtube' && (
+                                        <Avatar key={platform.value} style={{ cursor: 'pointer', marginRight: '10px', backgroundColor: selectedPlatforms.includes(platform.value) ? '#007bff' : '#FFFFFF' }} onClick={() => handlePlatformChange(platform.value)}>
+                                            <img src={platform.imageUrl} alt={platform.name} style={{ width: '90%', height: '90%', borderRadius: '50%' }} />
+                                        </Avatar>
+                                    )
+                                ))}
+                            </Box>
+                            <Typography style={{color:'red' , marginTop:'10px'}}>Twitter Is Currently unavailable For Image And Video Posting.</Typography>
+                            <Divider style={{ margin: '10px 0' }} />
+
                             {/* Content Textarea with Emoji Picker */}
-                            <Box position="relative" width="100%" marginBottom={1}>
-                            <TextField
-                             label="Title"
-                             value={title}
-                             onChange={(e)=>settitle(e.target.value)}
-                             fullWidth
-                             required
-                            />
+                            <Box position="relative" width="100%" marginBottom={5}>
                             <textarea
                                 rows={7}
                                 value={content}
                                 onChange={handleContentChange}
-                                placeholder="Description"
+                                placeholder="Write something..."
                                 style={{ width: '100%',
                                 resize: 'none',
                                 padding: '15px',
@@ -284,7 +309,7 @@ const Youtubepost = () =>{
                                 minHeight: '60px', // Minimum height of the textarea
                                 maxHeight: '120px',
                                 color:'black',
-                                borderRadius:'20px', marginTop:'10px'}} 
+                                borderRadius:'20px',}} 
                             />
                                 <Box
                                     style={{
@@ -296,7 +321,7 @@ const Youtubepost = () =>{
                                     }}
                                 >
                                     <p style={{ fontSize: '14px', marginLeft:'20px' }}>
-                                    {`${content.length}/2000`}
+                                    {`${content.length}/250`}
                                     </p>
                                     <IconButton onClick={() => setEmojiPickerOpen(!emojiPickerOpen)} >
                                     <InsertEmoticonRounded />
@@ -314,61 +339,16 @@ const Youtubepost = () =>{
                                     </Dialog>
                                 </Box>
                             </Box>
-                            <div style={{display:'flex'}}>
-                                {/* Video Category */}
-                                <select
-                                    style={{
-                                        padding: '8px 12px',
-                                        fontSize: '16px',
-                                        borderRadius: '5px',
-                                        border: '1px solid #ccc',
-                                        backgroundColor: '#f2f2f2',
-                                        color: '#333',
-                                        height:'50px',
-                                        width: '280px',
-                                        marginTop:'0px'
-                                    }}
-                                    value={selectedCategory}
-                                    onChange={(event) => setSelectedCategory(event.target.value)}
-                                >
-                                    <option value="">Select Category</option>
-                                    {categoriesData.map((category, index) => (
-                                        <option key={index} value={category.value}>{category.label}</option>
-                                    ))}
-                                    {/* Add other options here */}
-                                </select>
-                                {/* Video Type */}
-                                <select
-                                    style={{
-                                        padding: '8px 12px',
-                                        fontSize: '16px',
-                                        borderRadius: '5px',
-                                        border: '1px solid #ccc',
-                                        backgroundColor: '#f2f2f2',
-                                        color: '#333',
-                                        height:'50px',
-                                        width: '280px',
-                                        marginTop:'0px',
-                                        marginLeft:'10px'
-                                    }}
-                                    value={selectedvideotype}
-                                    onChange={(event) => setSelectedvideotype(event.target.value)}
-                                >
-                                    <option value="">Select Video Type</option>
-                                    <option value="public">Public</option>
-                                    <option value="private">Private</option>
-                                    {/* Add other options here */}
-                                </select>
-                            </div>
                             {/* Media Upload */}
                             <Box display="flex" alignItems="center" mt={2}>
                                 <input
-                                    accept="video/*"
+                                    accept="image/*,video/*"
                                     style={{ display: 'none' }}
                                     id="media-upload"
                                     type="file"
                                     onChange={handleFileChange}
                                     multiple // Allow multiple file selection
+                                    disabled={selectedPlatforms.includes('twitter')}
                                 />
                                 <label htmlFor="media-upload">
                                     <IconButton component="span">
@@ -385,6 +365,9 @@ const Youtubepost = () =>{
                                                 <DeleteIcon />
                                             </IconButton>
                                             <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                                                {file.type === 'image' && (
+                                                    <Avatar alt="Uploaded Media" src={file.previewUrl} sx={{ width: 100, height: 100, borderRadius: '0' }} />
+                                                )}
                                                 {file.type === 'video' && (
                                                     <video controls src={file.previewUrl} style={{ maxWidth: '250px', maxHeight: '250px', marginTop: 16 }} />
                                                 )}
@@ -393,6 +376,7 @@ const Youtubepost = () =>{
                                     </div>
                                 ))}
                             </Box>
+                            <Divider style={{ marginTop: '10px' }} />
 
                             {/* Buttons */}
                             <Box display="flex" mt={4} mb={0}>
@@ -415,21 +399,50 @@ const Youtubepost = () =>{
                         handleScheduleClick={handleScheduleClick}
                     />
                     <Grid md={6} style={{ marginTop: isMobile ? '20px' : '0px' }}>
+                    {selectedPlatforms.length > 0 && (
                         <Card style={{ background: '#FFFFFF', margin: '20px', borderRadius: '20px', boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.8)' , width: '70%' }}>
                             <CardContent>
-                                <Youtubepostlayout
-                                    title={title}
-                                    content={content}
-                                    media={selectedFiles[0] || ''}
-                                />
+                                <div style={{display: 'flex', justifyContent: 'end', alignItems: 'center'}}>
+                            <IconButton onClick={handlePrevPreviewPage}>
+                                <NavigateBefore />
+                            </IconButton>
+                            <IconButton onClick={handleNextPreviewPage}>
+                                <NavigateNext />
+                            </IconButton>
+                        </div>
+                                {/* Render preview based on platform */}
+                                {selectedPlatforms.length > 0 && (
+                                <>
+                                        {reversedPlatforms[previewPageIndex] === 'linkedin' && (
+                                            <LinkedInPostLayout
+                                                content={content}
+                                                media={selectedFiles.length > 0 ? selectedFiles[0] : undefined}
+                                            />
+                                        )}
+                                        {reversedPlatforms[previewPageIndex] === 'facebook' && (
+                                            <FacebookPostLayout
+                                                username="Harsh"
+                                                content={content}
+                                                media={selectedFiles.length > 0 ? selectedFiles[0] : undefined}
+                                            />
+                                        )}
+                                        {reversedPlatforms[previewPageIndex] === 'twitter' && (
+                                            <TwitterPostLayout
+                                                username="Harsh"
+                                                handle="@Harsh-shah"
+                                                content={content}
+                                                media={selectedFiles.length > 0 ? selectedFiles[0] : undefined}
+                                            />
+                                        )}
+                                        </>
+                                        )}
                             </CardContent>
                         </Card>
+                    )}
                     </Grid>
                 </Grid>
                 </main>
             </div>
-        </>
-  );
+            </>
+    )
 }
-
-export default Youtubepost;

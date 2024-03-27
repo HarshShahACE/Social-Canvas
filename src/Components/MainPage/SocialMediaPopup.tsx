@@ -38,7 +38,7 @@ const SocialMediaPopup: React.FC<SocialMediaPopupProps> = ({ isOpen, onClose, on
           <ButtonComponent onClick={() => handleLinkOpen('twitter')} style={{marginLeft:'10px'}}>
             <Twitter />
           </ButtonComponent>
-          <ButtonComponent onClick={() => handleLinkOpen('twitter')} style={{marginLeft:'10px'}}>
+          <ButtonComponent onClick={() => handleLinkOpen('youtube')} style={{marginLeft:'10px'}}>
             <YouTube />
           </ButtonComponent>
           {/* Add more icon buttons for other platforms as needed */}

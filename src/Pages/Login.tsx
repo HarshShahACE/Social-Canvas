@@ -147,7 +147,7 @@ export default function Login() {
               </ButtonComponent>
               <Grid container>
                 <Grid item xs>
-                  <ButtonComponent variant='text' href='/'>Forgot Password</ButtonComponent>
+                  <ButtonComponent variant='text' href='/Forgot_Password'>Forgot Password</ButtonComponent>
                 </Grid>
                 <Grid item>
                   <ButtonComponent variant='text' href='/Register'> Don't Have Account? Sign Up </ButtonComponent>

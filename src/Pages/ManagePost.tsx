@@ -100,6 +100,7 @@ const ManagePost = () => {
     };
 
     const handleCloseDialog = () => {
+        window.location.reload();
         setOpenDialog(false);
     };
 
@@ -147,7 +148,7 @@ const ManagePost = () => {
                 </main>
             </div>
             {/* Event details dialog */}
-            <PostDetails eventId={selectedEvent?.id ?? null} open={openDialog} onClose={handleCloseDialog} />
+            <PostDetails eventId={selectedEvent?.id ?? null} plateform={selectedEvent?.platform_name??null} open={openDialog} onClose={handleCloseDialog} />
         </div>
     );
 };
