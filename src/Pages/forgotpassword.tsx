@@ -9,7 +9,7 @@ import Typography from '@mui/material/Typography';
 import { useState } from 'react';
 import { IconButton } from '@mui/material';
 import {  EmailRounded, PasswordRounded, PhoneRounded } from '@mui/icons-material';
-import { isEmailValid } from '../utils/validation';
+import { isEmailValid, isPasswordValid } from '../utils/validation';
 import Copyright from '../Components/Common/Copyright';
 import axios from 'axios';
 import TextFieldComponent from '../Components/Fields/Textfield';
@@ -76,7 +76,7 @@ export default function ForgotPassword() {
         if (newPassword === '') {
           window.alert("Required Fields should not be empty");
         } else {
-          if (isEmailValid(username)) {
+          if (isPasswordValid(newPassword)) {
             setLoading(true);
             try {
               const response = await axios.post(`${process.env.REACT_APP_Fast_API}/UpdatePassword?user_email=`+username+`&User_Password=`+newPassword, {
@@ -92,6 +92,9 @@ export default function ForgotPassword() {
               window.alert("Try After Some Time");
             }
             setLoading(false);
+          }
+          else{
+            window.alert("Please make sure your Password Have 8 Characters Which contains at least one uppercase letter, one lowercase letter, one Number & One Sepcial Character");
           }
         }
     }

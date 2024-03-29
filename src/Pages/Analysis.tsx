@@ -11,6 +11,8 @@ import TopFivePieChart from "../Components/Analysis/top5piechart";
 import BottomFivePieChart from "../Components/Analysis/bottom5chart";
 import DoubleLineGraph from "../Components/Analysis/double_line";
 import DoughnutChart from "../Components/Analysis/Doughnut_chart";
+import AreaChartComponent from "../Components/Analysis/Areachart";
+import YDoubleLineGraph from "../Components/Analysis/youtube_doubleline";
 
 interface SentimentData {
     Tweet: string;
@@ -36,6 +38,7 @@ const Analysis = () => {
     const [connectionData, setconnectiondata] = useState(null);
     const [postdata , setPostData] = useState(null);
     const [Tweetdata, setTweetdata] = useState(null);
+    const [youtubedata,setyoutubedata] = useState(null);
     const [sentimentData, setSentimentData] = useState<SentimentData[]>([]);
 
     const idString = sessionStorage.getItem('Myid'); // Retrieve the value from localStorage
@@ -91,11 +94,31 @@ const Analysis = () => {
             }
         };
         
+        const fetchYData = async () => {
+            try {
+                const response = await axios.get(`${process.env.REACT_APP_Fast_API}/fetch_youtube_data/${id}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (response.status === 200) {
+                    const youtubedata = await response.data;
+                    setyoutubedata(youtubedata);
+                    console.log(youtubedata);
+                } else {
+                    throw new Error('Failed to fetch data');
+                }
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        };
 
         if(selectedPlatform === 'linkedin'){
         fetchData();
         }else if (selectedPlatform === "twitter"){
             fetchtData();
+        }else if (selectedPlatform === "youtube"){
+            fetchYData();
         }
     
         // Clear the timer on unmount or if loading is completed early
@@ -114,8 +137,8 @@ const Analysis = () => {
                     {/* First row */}
                     <Box display="flex" alignItems="center" mt={2}>
                   {platforms.map(platform => (
-                    <Box key={platform.value} style={{ display: 'flex', alignItems: 'center',  backgroundColor: selectedPlatform === platform.value ? '#283141' : '#D8D8D8', borderRadius: '10px', boxShadow: '0px 4px 8px rgba(67, 131, 197, 0.9)', marginRight: '20px' , padding:'5px' }}>
-                      <Avatar style={{ cursor: 'pointer' }} onClick={() => handlePlatformChange(platform.value)}>
+                    <Box key={platform.value} onClick={() => handlePlatformChange(platform.value)} style={{ display: 'flex', alignItems: 'center',  backgroundColor: selectedPlatform === platform.value ? '#283141' : '#D8D8D8', borderRadius: '10px', boxShadow: '0px 4px 8px rgba(67, 131, 197, 0.9)', marginRight: '20px' , padding:'5px' }}>
+                      <Avatar style={{ cursor: 'pointer' }}>
                         <img src={platform.imageUrl} alt={platform.name} style={{ width: '100%', height: '100%', borderRadius: '50%' }} />
                       </Avatar>
                       <Typography variant="subtitle1" style={{ marginLeft: '5px', marginRight: '30px', fontSize: '18px', color: selectedPlatform === platform.value ? '#FFFFFF' : '#000000' }}>{platform.name}</Typography>
@@ -137,6 +160,20 @@ const Analysis = () => {
                                     </div>
                                     
                                 </div>
+                                {/*  Second Row - Word Cloud Chart and Bar Chart Table*/}
+                                <div style={{ display: 'flex', flexDirection: 'row' }}>
+                                    <div style={{ width: '48%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(255, 255, 255, 0.8)', border: '1px solid #000' }} >
+                                        <div>
+                                            <WordCloudComponent data={connectionData || null} />
+                                        </div>
+                                    </div>
+                                    <div style={{ width: '50%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(255, 255, 255, 0.8)', border: '1px solid #000' }} >
+                                        <div>
+                                            <h2> Top 10 Job Titles</h2>
+                                            <Barchart socialData={connectionData || null} dataType="linkedin" />
+                                        </div>
+                                    </div>
+                                </div>
                                 {/* Connection Location Details */}
                                 <div style={{ display: 'flex', flexDirection: 'row' }}>
                                         <div style={{ width: '50%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(255, 255, 355, 0.8)', border: '1px solid #000' }} >
@@ -152,20 +189,7 @@ const Analysis = () => {
                                         </div>
                                     </div>
                                 </div>
-                                {/*  Second Row - Word Cloud Chart and Bar Chart Table*/}
-                                <div style={{ display: 'flex', flexDirection: 'row' }}>
-                                    <div style={{ width: '48%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(255, 255, 255, 0.8)', border: '1px solid #000' }} >
-                                        <div>
-                                            <WordCloudComponent data={connectionData || null} />
-                                        </div>
-                                    </div>
-                                    <div style={{ width: '50%',marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(255, 255, 255, 0.8)', border: '1px solid #000' }} >
-                                        <div>
-                                            <h2> Top 10 Job Titles</h2>
-                                            <Barchart socialData={connectionData || null} dataType="linkedin" />
-                                        </div>
-                                    </div>
-                                </div>
+                                
                             </>
                             ) : (
                             <div style={{ marginTop: '15px', borderRadius: '20px', height: '50px', padding: '20px', backgroundColor: 'rgba(255, 255, 255, 0.8)', border: '1px solid #000' }}>
@@ -193,9 +217,21 @@ const Analysis = () => {
                                 </div>
                         </div>
                     ) : selectedPlatform === 'youtube' ?  (
-                        <div style={{textAlign:'center' , marginTop:'50px'}}>
-                            <h2>Comming Soon For Youtube</h2>
-                        </div>
+                        <>
+                                {youtubedata ? (
+                                    <>  
+                                    <div style={{height:'850px'}}>
+                                        <YDoubleLineGraph data={youtubedata} />
+                                    </div>  
+                                    <div style={{ height:'750px' , borderRadius:'20px',border: '1px solid #000' , width:'98%'}}>
+                                        <AreaChartComponent apiResponse={youtubedata}/>
+                                    </div>
+                            </>
+                                ) : (
+                                    <div>Please add account for insights</div>
+                                )}
+                        </>
+                                              
                     ) : (
                         <div style={{ textAlign: 'center', marginTop: '50px' }}>
                             <h2>Please select a Platform to view Analysis</h2>

@@ -56,12 +56,12 @@ const GrowthCard: React.FC<GrowthCardProps> = ({ platform }) => {
         switch (key) {
             case 'Posts':
             case 'Following Count':
-            case 'Total Subscriber':
+            case 'Total subscriber':
                 return first; // Use the same image as 'Posts' for Twitter
-            case 'Total Likes':
+            case 'Total Comments':
             case 'Likes Count':
                 return second; // Use the same image as 'Total Likes' for Twitter
-            case 'Total Comments':
+            case 'Total Likes':
             case 'Tweets Count':
                 return third; // Use the same image as 'Total Comments' for Twitter
             case 'Total Connections':

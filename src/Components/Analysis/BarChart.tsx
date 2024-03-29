@@ -202,7 +202,7 @@ const BarChart: React.FC<Props> = ({ socialData, dataType }) => {
         {dataType === 'twitter' && data && data.length > 0 && (
           <>
             <div style={{ marginRight: '10px', flex: 1 }}>
-              <h2>Top 10 Twitter Repost Data</h2>
+              <h2>Top 10 Tweet Data</h2>
               <div style={{ height: '400px' }}>
                 <Bar data={generateChartData()} options={options} />
               </div>

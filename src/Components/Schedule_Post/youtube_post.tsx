@@ -2,12 +2,12 @@ import { Box, Card, CardContent, Dialog, DialogContent, DialogTitle, Grid, IconB
 import { useState } from "react";
 import { InsertEmoticonRounded, AddPhotoAlternateRounded } from "@mui/icons-material";
 import Picker from 'emoji-picker-react';
-import ButtonComponent from "../Components/Fields/Buttonfield";
-import SchedulePopup from "../Components/Schedule_Post/Schedule_Time";
+import ButtonComponent from "../Fields/Buttonfield";
+import SchedulePopup from "./Schedule_Time";
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from "axios";
-import Youtubepostlayout from "../Components/Schedule_Post/youtube";
-import LoadingScreen from "../Components/Common/Loading";
+import Youtubepostlayout from "./youtube";
+import LoadingScreen from "../Common/Loading";
 
 
 const categoriesData = [

@@ -71,6 +71,7 @@ const Profile = () => {
           },
         });
         clearTimeout(timeoutId);
+        
         if (response.status === 200) {
           const jsonData = response.data;
           setFormData(jsonData);

@@ -1,18 +1,14 @@
-import { Avatar, Box, Card, CardContent,  Dialog,  DialogContent,  DialogTitle,  Divider,  Grid,  IconButton, Typography, useMediaQuery } from "@mui/material";
+import { Avatar, Box, Card, CardContent,  Dialog,  DialogContent,  DialogTitle,  Divider,  Grid,  IconButton, useMediaQuery } from "@mui/material";
 import { useState } from "react";
-import LinkedInPostLayout from "../Components/Schedule_Post/Linkedin";
+import LinkedInPostLayout from "./Linkedin";
 import {  AddPhotoAlternateRounded, InsertEmoticonRounded } from "@mui/icons-material";
-import TwitterPostLayout from "../Components/Schedule_Post/Twitter";
-import FacebookPostLayout from "../Components/Schedule_Post/Facebook";
-import { NavigateBefore, NavigateNext } from '@mui/icons-material'; 
 import DeleteIcon from '@mui/icons-material/Delete';
 import React from "react";
-import SchedulePopup from "../Components/Schedule_Post/Schedule_Time";
+import SchedulePopup from "./Schedule_Time";
 import axios from "axios";
 import Picker from 'emoji-picker-react';
-import LoadingScreen from "../Components/Common/Loading";
-import { platforms } from "../Components/Common/platefroms";
-import ButtonComponent from "../Components/Fields/Buttonfield";
+import LoadingScreen from "../Common/Loading";
+import ButtonComponent from "../Fields/Buttonfield";
 
 // File Preview Interface
 type FilePreview = {
@@ -21,11 +17,10 @@ type FilePreview = {
       type: "image" | "video";
 };
 
-export default function Linkedin_Twitter_Post(){
+export default function Linkedin_Post(){
     
     const isMobile = useMediaQuery('(max-width:600px)');
     const [loading, setLoading] = useState(false);
-    const [selectedPlatforms, setSelectedPlatforms] = useState<string[]>([]);
     const [content, setContent] = useState('');
     const [selectedDate, setSelectedDate] = useState('');
     const [selectedTime, setSelectedTime] = useState('');
@@ -113,17 +108,6 @@ export default function Linkedin_Twitter_Post(){
         }
     };
     
-    const handlePlatformChange = (value: string) => {
-    if (selectedPlatforms.includes(value)) {
-        // If the platform is already selected, remove it from the selectedPlatforms array
-        setSelectedPlatforms(selectedPlatforms.filter(platform => platform !== value));
-    } else {
-        // If the platform is not selected, add it to the selectedPlatforms array
-        setSelectedPlatforms([...selectedPlatforms, value]);
-    }
-    };
-
-
     const handleDateChange = (event : any) => {
         setSelectedDate(event.target.value);
     };
@@ -185,15 +169,8 @@ export default function Linkedin_Twitter_Post(){
     
         try {
             const formData = new FormData();
-            // Append platform_name if platforms are selected
-            if (selectedPlatforms.length > 0) {
-                formData.append('platform_name', selectedPlatforms.join(','));
-            } else {
-                // Handle case where no platform is selected
-                window.alert('Please select at least one platform.');
-                window.location.reload();
-            }
-
+            
+            formData.append('platform_name','linkedin');
             // Set post_type to 'content' if no file is selected
             if (selectedFiles.length === 0) {
                 formData.append('post_type', 'content');
@@ -248,7 +225,6 @@ export default function Linkedin_Twitter_Post(){
             
             // Reset form fields after successful post creation
             setContent('');
-            setSelectedPlatforms([]);
             setSelectedFiles([]);
             setSelectedDate('');
             setSelectedTime('');
@@ -258,18 +234,6 @@ export default function Linkedin_Twitter_Post(){
             //console.error('Error creating post:', error.message);
         }
     };
-
-    const [previewPageIndex, setPreviewPageIndex] = useState(0);
-
-    const handleNextPreviewPage = () => {
-        setPreviewPageIndex((prevIndex) => Math.min(prevIndex + 1, selectedPlatforms.length - 1));
-    };
-
-    const handlePrevPreviewPage = () => {
-        setPreviewPageIndex((prevIndex) => Math.max(prevIndex - 1, 0));
-    };
-
-    const reversedPlatforms = selectedPlatforms.slice().reverse();
 
     return(
         <>
@@ -282,19 +246,6 @@ export default function Linkedin_Twitter_Post(){
                         <Grid md={6}>
                     <Card style={{background: '#FFFFFF' , margin:'20px', borderRadius:'20px' ,  boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.3)' }}>
                         <CardContent>
-                            {/* Drop Down For Plateform Selection */}
-                            <Box display="flex" alignItems="center" mt={2}>
-                                {platforms.map(platform => (
-                                    platform.value !== 'youtube' && (
-                                        <Avatar key={platform.value} style={{ cursor: 'pointer', marginRight: '10px', backgroundColor: selectedPlatforms.includes(platform.value) ? '#007bff' : '#FFFFFF' }} onClick={() => handlePlatformChange(platform.value)}>
-                                            <img src={platform.imageUrl} alt={platform.name} style={{ width: '90%', height: '90%', borderRadius: '50%' }} />
-                                        </Avatar>
-                                    )
-                                ))}
-                            </Box>
-                            <Typography style={{color:'red' , marginTop:'10px'}}>Twitter Is Currently unavailable For Image And Video Posting.</Typography>
-                            <Divider style={{ margin: '10px 0' }} />
-
                             {/* Content Textarea with Emoji Picker */}
                             <Box position="relative" width="100%" marginBottom={5}>
                             <textarea
@@ -348,7 +299,6 @@ export default function Linkedin_Twitter_Post(){
                                     type="file"
                                     onChange={handleFileChange}
                                     multiple // Allow multiple file selection
-                                    disabled={selectedPlatforms.includes('twitter')}
                                 />
                                 <label htmlFor="media-upload">
                                     <IconButton component="span">
@@ -399,46 +349,14 @@ export default function Linkedin_Twitter_Post(){
                         handleScheduleClick={handleScheduleClick}
                     />
                     <Grid md={6} style={{ marginTop: isMobile ? '20px' : '0px' }}>
-                    {selectedPlatforms.length > 0 && (
                         <Card style={{ background: '#FFFFFF', margin: '20px', borderRadius: '20px', boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.8)' , width: '70%' }}>
                             <CardContent>
-                                <div style={{display: 'flex', justifyContent: 'end', alignItems: 'center'}}>
-                            <IconButton onClick={handlePrevPreviewPage}>
-                                <NavigateBefore />
-                            </IconButton>
-                            <IconButton onClick={handleNextPreviewPage}>
-                                <NavigateNext />
-                            </IconButton>
-                        </div>
-                                {/* Render preview based on platform */}
-                                {selectedPlatforms.length > 0 && (
-                                <>
-                                        {reversedPlatforms[previewPageIndex] === 'linkedin' && (
-                                            <LinkedInPostLayout
-                                                content={content}
-                                                media={selectedFiles.length > 0 ? selectedFiles[0] : undefined}
-                                            />
-                                        )}
-                                        {reversedPlatforms[previewPageIndex] === 'facebook' && (
-                                            <FacebookPostLayout
-                                                username="Harsh"
-                                                content={content}
-                                                media={selectedFiles.length > 0 ? selectedFiles[0] : undefined}
-                                            />
-                                        )}
-                                        {reversedPlatforms[previewPageIndex] === 'twitter' && (
-                                            <TwitterPostLayout
-                                                username="Harsh"
-                                                handle="@Harsh-shah"
-                                                content={content}
-                                                media={selectedFiles.length > 0 ? selectedFiles[0] : undefined}
-                                            />
-                                        )}
-                                        </>
-                                        )}
+                                <LinkedInPostLayout
+                                    content={content}
+                                    media={selectedFiles.length > 0 ? selectedFiles[0] : undefined}
+                                />
                             </CardContent>
                         </Card>
-                    )}
                     </Grid>
                 </Grid>
                 </main>

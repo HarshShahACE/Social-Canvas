@@ -1,69 +1,86 @@
 import React, { useState } from 'react';
 import { Drawer, ListItem, ListItemButton, ListItemIcon, ListItemText, Divider, useMediaQuery, AppBar, Toolbar, IconButton, Box, MenuItem, Typography } from '@mui/material';
-import HomeIcon from '@mui/icons-material/Home';
 import PostAddIcon from '@mui/icons-material/PostAdd';
 import AnalyticsIcon from '@mui/icons-material/Analytics';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import LogoutIcon from '@mui/icons-material/Logout';
 import MenuIcon from '@mui/icons-material/Menu';
-import { useLocation, Link, useNavigate } from 'react-router-dom';
+import { useLocation, Link } from 'react-router-dom';
 import Popover from '@mui/material/Popover';
 import MenuList from '@mui/material/MenuList';
 import PersonIcon from '@mui/icons-material/Person';
 import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
-import { NotificationsRounded } from '@mui/icons-material';
+import { Dashboard, NotificationsRounded } from '@mui/icons-material';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import Person from '../../assets/Photos/Person.png'
 
 const drawerWidth = 230;
 
+interface SideNavItem {
+  id: string;
+  text: string;
+  icon: JSX.Element;
+  path: string;
+}
+
 export default function SideNav() {
-    const isMobile = useMediaQuery('(max-width:600px)');
-    const [open, setOpen] = React.useState(!isMobile); // Start with sidebar open on larger screens
-    const [alertAnchorEl, setAlertAnchorEl] = useState(null); // Anchor element for the alert popover
-    const [profileAnchorEl, setProfileAnchorEl] = useState(null); // Anchor element for the profile popover
-    const location = useLocation();
+  const isMobile = useMediaQuery('(max-width:600px)');
+  const [open, setOpen] = React.useState(!isMobile); // Start with sidebar open on larger screens
+  const [alertAnchorEl, setAlertAnchorEl] = useState<HTMLElement | null>(null); // Anchor element for the alert popover
+  const [profileAnchorEl, setProfileAnchorEl] = useState<HTMLElement | null>(null); // Anchor element for the profile popover
+  const [selectedItem, setSelectedItem] = useState<SideNavItem | null>(null); // Selected item in the drawer
+  const location = useLocation();
 
-    const username = sessionStorage.getItem('Uname');
+  const username = sessionStorage.getItem('Uname');
   
-    const handleDrawerOpen = () => {
-      setOpen(true);
-    };
+  const handleDrawerOpen = () => {
+    setOpen(true);
+  };
   
-    const handleDrawerClose = () => {
-      setOpen(false);
-    };
+  const handleDrawerClose = () => {
+    setOpen(false);
+  };
   
-    const handlealertopen = (event : any) => {
-      setAlertAnchorEl(event.currentTarget); // Open the alert popover
-    };
+  const handlealertopen = (event: React.MouseEvent<HTMLElement>) => {
+    setAlertAnchorEl(event.currentTarget); // Open the alert popover
+  };
   
-    const handlealertclose = () => {
-      setAlertAnchorEl(null); // Close the alert popover
-    };
+  const handlealertclose = () => {
+    setAlertAnchorEl(null); // Close the alert popover
+  };
   
-    const handleProfileClick = (event : any) => {
-      setProfileAnchorEl(event.currentTarget); // Open the profile popover
-    };
+  const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
+    setProfileAnchorEl(event.currentTarget); // Open the profile popover
+  };
   
-    const handleProfileClose = () => {
-      setProfileAnchorEl(null); // Close the profile popover
-    };
-  
-    const openAlert = Boolean(alertAnchorEl);
-    const openProfile = Boolean(profileAnchorEl);
+  const handleProfileClose = () => {
+    setProfileAnchorEl(null); // Close the profile popover
+  };
 
-    const alertId = openAlert ? 'alert-popover' : undefined; 
-    const profileId = openProfile ? 'profile-popover' : undefined; 
+  const openAlert = Boolean(alertAnchorEl);
+  const openProfile = Boolean(profileAnchorEl);
 
-  const sideList = [
-    { id: 'dashboard', text: 'Dashboard', icon: <HomeIcon style={{color:'#8B5CE1'}} />, path: '/Dashboard' },
+  const alertId = openAlert ? 'alert-popover' : undefined; 
+  const profileId = openProfile ? 'profile-popover' : undefined; 
+
+  const sideList: SideNavItem[] = [
+    { id: 'dashboard', text: 'Dashboard', icon: <Dashboard style={{color:'#8B5CE1'}} />, path: '/Dashboard' },
     { id: 'Schedulepost', text: 'Schedule Post', icon:<PostAddIcon style={{color:'#F8A30C'}}/> ,path: '/Schedule_Post' },
     { id: 'managepost', text: 'Manange Post', icon:<ManageHistoryIcon style={{color:'#0090E7'}}/>, path: '/Manage_Post' },
     { id: 'analysis', text: 'Insights', icon: <AnalyticsIcon style={{color:'#52D017'}}/>, path: '/Analysis' },
     { id: 'profile', text: 'My Profile', icon: <AccountCircleIcon style={{color:'#EB5406'}}/>, path: '/Profile' },
     { id: 'logout', text: 'Logout', icon: <LogoutIcon style={{color:'#D53940'}} /> , path:'/Logout' }, // Change path to the login page
   ];
+
+  const handleDrawerItemClick = (item: SideNavItem | undefined) => {
+    setSelectedItem(item || null); // Use null as the default value if item is undefined
+    handleDrawerClose(); // Close the Drawer after selecting an item
+  };
+  
+  React.useEffect(() => {
+    setSelectedItem(sideList.find(item => item.path === location.pathname) || null); // Use null as the default value if item is not found
+  }, []);
+
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -78,7 +95,9 @@ export default function SideNav() {
           >
             <MenuIcon style={{color:'black'}}/>
           </IconButton>
-          <Typography style={{color:'black',fontSize:'18px',marginLeft:isMobile?'0px':'200px'}}>{location.pathname}</Typography>
+            <Typography style={{color:'black',fontSize:'20px',marginLeft:isMobile?'0px':'200px'}}>
+              {selectedItem ? selectedItem.text : ''}
+            </Typography>
           <IconButton
             color="inherit"
             aria-label="alert"
@@ -193,39 +212,39 @@ export default function SideNav() {
           </Box>
           <Divider style={{background:'#FFFFFF' , marginBottom:'20px'}}/>
           {sideList.map(({ id, text, icon, path }) => (
-          <React.Fragment key={id}>
-            <ListItem
-              disablePadding
-              onClick={handleDrawerClose}
-              sx={{ 
-                backgroundColor: location.pathname === path ? '#FFFFFF' : 'transparent', // Light blue color with reduced opacity 
-                borderTopRightRadius: location.pathname === path ? '20px' : 0, // Add curved edges for the selected item
-                borderBottomRightRadius: location.pathname === path ? '20px' : 0, // Add curved edges for the selected item
-                paddingRight: location.pathname === path ? '20px' : 0,
-              }}
-            >
-              <ListItemButton 
-                component={Link} 
-                to={path} 
-                sx={{ 
-                  borderLeft: location.pathname === path ? '4px solid #1D8AFF' : '4px solid transparent',
-                  paddingRight: '20px',
-                }}
-              >
-                <ListItemIcon sx={{ margin: 0, color: location.pathname === path ? '#4694E0' : '#FFFFFF', minWidth: 0 }}>
-                  {icon}
-                </ListItemIcon>
-                <ListItemText 
-                  primary={text} 
-                  sx={{ 
-                    color: location.pathname === path ? '#0D0D0D' : '#FFFFFF', 
-                    marginLeft: 1,
-                  }} 
-                />
-              </ListItemButton>
-            </ListItem>
-          </React.Fragment>
-        ))}
+  <React.Fragment key={id}>
+    <ListItem
+      disablePadding
+      sx={{ 
+        backgroundColor: location.pathname === path ? '#FFFFFF' : 'transparent', 
+        borderTopRightRadius: location.pathname === path ? '20px' : 0, 
+        borderBottomRightRadius: location.pathname === path ? '20px' : 0,
+        paddingRight: location.pathname === path ? '20px' : 0,
+      }}
+    >
+      <ListItemButton 
+        component={Link} 
+        to={path} 
+        sx={{ 
+          borderLeft: location.pathname === path ? '4px solid #1D8AFF' : '4px solid transparent',
+          paddingRight: '20px',
+        }}
+        onClick={() => handleDrawerItemClick({ id, text, icon, path })} // Pass the item to handleDrawerItemClick
+      >
+        <ListItemIcon sx={{ margin: 0, color: location.pathname === path ? '#4694E0' : '#FFFFFF', minWidth: 0 }}>
+          {icon}
+        </ListItemIcon>
+        <ListItemText 
+          primary={text} 
+          sx={{ 
+            color: location.pathname === path ? '#0D0D0D' : '#FFFFFF', 
+            marginLeft: 1,
+          }} 
+        />
+      </ListItemButton>
+    </ListItem>
+  </React.Fragment>
+))}
         </Box>
       </Drawer>
     </Box>

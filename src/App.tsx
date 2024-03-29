@@ -9,7 +9,6 @@ import Analysis from './Pages/Analysis';
 import PrivateRoute from './Components/Authentication/Private_Route';
 import { useState } from 'react';
 import LoadingScreen from './Components/Common/Loading';
-import Youtubepost from './Pages/youtube_post';
 import ForgotPassword from './Pages/forgotpassword';
 
 function App() {

@@ -111,7 +111,7 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, plateform , open, onClos
       const formattedTime = new Date(`${selectedDate}T${selectedTime}`).toISOString()
 
       if (eventId !== null) {
-        const response = await axios.put(`${process.env.REACT_APP_Fast_API}/update_schedule_post/${eventId}?time=${formattedTime}&timezone=${selectedTimezone}`,{
+        const response = await axios.put(`${process.env.REACT_APP_Fast_API}/update_schedule_post/${eventDetails.platform_name}/${eventId}?time=${formattedTime}&timezone=${selectedTimezone}`,{
             headers: {
               'Content-Type': 'application/json',
             }
@@ -130,16 +130,19 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, plateform , open, onClos
   };
 
 
-  const handlepostdelete = async() => {
-    try{
+  const handlePostDelete = async () => {
+    try {
       if (eventId !== null) {
-        const response = await axios.post(`${process.env.REACT_APP_Fast_API}/remove_schedule_post/${eventId}`);
-        if (response.status === 200) {
-          window.alert("Post Removed Successfully");
-          window.location.reload();
-        } else {
-          console.error('Error:', response.statusText);
-          window.alert("Error in Removing Post");
+        const confirmed = window.confirm("Are you sure you want to delete this post?");
+        if (confirmed) {
+          const response = await axios.post(`${process.env.REACT_APP_Fast_API}/remove_schedule_post/${eventDetails.platform_name}/${eventId}`);
+          if (response.status === 200) {
+            window.alert("Post Removed Successfully");
+            window.location.reload();
+          } else {
+            console.error('Error:', response.statusText);
+            window.alert("Error in Removing Post");
+          }
         }
       }
     } catch (error) {
@@ -213,7 +216,7 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, plateform , open, onClos
             </div>
             <div style={{ display: 'flex', alignItems: 'center' }}>
                 <TextFieldComponent
-                style={{ flex: 1, marginBottom: 20 }}
+                style={{ flex: 1 }}
                 label="Date"
                 value={date}
                 InputProps={{
@@ -221,7 +224,7 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, plateform , open, onClos
                 }}
                 />
                 <TextFieldComponent
-                style={{ flex: 1, marginBottom: 20, marginLeft: 10 }}
+                style={{ flex: 1, marginLeft: 10 }}
                 label="Time"
                 value={time}
                 InputProps={{
@@ -232,7 +235,7 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, plateform , open, onClos
             </div>
             {media.map(item => (
               item.type === "image" ? (
-                <img key={item.id} src={`data:image/jpeg;base64,${item.url}`} alt={`${item.id}`} style={{ width: '60%', height: '60%', margin: 5 }} />
+                <img key={item.id} src={`data:image/jpeg;base64,${item.url}`} alt={`${item.id}`} style={{ width: '60%', height: '60%'}} />
               ) : (
                 <video key={item.id} controls style={{ width: '500px', height: '500px' }}>
                 <source src={`data:video/mp4;base64,${item.url}`} type="video/mp4" />
@@ -247,7 +250,7 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, plateform , open, onClos
         {eventDetails && eventDetails.sch_type === "schedule" && !isDateTimePassed(eventDetails.sch_user_time) && (
             <>
             <ButtonComponent variant="contained" onClick={handlepostupdatepopup}>Update</ButtonComponent>
-            <ButtonComponent variant="contained" onClick={handlepostdelete}>Delete</ButtonComponent>
+            <ButtonComponent variant="contained" onClick={handlePostDelete}>Delete</ButtonComponent>
             </>
         )}
         </DialogActions>

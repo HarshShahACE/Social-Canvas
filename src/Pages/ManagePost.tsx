@@ -28,6 +28,7 @@ const ManagePost = () => {
     const [openDialog, setOpenDialog] = useState(false);
     const [events, setEvents] = useState<Event[]>([]); // Store events received from API
     const [showPopup, setShowPopup] = useState(false);
+    const [selectedView, setSelectedView] = useState<'month' | 'agenda'>('month');
 
     const handlePopupClose = () => {
         setShowPopup(false);
@@ -104,6 +105,40 @@ const ManagePost = () => {
         setOpenDialog(false);
     };
 
+    const CustomToolbar = (toolbar : any) => {
+        const goToToday = () => {
+            toolbar.onNavigate('TODAY');
+        };
+
+        const goToNext = () => {
+            toolbar.onNavigate('NEXT');
+        };
+
+        const goToBack = () => {
+            toolbar.onNavigate('PREV');
+        };
+
+        const handleViewChange = (view: 'month' | 'agenda') => {
+            toolbar.onView(view);
+            setSelectedView(view);
+        };
+
+        return (
+            <div className="rbc-toolbar">
+                <span className="rbc-btn-group">
+                    <button type="button" onClick={goToToday}>Today</button>
+                    <button type="button" onClick={goToBack}>{"<"}</button>
+                    <button type="button" onClick={goToNext}>{">"}</button>
+                </span>
+                <span className="rbc-toolbar-label">{toolbar.label}</span>
+                <span className="rbc-btn-group">
+                <button className={selectedView === 'month' ? 'rbc-active' : ''} type="button" onClick={() => handleViewChange('month')}>Month</button>
+                <button className={selectedView === 'agenda' ? 'rbc-active' : ''} type="button" onClick={() => handleViewChange('agenda')}>Agenda</button>
+            </span>
+            </div>
+        );
+    };
+
     return (
         <div style={{ display: 'flex', backgroundColor:'#FFFFFF' , backgroundImage: `url(${defaultImagePath})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'bottom right', height: '100vh' }}>
             {/* Sidebar */}
@@ -125,6 +160,9 @@ const ManagePost = () => {
                             onSelectEvent={handleEventClick}
                             defaultView="month"
                             views={['month', 'agenda']}
+                            components={{
+                                toolbar: CustomToolbar,
+                            }}
                             // Render multiple events for the same time slot
                             eventPropGetter={(event, start, end, isSelected) => {
                                 const backgroundColor = '#';
@@ -142,7 +180,6 @@ const ManagePost = () => {
                                 });
                                 return { style: {}, className: '', events: dayEvents };
                             }}
-
                         />
                     </div>
                 </main>
