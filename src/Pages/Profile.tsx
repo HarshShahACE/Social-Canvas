@@ -24,11 +24,13 @@ interface UserData {
 
 const Profile = () => {
 
+  // Variable Declaration
   const isMobile = useMediaQuery('(max-width:600px)');
   type Country = keyof typeof states;
   const [loading,setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
 
+  // For Closing No Data PopUp
   const handlePopupClose = () => {
     setShowPopup(false);
   };
@@ -49,6 +51,7 @@ const Profile = () => {
   const Home = useNavigate()
   const defaultImagePath = process.env.REACT_APP_DEFAULT_APP_IMAGE;
 
+  // Fetch UserID
   const idString = sessionStorage.getItem('Myid'); // Retrieve the value from localStorage
       if (idString !== null) {
         var id = parseInt(idString);
@@ -121,6 +124,7 @@ const Profile = () => {
     handleChange(e);
   };
 
+  // Reseting Data
   const handlecancel = () =>{
     setFormData({
       name: '',

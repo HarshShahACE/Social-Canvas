@@ -24,6 +24,7 @@ interface SideNavItem {
 }
 
 export default function SideNav() {
+  // Variable Declaration
   const isMobile = useMediaQuery('(max-width:600px)');
   const [open, setOpen] = React.useState(!isMobile); // Start with sidebar open on larger screens
   const [alertAnchorEl, setAlertAnchorEl] = useState<HTMLElement | null>(null); // Anchor element for the alert popover
@@ -33,36 +34,44 @@ export default function SideNav() {
 
   const username = sessionStorage.getItem('Uname');
   
+  // For Opening Side Navigation
   const handleDrawerOpen = () => {
     setOpen(true);
   };
   
+  // For Closing Side Naviagation
   const handleDrawerClose = () => {
     setOpen(false);
   };
   
+  // Notification Open
   const handlealertopen = (event: React.MouseEvent<HTMLElement>) => {
     setAlertAnchorEl(event.currentTarget); // Open the alert popover
   };
   
+  // Notification Close
   const handlealertclose = () => {
     setAlertAnchorEl(null); // Close the alert popover
   };
-  
+
+  //  On Profile Click
   const handleProfileClick = (event: React.MouseEvent<HTMLElement>) => {
     setProfileAnchorEl(event.currentTarget); // Open the profile popover
   };
   
+  //  On Profile Close
   const handleProfileClose = () => {
     setProfileAnchorEl(null); // Close the profile popover
   };
 
+  // 
   const openAlert = Boolean(alertAnchorEl);
   const openProfile = Boolean(profileAnchorEl);
 
   const alertId = openAlert ? 'alert-popover' : undefined; 
   const profileId = openProfile ? 'profile-popover' : undefined; 
 
+  // Navigation Items
   const sideList: SideNavItem[] = [
     { id: 'dashboard', text: 'Dashboard', icon: <Dashboard style={{color:'#8B5CE1'}} />, path: '/Dashboard' },
     { id: 'Schedulepost', text: 'Schedule Post', icon:<PostAddIcon style={{color:'#F8A30C'}}/> ,path: '/Schedule_Post' },
@@ -72,11 +81,13 @@ export default function SideNav() {
     { id: 'logout', text: 'Logout', icon: <LogoutIcon style={{color:'#D53940'}} /> , path:'/Logout' }, // Change path to the login page
   ];
 
+  // For Changing Selected Page Or Item
   const handleDrawerItemClick = (item: SideNavItem | undefined) => {
     setSelectedItem(item || null); // Use null as the default value if item is undefined
     handleDrawerClose(); // Close the Drawer after selecting an item
   };
   
+  // For Fetching Selected Item on Load
   React.useEffect(() => {
     setSelectedItem(sideList.find(item => item.path === location.pathname) || null); // Use null as the default value if item is not found
   }, []);
@@ -84,8 +95,10 @@ export default function SideNav() {
 
   return (
     <Box sx={{ display: 'flex' }}>
+      {/* Application Bar */}
       <AppBar position="fixed" sx={{ zIndex: 2, top: 0 }}>
         <Toolbar sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor:'#F8F9FC'  }}>
+          {/* For Opening And Closing Side Nav IN Mobile View */}
           <IconButton
             color="inherit"
             aria-label="open drawer"
@@ -95,9 +108,11 @@ export default function SideNav() {
           >
             <MenuIcon style={{color:'black'}}/>
           </IconButton>
-            <Typography style={{color:'black',fontSize:'20px',marginLeft:isMobile?'0px':'200px'}}>
-              {selectedItem ? selectedItem.text : ''}
-            </Typography>
+          {/* Show Selected Item Text Value */}
+          <Typography style={{color:'black',fontSize:'20px',marginLeft:isMobile?'0px':'200px'}}>
+            {selectedItem ? selectedItem.text : ''}
+          </Typography>
+          {/* Notification Icon And Pop Over */}
           <IconButton
             color="inherit"
             aria-label="alert"
@@ -144,6 +159,7 @@ export default function SideNav() {
 
             <Divider orientation='vertical' flexItem  style={{color:'black' , width:'2px'}}/>
 
+          {/* Profile Pic and Name Section With Pop Over */}
           <IconButton
             color="inherit"
             aria-label="profile"
@@ -187,6 +203,7 @@ export default function SideNav() {
         </Toolbar>
       </AppBar>
 
+        {/* SideNav Started */}
         <Drawer
           variant={isMobile ? 'temporary' : 'permanent'}
           open={open}

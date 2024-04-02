@@ -6,7 +6,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-import { IconButton, Paper} from '@mui/material';
+import { IconButton, Paper } from '@mui/material';
 import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
 import { useEffect, useState } from 'react';
 import countries from '../assets/country.json';
@@ -27,8 +27,10 @@ import LoadingScreen from '../Components/Common/Loading';
 
 export default function Register() {
 
+  // Define the type for the selected country
   type Country = keyof typeof states;
-        
+
+  // Variable Declaration
   const [name1, setname] = useState('');
   const [email1, setemail] = useState('');
   const [phone1, setphone] = useState('');
@@ -60,9 +62,7 @@ export default function Register() {
     setstate(selectedState);
   };
 
-  
-  // Check Email Validation
-    // Check On Email Field When field is leave
+  // Check On Email Field When field is left
   const handleemailBlur = () => {
     if(email1 !== ''){ 
       if(!isEmailValid(email1)){
@@ -70,9 +70,8 @@ export default function Register() {
       };
     };
   }
-  
-  // Check Phone Validation
-  // Check On Phone Number Field When field is leave
+
+  // Check On Phone Number Field When field is left
   const handlephoneBlur = () => {
     if(phone1 !== ''){
       if(!isPhoneNumberValid(phone1)){
@@ -81,8 +80,7 @@ export default function Register() {
     };
   }
 
-  // Check Password Validation
-  // Check On Password Field When field is leave
+  // Check On Password Field When field is left
   const handlepasswordBlur = () => {
     if(password1 !== ''){
       if(!isPasswordValid(password1)){
@@ -91,7 +89,7 @@ export default function Register() {
     };
   }
 
-  // Check Confirm Password On Field When field is leave
+  // Check Confirm Password On Field When field is left
   const handlecpasswordBlur = () => {
     if(confirmpassword !== ''){
       if(password1 !==  confirmpassword){
@@ -100,6 +98,7 @@ export default function Register() {
     };
   }
 
+  // On Submit 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const agreeCheckbox = document.querySelector<HTMLInputElement>('input[type="checkbox"][value="Agree"]');
@@ -115,7 +114,7 @@ export default function Register() {
         if(isPasswordValid(password1)) {
           try {
             setloading(true);
-
+            //Api Call
             const response = await axios.post(`${process.env.REACT_APP_Fast_API}/create`, {
               name: name1,
               email: email1,

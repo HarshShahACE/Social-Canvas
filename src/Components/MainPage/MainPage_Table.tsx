@@ -72,23 +72,8 @@ const SocialAccount = () => {
       const confirmed = window.confirm('Are you sure you want to delete your account?');
       if (confirmed) {
         try {
-          let apiUrl = '';
-          switch (platform) {
-            case 'Linkedin':
-              apiUrl = `${process.env.REACT_APP_Fast_API}/s_linkedin_account_remove?user_id=${id}`;
-              break;
-            case 'Twitter':
-              apiUrl = `${process.env.REACT_APP_Fast_API}/s_twitter_account_remove?user_id=${id}`;
-              break;
-            case 'YouTube':
-              apiUrl = `${process.env.REACT_APP_Fast_API}/s_youtube_account_remove?user_id=${id}`;
-              break;
-            // Add cases for other platforms if needed
-            default:
-              break;
-          }
           // Make the API call
-          const response = await axios.post(apiUrl, {
+          const response = await axios.post( `${process.env.REACT_APP_Fast_API}/remove_social_account/${platform}?user_id=${id}`, {
             headers: {
               'Content-Type': 'application/json',
             },

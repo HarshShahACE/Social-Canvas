@@ -2,10 +2,12 @@ import { useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 const PrivateRoute = ({ element: Component, ...rest } : any) => {
+  // Variable Declaration
   const navigate = useNavigate();
   const location = useLocation();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  // Check For Item In Session Storage
   useEffect(() => {
     const checkUserToken = () => {
       const userToken = sessionStorage.getItem('Myid');

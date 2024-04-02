@@ -20,15 +20,16 @@ import ButtonComponent from '../Components/Fields/Buttonfield';
 // Import statements...
 
 export default function ForgotPassword() {
-    const [username, setusername] = useState('');
-    const [Phone, setPhone] = useState('');
-    const [loading, setLoading] = useState(false);
+    const [username, setusername] = useState(''); // State for email
+    const [Phone, setPhone] = useState(''); // State for phone number
+    const [loading, setLoading] = useState(false); // State for loading status
     const [emailValid, setEmailValid] = useState(false); // State to track email validity
     const [showNewPassword, setShowNewPassword] = useState(false); // State to show new password field
     const [newPassword, setNewPassword] = useState(''); // State to store new password
-    const defaultImagePath = process.env.REACT_APP_DEFAULT_AUTHENTICATION_IMAGE;
-    const navigate = useNavigate();
+    const defaultImagePath = process.env.REACT_APP_DEFAULT_AUTHENTICATION_IMAGE; // Default image path
+    const navigate = useNavigate(); // Navigation hook
   
+    // Function to handle blur event on email field
     const handleemailBlur = () => {
       if (username !== '') {
         if (!isEmailValid(username)) {
@@ -37,6 +38,7 @@ export default function ForgotPassword() {
       }
     };
   
+    // Function to check email validity and fetch user details
     const handleCheckEmail = async (event: React.FormEvent<HTMLFormElement>) => {
       event.preventDefault();
       if (username === '') {
@@ -67,10 +69,12 @@ export default function ForgotPassword() {
       }
     };
   
+    // Function to handle new password change event
     const handleNewPasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
       setNewPassword(event.target.value);
     };
 
+    // Function to handle update password form submission
     const handleupdatePassword = async(event : React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
         if (newPassword === '') {

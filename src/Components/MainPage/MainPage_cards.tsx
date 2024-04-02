@@ -25,7 +25,7 @@ const GrowthCard: React.FC<GrowthCardProps> = ({ platform }) => {
         const fetchData = async () => {
             try {
                 setLoading(true);
-                const response = await axios.get(`${process.env.REACT_APP_Fast_API}/${platform}_Dashboard/${id}`, {
+                const response = await axios.get(`${process.env.REACT_APP_Fast_API}/Dashboard_${platform}/${id}`, {
                     headers: {
                         'Content-Type': 'application/json',
                     },

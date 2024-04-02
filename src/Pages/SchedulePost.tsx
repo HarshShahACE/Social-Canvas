@@ -8,11 +8,13 @@ import LinkedinPost from "../Components/Schedule_Post/Linkedin_post";
 
 const Schedule_Post = () =>{
 
+    //Variable Declaration
     const defaultImagePath = process.env.REACT_APP_DEFAULT_APP_IMAGE;
     const isMobile = useMediaQuery('(max-width:600px)');
 
     const [selectedPlatform, setSelectedPlatform] = useState<string | null>('linkedin');
 
+    // For Chnaging Selected Plateform
     const handlePlatformChange = (value: string) => {
         if (selectedPlatform === value) {
             // If the platform is already selected, deselect it
@@ -33,6 +35,7 @@ const Schedule_Post = () =>{
             {/* Sidebar */}
             <SideNav/>
             <div style={{marginTop:'90px' , marginLeft:isMobile?'10px':'250px'}}>
+                {/* Show The Plateforms */}
                 <Box display="flex" alignItems="center" mt={2}>
                   {platforms.map(platform => (
                     <Box key={platform.value} onClick={() => handlePlatformChange(platform.value)} style={{ display: 'flex', alignItems: 'center',  backgroundColor: selectedPlatform === platform.value ? '#283141' : '#D8D8D8', borderRadius: '10px', boxShadow: '0px 4px 8px rgba(67, 131, 197, 0.9)', marginRight: '20px' , padding:'5px' }}>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Calendar, momentLocalizer, Event as CalendarEvent } from 'react-big-calendar';
 import moment from 'moment';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
+import 'react-big-calendar/lib/css/react-big-calendar.css'; // Import CSS file for calendar styling
 import { useMediaQuery } from "@mui/material";
 import axios from "axios";
 import SideNav from "../Components/Common/Navbar";
@@ -11,6 +11,7 @@ import NoDataPopup from "../Components/Common/NoDatapop";
 
 const localizer = momentLocalizer(moment);
 
+// Define interface for calendar events
 interface Event extends CalendarEvent {
     id: number; // Include id property
     Details: string;
@@ -19,24 +20,34 @@ interface Event extends CalendarEvent {
     content: string; // Add content property
 }
 
+// Define functional component ManagePost
 const ManagePost = () => {
+    // Check for mobile screen
     const isMobile = useMediaQuery('(max-width:600px)');
+    // Default image path
     const defaultImagePath = process.env.REACT_APP_DEFAULT_APP_IMAGE;
+    // Loading state
     const [loading,setloading] = useState(false);
 
+    // State for selected event and dialog
     const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
     const [openDialog, setOpenDialog] = useState(false);
+
+    // State for events, popup and selected view
     const [events, setEvents] = useState<Event[]>([]); // Store events received from API
     const [showPopup, setShowPopup] = useState(false);
     const [selectedView, setSelectedView] = useState<'month' | 'agenda'>('month');
 
+    // Close popup handler
     const handlePopupClose = () => {
         setShowPopup(false);
     };
 
+    // Retrieve id from session storage
     const idString = sessionStorage.getItem('Myid'); // Retrieve the value from localStorage
     const id = idString ? parseInt(idString) : undefined;
 
+    // Fetch data from API
     useEffect(() => {
         setloading(true);
         const fetchData = async () => {
@@ -95,16 +106,19 @@ const ManagePost = () => {
 
     }, [id]); // Add id as dependency to useEffect
 
+    // Event click handler
     const handleEventClick = (event: Event) => {
         setSelectedEvent(event);
         setOpenDialog(true);
     };
 
+    // Close dialog handler
     const handleCloseDialog = () => {
         window.location.reload();
         setOpenDialog(false);
     };
 
+    // Custom toolbar component
     const CustomToolbar = (toolbar : any) => {
         const goToToday = () => {
             toolbar.onNavigate('TODAY');
@@ -139,6 +153,7 @@ const ManagePost = () => {
         );
     };
 
+    // Return JSX
     return (
         <div style={{ display: 'flex', backgroundColor:'#FFFFFF' , backgroundImage: `url(${defaultImagePath})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'bottom right', height: '100vh' }}>
             {/* Sidebar */}

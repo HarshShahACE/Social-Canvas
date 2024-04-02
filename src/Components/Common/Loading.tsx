@@ -1,6 +1,7 @@
 import Logo from '../../assets/Photos/SCLOGO.png';
 
 const LoadingScreen = () => {
+  // Loading Screen
   return (
     <div className="loading-screen-overlay">
       <div className="loading-popup">

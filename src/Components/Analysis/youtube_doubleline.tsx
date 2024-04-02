@@ -7,7 +7,7 @@ interface GraphData {
     likes: number;
     comments: number;
     dislikes: number;
-    subscribersGained : number;
+    subscribersGained: number;
   };
 }
 
@@ -15,37 +15,51 @@ interface TripleLineGraphProps {
   data: GraphData;
 }
 
+const formatDate = (dateString : any) => {
+  const date = new Date(dateString);
+  const formattedDate = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+  return formattedDate;
+};
+
 const TripleLineGraph: React.FC<TripleLineGraphProps> = ({ data }) => {
   const dates = Object.keys(data);
+  const firstDate = formatDate(Object.keys(data)[0]);
+  const lastDate = formatDate(Object.keys(data)[Object.keys(data).length - 1]);
 
   // Extracting data for each item
   const likesData = dates.map(date => data[date].likes);
-  const commentsData = dates.map(date => data[date].comments);
   const dislikesData = dates.map(date => data[date].dislikes);
+  const commentsData = dates.map(date => data[date].comments);
   const subscriberData = dates.map(date => data[date].subscribersGained);
 
-  const lastLikes = likesData[likesData.length - 1];
-  const lastComments = commentsData[commentsData.length - 1];
-  const lastDislikes = dislikesData[dislikesData.length - 1];
-  const lastSubscribers = subscriberData[subscriberData.length - 1];
+  const totalLikes = Object.values(data).reduce((acc, curr) => acc + curr.likes, 0);
+  const totalDislikes = Object.values(data).reduce((acc, curr) => acc + curr.dislikes, 0);
+  const totalComments = Object.values(data).reduce((acc, curr) => acc + curr.comments, 0);
+  const totalSubscribers = Object.values(data).reduce((acc, curr) => acc + curr.subscribersGained, 0);
 
-
-  // Chart data for Likes
-  const likesChartData = {
+  // Combined chart data for Likes and Dislikes
+  const likesDislikesChartData = {
     labels: dates,
     datasets: [
       {
         label: 'Likes',
         data: likesData,
         fill: false,
-        borderColor: 'purple',
-        tension: 0.1
-      }
-    ]
+        borderColor: 'blue',
+        tension: 0.1,
+      },
+      {
+        label: 'Dislikes',
+        data: dislikesData,
+        fill: false,
+        borderColor: 'red',
+        tension: 0.1,
+      },
+    ],
   };
 
   // Chart data for Comments
-  const commentsChartData = {
+  const commentsubscriberChartData = {
     labels: dates,
     datasets: [
       {
@@ -53,63 +67,31 @@ const TripleLineGraph: React.FC<TripleLineGraphProps> = ({ data }) => {
         data: commentsData,
         fill: false,
         borderColor: 'brown',
-        tension: 0.1
-      }
-    ]
-  };
-
-  // Chart data for Dislikes
-  const dislikesChartData = {
-    labels: dates,
-    datasets: [
-      {
-        label: 'Dislikes',
-        data: dislikesData,
-        fill: false,
-        borderColor: 'blue',
-        tension: 0.1
-      }
-    ]
-  };
-
-  const subscriberchartData = {
-    labels: dates,
-    datasets: [
+        tension: 0.1,
+      },
       {
         label: 'Subscribers',
         data: subscriberData,
         fill: false,
-        borderColor: 'Red',
-        tension: 0.1
-      }
-    ]
+        borderColor: '#E9CB76',
+        tension: 0.1,
+      },
+    ],
   };
 
   return (
-    <div style={{ display: 'flex', flexDirection: 'column' , width:'98%' }}>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'row' }}>
-        <div style={{ flex: 1 ,borderRadius:'20px',border: '1px solid #000'}}>
-          <h2 style={{textAlign:'center'}}>Likes</h2>
-          <Typography style={{marginLeft:'20px'}}>Current Month Likes : {lastLikes}</Typography>
-          <Line data={likesChartData} style={{padding:'10px'}}/>
-        </div>
-        <div style={{ flex: 1 ,borderRadius:'20px',border: '1px solid #000' , marginLeft:'15px'}}>
-          <h2 style={{textAlign:'center'}}>Dislikes</h2>
-          <Typography style={{marginLeft:'20px'}}>Current Month Dislikes : {lastDislikes}</Typography>
-          <Line data={dislikesChartData} style={{padding:'10px'}}/>
-        </div>
+    <div style={{ display: 'flex', flexDirection: 'row', width: '98%' }}>
+      <div style={{ flex: 1, borderRadius: '20px', border: '1px solid #000', marginRight: '10px' }}>
+        <Typography style={{ textAlign: 'center' , fontSize:'20px' , marginTop:'10px',marginBottom:'10px' }}><b>Likes vs Dislikes:</b> {firstDate} - {lastDate}</Typography>
+        <Typography style={{ marginLeft: '20px' }}>Total Likes: {totalLikes}</Typography>
+        <Typography style={{ marginLeft: '20px' }}>Total Dislikes: {totalDislikes}</Typography>
+        <Line data={likesDislikesChartData} style={{ padding: '10px' }} />
       </div>
-      <div style={{ flex: 1, display: 'flex', flexDirection: 'row',marginTop:'15px' }}>
-        <div style={{ flex: 1 ,borderRadius:'20px',border: '1px solid #000'}}>
-          <h2 style={{textAlign:'center'}}>Comments</h2>
-          <Typography style={{marginLeft:'20px'}}>Current Month Comments : {lastComments}</Typography>
-          <Line data={commentsChartData} style={{padding:'10px'}}/>
-        </div>
-        <div style={{ flex: 1 ,borderRadius:'20px',border: '1px solid #000', marginLeft:'15px'}}>
-          <h2 style={{textAlign:'center'}}>Subscribers</h2>
-          <Typography style={{marginLeft:'20px'}}>Current Month Subscribers : {lastSubscribers}</Typography>
-          <Line data={subscriberchartData} style={{padding:'10px'}}/>
-        </div>
+      <div style={{ flex: 1, borderRadius: '20px', border: '1px solid #000' }}>
+      <Typography style={{ textAlign: 'center' , fontSize:'20px' , marginTop:'10px',marginBottom:'10px' }}><b>Comments & Subscribers:</b> {firstDate} - {lastDate}</Typography>
+        <Typography style={{ marginLeft: '20px' }}>Total Comments: {totalComments}</Typography>
+        <Typography style={{ marginLeft: '20px' }}>Total Subscribers: {totalSubscribers}</Typography>
+        <Line data={commentsubscriberChartData} style={{ padding: '10px' }} />
       </div>
     </div>
   );

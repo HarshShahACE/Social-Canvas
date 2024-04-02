@@ -35,6 +35,12 @@ interface APIResponse {
   };
 }
 
+const formatDate = (dateString : any) => {
+  const date = new Date(dateString);
+  const formattedDate = date.toLocaleString('default', { month: 'long', year: 'numeric' });
+  return formattedDate;
+};
+
 const parseDataForChart = (apiResponse: APIResponse) => {
   const labels: string[] = [];
   const data: number[] = [];
@@ -51,6 +57,11 @@ const parseDataForChart = (apiResponse: APIResponse) => {
 
 const AreaChartComponent: React.FC<{ apiResponse: APIResponse }> = ({ apiResponse }) => {
   const { labels, data, views } = parseDataForChart(apiResponse);
+  const firstDate = formatDate(Object.keys(apiResponse)[0]);
+  const lastDate = formatDate(Object.keys(apiResponse)[Object.keys(apiResponse).length - 1]);
+
+  const totaltime = Object.values(data).reduce((acc, curr) => acc + curr, 0);
+  const totalview = Object.values(views).reduce((acc, curr) => acc + curr, 0);
 
   const lastDataValue = data[data.length - 1];
   const lastViewsValue = views[views.length - 1];
@@ -97,10 +108,10 @@ const AreaChartComponent: React.FC<{ apiResponse: APIResponse }> = ({ apiRespons
 
   return (
        <div>
-        <h2 style={{textAlign:'center'}}>Views And Time Watch(In Minutes)</h2>
+        <Typography style={{ textAlign: 'center' , fontSize:'20px' , marginTop:'10px',marginBottom:'10px' }}><b>Views & Time Watched(In Minutes):</b> {firstDate} - {lastDate}</Typography>
         <div style={{marginLeft:'30px'}}>
-          <Typography>This Month Total Minutes Watched: {lastDataValue}</Typography>
-          <Typography>This Month Views: {lastViewsValue}</Typography>
+          <Typography>Total Minutes Watched: {totaltime}</Typography>
+          <Typography>Total Views: {totalview}</Typography>
         </div>
         <Line data={chartData} options={options} style={{padding:'10px'}} />
       </div>

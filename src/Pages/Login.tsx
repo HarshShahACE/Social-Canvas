@@ -28,13 +28,13 @@ export default function Login() {
   // Default BackGround Image
   const defaultImagePath = process.env.REACT_APP_DEFAULT_AUTHENTICATION_IMAGE;
   
-  // Define Naviagation 
+  // Define Navigation 
   const navigate = useNavigate()
 
   // Define Loading Screen
   const [loading, setLoading] = useState(false);
 
-  // Check On Field When field is leave
+  // Check On Field When field is left
   const handleemailBlur = () => {
     if(username !== ''){
     if(!isEmailValid(username)){
@@ -43,7 +43,7 @@ export default function Login() {
     }
   };
 
-  // Check Password on  leave
+  // Check Password on leave
   const handlepasswordBlur = () => {
     if(password1 !== ''){
     handlepasswordcheck(password1);
