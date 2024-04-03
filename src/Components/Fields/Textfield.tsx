@@ -8,6 +8,8 @@ interface TextFieldProps {
   value: string;
   onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: () => void;
+  onFocus?: (e: any) => void;
+  suggestion?: string;
   startAdornment?: JSX.Element;
   type?: string;
   maxLength?: number;
@@ -21,6 +23,7 @@ const TextFieldComponent: React.FC<TextFieldProps> = ({
   value,
   onChange,
   onBlur,
+  suggestion,
   startAdornment,
   type = 'text',
   maxLength,
@@ -52,6 +55,7 @@ const TextFieldComponent: React.FC<TextFieldProps> = ({
       value={value}
       onChange={onChange}
       onBlur={onBlur}
+      helperText={suggestion}
       InputProps={{
         startAdornment: startAdornment && (
           <InputAdornment position="start">{startAdornment}</InputAdornment>
@@ -61,6 +65,7 @@ const TextFieldComponent: React.FC<TextFieldProps> = ({
       inputProps={{ maxLength }}
       style={style}
       disabled= {disabled || false}
+      autoComplete='false'
     />
   );
 };

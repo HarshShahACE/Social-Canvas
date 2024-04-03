@@ -156,6 +156,7 @@ const ManagePost = () => {
     // Return JSX
     return (
         <div style={{ display: 'flex', backgroundColor:'#FFFFFF' , backgroundImage: `url(${defaultImagePath})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'bottom right', height: '100vh' }}>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             {/* Sidebar */}
             <SideNav />
             <NoDataPopup isOpen={showPopup} onClose={handlePopupClose} />

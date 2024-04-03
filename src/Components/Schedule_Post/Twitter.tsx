@@ -27,6 +27,17 @@ const TwitterPostLayout: React.FC<TwitterProps> = ({ content, media }) => {
   const [handle, setHandle] = useState<string[]>([]);
   const [userPic, setUserPic] = useState<string[]>([]);
 
+  // Create a new Date object
+  const currentDate = new Date();
+
+  // Get the day, month, and year
+  const day = currentDate.getDate();
+  const month = currentDate.toLocaleString('default', { month: 'long' }); // Get full month name
+  const year = currentDate.getFullYear();
+
+  // Format the date as needed
+  const formattedDate = `${day}-${month}-${year}`;
+
   useEffect(() => {
     const fetchData = async () => {
       const idString = sessionStorage.getItem('Myid');
@@ -79,7 +90,7 @@ const TwitterPostLayout: React.FC<TwitterProps> = ({ content, media }) => {
             <div style={{ display: 'flex', alignItems: 'center' }}>
               <Typography variant="body1">{username}</Typography>
                 <VerifiedIcon style={{ marginLeft: '5px', color: '#1FA0F3'}}/>
-              <Typography variant="body2" color="textSecondary" style={{ marginLeft: '10px' }}>19-Feb-2024</Typography>
+              <Typography variant="body2" color="textSecondary" style={{ marginLeft: '10px' }}>{formattedDate }</Typography>
             </div>
           }
           subheader={"@"+handle}

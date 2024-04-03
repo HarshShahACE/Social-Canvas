@@ -64,7 +64,7 @@ const Youtubepostlayout: React.FC<youtubeprops> = ({ title ,content, media }) =>
         <>
           <div style={{ display: 'flex', alignItems: 'center', margin: '10px' }}>
             <img src={youtubelogo} alt='Youtube' style={{ width: '30px', height: '30px' }} />
-            <Typography variant="body1" color="textPrimary">
+            <Typography variant="body1" color="textPrimary" style={{marginLeft:'5px'}}>
               Youtube
             </Typography>
           </div>

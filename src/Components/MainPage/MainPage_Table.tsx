@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Card, CardContent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogContent, Avatar, IconButton } from '@mui/material';
+import { Card, CardContent, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Dialog, DialogContent, Avatar } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import LoadingScreen from '../Common/Loading';
@@ -211,9 +211,9 @@ const SocialAccount = () => {
         </DialogContent>
       </Dialog>
       {loading && <LoadingScreen />}
-      <Card sx={{ maxWidth:'75%' , margin:'10px' , borderRadius:'20px' , padding:'20px' , backgroundColor:'rgba(255, 255, 255, 0.8)' , boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.5)' }}>
+      <Card sx={{ maxWidth:'75%' , margin:'10px' , borderRadius:'20px' , padding:'10px' , backgroundColor:'rgba(255, 255, 255, 0.8)' , boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.5)' }}>
         <CardContent>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '16px' ,   }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop:'0px'  }}>
             <h2>Social Media Accounts</h2>
             <ButtonComponent variant="contained" onClick={handleSocialMediaPopupOpen} startIcon={<AddCircleIcon/>}>Add</ButtonComponent>
           </div>
@@ -237,15 +237,15 @@ const SocialAccount = () => {
                       <TableCell style={{fontSize:'16px',  }}>{user}</TableCell>
                       <TableCell style={{fontSize:'16px',  }}>{platform[index]}</TableCell>
                       <TableCell>
-                        <IconButton style={{backgroundColor:'#1565C0' , color:'#FFFFFF' ,borderRadius:'5px' ,   }} onClick={() => handleDeleteClick(platform[index])}>
-                          <DeleteIcon />
-                        </IconButton>
+                        <ButtonComponent variant='contained' onClick={() => handleDeleteClick(platform[index])}>
+                          <DeleteIcon style={{padding:'0'}}/>
+                        </ButtonComponent>
                       </TableCell>
                     </TableRow>
                   ))
                 ) : (
                   <TableRow>
-                    <TableCell colSpan={5} style={{ textAlign: 'center', color: 'red' }}>No data found</TableCell>
+                    <TableCell colSpan={5} style={{ textAlign: 'center', color: 'red' , fontSize:'20px' }}>Please Add Social Media Account</TableCell>
                   </TableRow>
                 )}
               </TableBody>

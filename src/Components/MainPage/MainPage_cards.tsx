@@ -83,11 +83,15 @@ const GrowthCard: React.FC<GrowthCardProps> = ({ platform }) => {
                     position: 'relative',
                     overflow: 'hidden',
                     borderRadius: 5,
-                    backgroundImage: `linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)), url(${getBackgroundImage(key)})`, // Assuming you have a function to get the appropriate background image based on the key
+                    backgroundImage: `url(${getBackgroundImage(key)})`, // Assuming you have a function to get the appropriate background image based on the key
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     margin: '20px 40px 20px 0px',
-                    boxShadow: '6px 6px 6px rgba(0, 0, 0, 0.5)'
+                    boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.5)',
+                    "&:hover": {
+                        boxShadow: "12px 12px 16px 5px rgba(0, 0, 0, 0.5)",
+                        // backgroundColor: "#d4d4d4",
+                      },
                 }}>
                     <CardContent style={{ position: 'relative', zIndex: 1, color: '#000', textAlign: 'center' }}>
                         <Typography variant="h5" component="div" >

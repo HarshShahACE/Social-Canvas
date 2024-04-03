@@ -14,8 +14,6 @@ import states from '../assets/states.json';
 import { useNavigate } from 'react-router-dom';
 import { EmailRounded, PasswordRounded, Person2Rounded } from '@mui/icons-material';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
-import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
-import ContactPhoneRoundedIcon from '@mui/icons-material/ContactPhoneRounded';
 import axios, { AxiosError } from "axios";
 import { isEmailValid , isPhoneNumberValid , isPasswordValid } from '../utils/validation';
 import Copyright from '../Components/Common/Copyright';
@@ -24,6 +22,7 @@ import SelectComponent from '../Components/Fields/Selectfield';
 import { LocationCity } from '@mui/icons-material';
 import ButtonComponent from '../Components/Fields/Buttonfield';
 import LoadingScreen from '../Components/Common/Loading';
+import CallIcon from '@mui/icons-material/Call';
 
 export default function Register() {
 
@@ -217,7 +216,7 @@ export default function Register() {
               value={phone1}
               onChange={e=>setphone(e.target.value)}
               onBlur={handlephoneBlur}
-              startAdornment={<IconButton disabled><ContactPhoneRoundedIcon style={{color:'#707070'}} /></IconButton>}
+              startAdornment={<IconButton disabled><CallIcon style={{color:'#707070'}} /></IconButton>}
               maxLength={10}
             />
             <TextFieldComponent
@@ -234,10 +233,8 @@ export default function Register() {
               onChange={e=>setpassword(e.target.value)}
               onBlur={handlepasswordBlur}
               startAdornment={<IconButton><PasswordRounded style={{color:'#707070'}} /></IconButton>}
+              suggestion='It should contain at least 8 character: 1 UC(A-Z), 1 LC(a-z), 1 Number(0-9), 1 SC(@,#,$..)'
             />
-            <p style={{ textAlign: 'left', fontSize: 12 , marginBottom: 0 , marginTop:0 }}>
-              Password Field Contains at least 8 character : 1 UpperCase , 1 LowerCase </p>
-            <p style={{ textAlign: 'left', fontSize: 12 , marginTop: 0 , marginBottom:0}}> 1 Number , 1 Special Character</p>
             <TextFieldComponent
             label="Confirm Password"
             type='password'
@@ -255,7 +252,7 @@ export default function Register() {
                 onChange={e=>setgender(e)}
                 startAdornment={
                   <IconButton>
-                    <PersonRoundedIcon style={{ color: '#707070' }} />
+                    <Person2Rounded style={{ color: '#707070' }} />
                   </IconButton>
                 }
                 options={[

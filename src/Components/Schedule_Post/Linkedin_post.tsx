@@ -33,7 +33,7 @@ export default function Linkedin_Post(){
 
     const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const inputContent = e.target.value;
-        if (inputContent.length <= 250) { // Check if character count is less than or equal to 200
+        if (inputContent.length <= 3000) { // Check if character count is less than or equal to 200
             setContent(inputContent);
         }
         else{
@@ -272,7 +272,7 @@ export default function Linkedin_Post(){
                                     }}
                                 >
                                     <p style={{ fontSize: '14px', marginLeft:'20px' }}>
-                                    {`${content.length}/250`}
+                                    {`${content.length}/3000`}
                                     </p>
                                     <IconButton onClick={() => setEmojiPickerOpen(!emojiPickerOpen)} >
                                     <InsertEmoticonRounded />

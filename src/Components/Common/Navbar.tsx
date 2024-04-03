@@ -211,12 +211,12 @@ export default function SideNav() {
           sx={{
             '& .MuiDrawer-paper': { 
               width: drawerWidth,
-              backgroundColor: '#202020', // Light background color
+              backgroundColor: '#36454F', // Light background color
             },
             ...(isMobile && {
               '& .MuiDrawer-paper': {
                 boxSizing: 'border-box',
-                backgroundColor: '#202020',
+                backgroundColor: '#36454F',
               },
             }),
             paddingLeft: '10px',

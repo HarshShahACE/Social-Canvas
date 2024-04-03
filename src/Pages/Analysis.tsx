@@ -39,7 +39,7 @@ const Analysis = () => {
     const [Tweetdata, setTweetdata] = useState(null);
     const [youtubedata,setyoutubedata] = useState(null);
     const [sentimentData, setSentimentData] = useState<SentimentData[]>([]);
-    const [months,setmonths] = useState('24');
+    const [months,setmonths] = useState('6');
 
     // Retrieve the user ID from sessionStorage
     const idString = sessionStorage.getItem('Myid');
@@ -146,6 +146,7 @@ const Analysis = () => {
 
     return (
         <div style={{ display: 'flex', backgroundColor:'#FFFFFF' , height:'100vh' }}>
+            <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             <CssBaseline />
             {loading && <LoadingScreen/>}
             {/* Sidebar */}
@@ -198,21 +199,17 @@ const Analysis = () => {
                                     </div>
                                 </>
                             ) : (
-                                <div style={{ marginTop: '15px', borderRadius: '20px', height: '50px', padding: '20px', backgroundColor: 'rgba(255, 255, 255, 0.8)', border: '1px solid #000' }}>
-                                    <h2>Add Account for Insights</h2>
-                                </div>
+                                <h2>Add Account for Insights</h2>
                             )}
                         </>
                     ) : selectedPlatform === 'twitter' ?  (
-                        <div>
+                        <>
+                            {Tweetdata ? (
+                                <>
                             <div style={{marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(255, 255, 255, 0.8)', border: '1px solid #000' }} >
-                                {Tweetdata ? (
                                     <div>
                                         <Barchart socialData={Tweetdata} dataType="twitter" />
                                     </div>
-                                ) : (
-                                    <div>Please add account for insights</div>
-                                )}
                             </div>
                             <div style={{ display: 'flex', flexDirection: 'row' }}>
                                 <div style={{marginTop:'15px', borderRadius:'20px' ,height: '500px', padding: '20px', marginRight:'15px', backgroundColor: 'rgba(255, 255, 255, 0.8)', border: '1px solid #000' }} >
@@ -221,7 +218,11 @@ const Analysis = () => {
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                            </>
+                            ) : (
+                               <h2>Please add account for insights</h2>
+                            )}
+                        </>
                     ) : selectedPlatform === 'youtube' ?  (
                         <>
                             {youtubedata ? (
@@ -242,7 +243,7 @@ const Analysis = () => {
                                     </div>
                                 </>
                             ) : (
-                                <div>Please add account for insights</div>
+                                <h2>Please add account for insights</h2>
                             )}
                         </>
                     ) : (

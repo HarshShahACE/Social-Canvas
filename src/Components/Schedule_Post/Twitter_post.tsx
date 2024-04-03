@@ -31,11 +31,13 @@ export default function Twitter_Post(){
 
     const handleContentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
         const inputContent = e.target.value;
-        if (inputContent.length <= 250) { // Check if character count is less than or equal to 200
+        if (inputContent.length <= 250) { // Check if character count is less than or equal to 250
             setContent(inputContent);
-        }
-        else{
-            alert("Limit Has Been Reached");
+        } else {
+            // Truncate the inputContent to 250 characters
+            const truncatedContent = inputContent.substring(0, 250);
+            // Update the content with truncatedContent
+            setContent(truncatedContent);
         }
     };
 
