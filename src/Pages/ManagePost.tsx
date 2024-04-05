@@ -1,33 +1,35 @@
 import React, { useEffect, useState } from "react";
-import { Calendar, momentLocalizer, Event as CalendarEvent } from 'react-big-calendar';
-import moment from 'moment';
-import 'react-big-calendar/lib/css/react-big-calendar.css'; // Import CSS file for calendar styling
-import { useMediaQuery } from "@mui/material";
+import FullCalendar from '@fullcalendar/react';
+import dayGridPlugin from '@fullcalendar/daygrid';
+import timeGridPlugin from '@fullcalendar/timegrid';
+import listPlugin from '@fullcalendar/list';
 import axios from "axios";
 import SideNav from "../Components/Common/Navbar";
 import PostDetails from "../Components/Manage_Post/Post_Details";
 import LoadingScreen from "../Components/Common/Loading";
-import NoDataPopup from "../Components/Common/NoDatapop";
+import PopUpModel from "../Components/Common/PopupModel";
+import { useMediaQuery } from "@mui/material";
 
-const localizer = momentLocalizer(moment);
-
-// Define interface for calendar events
-interface Event extends CalendarEvent {
-    id: number; // Include id property
-    Details: string;
-    sch_user_time: string; // Add sch_user_time property
-    platform_name: string; // Add platform_name property
-    content: string; // Add content property
+// Define interface for event
+interface Event {
+    id: string;
+    title: string;
+    start: Date;
+    end: Date;
+    platform_name: string;
 }
 
 // Define functional component ManagePost
-const ManagePost = () => {
+const ManagePost: React.FC = () => {
+
     // Check for mobile screen
     const isMobile = useMediaQuery('(max-width:600px)');
+
     // Default image path
-    const defaultImagePath = process.env.REACT_APP_DEFAULT_APP_IMAGE;
+    const defaultImagePath = process.env.REACT_APP_DEFAULT_APP_IMAGE || '';
+
     // Loading state
-    const [loading,setloading] = useState(false);
+    const [loading, setLoading] = useState(false);
 
     // State for selected event and dialog
     const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
@@ -36,12 +38,6 @@ const ManagePost = () => {
     // State for events, popup and selected view
     const [events, setEvents] = useState<Event[]>([]); // Store events received from API
     const [showPopup, setShowPopup] = useState(false);
-    const [selectedView, setSelectedView] = useState<'month' | 'agenda'>('month');
-
-    // Close popup handler
-    const handlePopupClose = () => {
-        setShowPopup(false);
-    };
 
     // Retrieve id from session storage
     const idString = sessionStorage.getItem('Myid'); // Retrieve the value from localStorage
@@ -49,66 +45,50 @@ const ManagePost = () => {
 
     // Fetch data from API
     useEffect(() => {
-        setloading(true);
+        setLoading(true);
         const fetchData = async () => {
-            const timeoutId = setTimeout(() => {
-                setloading(false);
-                setShowPopup(true);
-                }, 2000);
             try {
-                if (id !== undefined) {
-                    const response = await axios.get(`${process.env.REACT_APP_Fast_API}/scheduled_posts/${id}`, {
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                    });
-                    clearTimeout(timeoutId);
-                    if (response.status === 200) {
-                        const jsonData = response.data;
-
-                        // Group events by start time
-                        const groupedEvents: { [key: string]: Event[] } = {};
-                        jsonData.forEach((item: any) => {
-                            const startTime = new Date(item.sch_user_time).toISOString();
-                            if (!groupedEvents[startTime]) {
-                                groupedEvents[startTime] = [];
-                            }
-                            groupedEvents[startTime].push({
-                                ...item,
-                                id: item.id,
-                                title: `${item.content}\n${item.platform_name}`,
-                                platform_name: item.platform_name,
-                                content: item.content,
-                                start: new Date(item.sch_user_time),
-                                end: new Date(item.sch_user_time),
-                            });
-                        });
-
-                        // Flatten the grouped events
-                        const formattedEvents: Event[] = [];
-                        Object.keys(groupedEvents).forEach((key) => {
-                            formattedEvents.push(...groupedEvents[key]);
-                        });
-
-                        setEvents(formattedEvents);
-                        setloading(false);
-                    } else {
-                        console.log('Error:', response.statusText);
-                        window.alert("No Data Found");
-                    }
+                const response = await axios.get(`${process.env.REACT_APP_Fast_API}/scheduled_posts/${id}`, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                if (response.status === 200) {
+                    const jsonData = response.data;
+                    const formattedEvents: Event[] = jsonData.map((item: any) => ({
+                        id: String(item.id),
+                        title: `${item.content}\n${item.platform_name}`,
+                        start: new Date(item.sch_user_time),
+                        end: new Date(item.sch_user_time),
+                        platform_name: item.platform_name,
+                    }));
+                    setEvents(formattedEvents);
+                    console.log(events);
+                    setLoading(false);
+                } else {
+                    console.log('Error:', response.statusText);
+                    setShowPopup(true);
                 }
             } catch (error) {
                 console.error('Error fetching data:', error);
+                setShowPopup(true);
+                setLoading(false);
+                
             }
         };
-
         fetchData(); // Call the fetchData function
-
-    }, [id]); // Add id as dependency to useEffect
+    }, []);
 
     // Event click handler
-    const handleEventClick = (event: Event) => {
-        setSelectedEvent(event);
+    const handleEventClick = (info: any) => {
+        const clickedEvent: Event = {
+            id: info.event.id,
+            title: info.event.title,
+            start: info.event.start,
+            end: info.event.end,
+            platform_name: info.event.extendedProps.platform_name, // Access platform_name from extendedProps
+        };
+        setSelectedEvent(clickedEvent);
         setOpenDialog(true);
     };
 
@@ -118,90 +98,46 @@ const ManagePost = () => {
         setOpenDialog(false);
     };
 
-    // Custom toolbar component
-    const CustomToolbar = (toolbar : any) => {
-        const goToToday = () => {
-            toolbar.onNavigate('TODAY');
-        };
-
-        const goToNext = () => {
-            toolbar.onNavigate('NEXT');
-        };
-
-        const goToBack = () => {
-            toolbar.onNavigate('PREV');
-        };
-
-        const handleViewChange = (view: 'month' | 'agenda') => {
-            toolbar.onView(view);
-            setSelectedView(view);
-        };
-
-        return (
-            <div className="rbc-toolbar">
-                <span className="rbc-btn-group">
-                    <button type="button" onClick={goToToday}>Today</button>
-                    <button type="button" onClick={goToBack}>{"<"}</button>
-                    <button type="button" onClick={goToNext}>{">"}</button>
-                </span>
-                <span className="rbc-toolbar-label">{toolbar.label}</span>
-                <span className="rbc-btn-group">
-                <button className={selectedView === 'month' ? 'rbc-active' : ''} type="button" onClick={() => handleViewChange('month')}>Month</button>
-                <button className={selectedView === 'agenda' ? 'rbc-active' : ''} type="button" onClick={() => handleViewChange('agenda')}>Agenda</button>
-            </span>
-            </div>
-        );
+    // Close popup handler
+    const handlePopupClose = () => {
+        setShowPopup(false);
     };
 
-    // Return JSX
+    const eventid = selectedEvent ? parseInt(selectedEvent.id, 10) : null;
+    console.log(selectedEvent?.platform_name);
+
     return (
-        <div style={{ display: 'flex', backgroundColor:'#FFFFFF' , backgroundImage: `url(${defaultImagePath})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'bottom right', height: '100vh' }}>
+        <div style={{ display: 'flex', backgroundColor:'#FFFFFF', backgroundImage: `url(${defaultImagePath})`, backgroundSize: 'contain', backgroundRepeat: 'no-repeat', backgroundPosition: 'bottom right', height: '100vh' }}>
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             {/* Sidebar */}
             <SideNav />
-            <NoDataPopup isOpen={showPopup} onClose={handlePopupClose} />
+            <PopUpModel
+                isOpen={showPopup}
+                onClose={handlePopupClose}
+                content="No Data Found"
+                success={false}
+            />
             {loading && <LoadingScreen />}
             {/* Main content */}
             <div style={{ flex: 1 }}>
-                <main style={{ flexGrow: 1, padding: 3, marginTop: '70px', marginLeft: isMobile ? '20px' : '240px' }}>
-                    <div style={{ height: '80vh', width: '80vw', padding: '20px' }}>
-                        <Calendar
-                            localizer={localizer}
-                            events={events}
-                            startAccessor="start"
-                            endAccessor="end"
-                            style={{ background: 'rgba(250,250,250,0.7)' , padding:'20px' , boxShadow: '0px 4px 8px rgba(67, 131, 197, 0.9)' }}
-                            onSelectSlot={(slotInfo) => console.log(slotInfo)}
-                            selectable
-                            onSelectEvent={handleEventClick}
-                            defaultView="month"
-                            views={['month', 'agenda']}
-                            components={{
-                                toolbar: CustomToolbar,
-                            }}
-                            // Render multiple events for the same time slot
-                            eventPropGetter={(event, start, end, isSelected) => {
-                                const backgroundColor = '#';
-                                return { style: { backgroundColor } };
-                            }}
-                            // Show all events in day cells
-                            dayPropGetter={(date: Date) => {
-                                const dayEvents = events.filter((event) => {
-                                    const eventStart = event.start;
-                                    if (eventStart) {
-                                        const eventStartDate = new Date(eventStart);
-                                        return eventStartDate.getDate() === date.getDate() && eventStartDate.getMonth() === date.getMonth() && eventStartDate.getFullYear() === date.getFullYear();
-                                    }
-                                    return false;
-                                });
-                                return { style: {}, className: '', events: dayEvents };
-                            }}
-                        />
-                    </div>
+                <main style={{height:'80vh' , width:'80vw', marginTop: '100px', marginLeft: isMobile ? '20px' : '240px', border:'2px solid black' , background:'rgba(240,240,240,0.7)' , padding:'15px' }}>
+                    <FullCalendar
+                        plugins={[dayGridPlugin, timeGridPlugin, listPlugin]} // Include list plugin
+                        initialView="dayGridMonth" // Set initial view to timeGridWeek
+                        headerToolbar={{
+                            left: 'prev,next today',
+                            center: 'title',
+                            right: 'dayGridMonth,listWeek', // Add listWeek and listDay to the toolbar
+                        }}
+                        selectable={true}
+                        events={events}
+                        eventClick={handleEventClick}
+                        height="100%" // Adjust the height as needed
+                    />
                 </main>
             </div>
             {/* Event details dialog */}
-            <PostDetails eventId={selectedEvent?.id ?? null} plateform={selectedEvent?.platform_name??null} open={openDialog} onClose={handleCloseDialog} />
+            <PostDetails eventId={eventid} plateform={selectedEvent?.platform_name || null} open={openDialog} onClose={handleCloseDialog} />
         </div>
     );
 };

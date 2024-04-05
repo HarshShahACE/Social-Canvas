@@ -17,6 +17,7 @@ import TextFieldComponent from '../Components/Fields/Textfield';
 import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import Copyright from '../Components/Common/Copyright';
+import PopUpModel from '../Components/Common/PopupModel';
 
 export default function ForgotPassword() {
   const [username, setusername] = useState(''); // State for email
@@ -28,6 +29,14 @@ export default function ForgotPassword() {
   const [newPassword, setNewPassword] = useState(''); // State to store new password
   const defaultImagePath = process.env.REACT_APP_DEFAULT_AUTHENTICATION_IMAGE; // Default image path
   const navigate = useNavigate(); // Navigation hook
+  const [content,setcontent] = useState('');
+  const [success,setSuccess] = useState(Boolean);
+  const [showPopup, setShowPopup] = useState(false);
+
+   // For Closing No Data PopUp
+   const handlePopupClose = () => {
+    setShowPopup(false);
+  };
 
 
   useEffect(() => {
@@ -40,7 +49,9 @@ export default function ForgotPassword() {
   const handleEmailBlur = () => {
     if (username !== '') {
       if (!isEmailValid(username)) {
-        window.alert("Please enter a valid Email ID");
+        setcontent("Please enter a valid Email ID");
+        setSuccess(false)
+        setShowPopup(true);
       }
     }
   };
@@ -49,7 +60,9 @@ export default function ForgotPassword() {
   const handleCheckEmail = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (username === '') {
-      window.alert("Required Fields should not be empty");
+      setcontent("Required Fields should not be empty");
+      setSuccess(false)
+      setShowPopup(true);
     } else {
       if (isEmailValid(username)) {
         setLoading(true);
@@ -64,16 +77,22 @@ export default function ForgotPassword() {
           if (response.status === 200) {
             let CheckOtp = response.data.otp;
             sessionStorage.setItem('OTP', CheckOtp);
-            alert("Check Your Email For OTP")
+            setcontent("Check Your Email For OTP")
+            setSuccess(true)
+            setShowPopup(true);
             setEmailValid(true);
           }
           else{
             setLoading(false);
-            window.alert("No User Found , Please Try After Some Time");
+            setcontent("No User Found , Please Try After Some Time");
+            setSuccess(false)
+            setShowPopup(true);
           }
         } catch (error: unknown) {
           setLoading(false);
-          window.alert("No User Found , Please Try After Some Time");
+          setcontent("No User Found , Please Try After Some Time");
+          setSuccess(false)
+          setShowPopup(true);
         }
         setLoading(false);
       }
@@ -84,7 +103,9 @@ export default function ForgotPassword() {
   const handleOTPVerification = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (otp === '') {
-      window.alert("OTP Field should not be empty");
+      setcontent("OTP Field should not be empty");
+      setSuccess(false)
+      setShowPopup(true)
     } else {
       setLoading(true);
       const CheckOtp = sessionStorage.getItem('OTP');
@@ -96,7 +117,9 @@ export default function ForgotPassword() {
       }else{
         setLoading(false);
         console.log("Otp",otp,"Check",CheckOtp);
-        window.alert("Otp Not Match, Try After Some Time.");
+        setcontent("Otp Not Match, Try After Some Time.");
+        setSuccess(false)
+        setShowPopup(true);
       }
   };
   }
@@ -110,7 +133,9 @@ export default function ForgotPassword() {
   const handleUpdatePassword = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (newPassword === '') {
-      window.alert("New Password Field should not be empty");
+      setcontent("New Password Field should not be empty");
+      setSuccess(false)
+      setShowPopup(true);
     } else {
       if (isPasswordValid(newPassword)) {
         setLoading(true);
@@ -121,16 +146,22 @@ export default function ForgotPassword() {
               },
             });
           if (response.status === 200) {
-            window.alert("Password Updated Successfully");
+            setcontent("Password Updated Successfully");
+            setSuccess(true)
+            setShowPopup(true);
             navigate("/Login");
           }
         } catch (error: unknown) {
-          window.alert("Try After Some Time");
+          setcontent("Try After Some Time");
+          setSuccess(false)
+          setShowPopup(true);
         }
         setLoading(false);
       }
       else{
-        window.alert("Please make sure your Password Have 8 Characters Which contains at least one uppercase letter, one lowercase letter, one Number & One Special Character");
+        setcontent("Please make sure your Password Have 8 Characters Which contains at least one uppercase letter, one lowercase letter, one Number & One Special Character");
+        setSuccess(false)
+        setShowPopup(true);
       }
     }
   };
@@ -140,6 +171,12 @@ export default function ForgotPassword() {
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <CssBaseline />
       {loading && <LoadingScreen />}
+      <PopUpModel
+              isOpen={showPopup}
+              onClose={handlePopupClose}
+              content={content}
+              success={success}
+            />
       <Grid container component="main">
         <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square style={{ border: 'none', borderRadius: '20px', margin: '20px', boxShadow: 'none', background: 'rgba(225, 225, 225, 0.7)' }} >
           <Box sx={{ my: 8, mx: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
@@ -187,13 +224,13 @@ export default function ForgotPassword() {
                   onChange={handleNewPasswordChange}
                   startAdornment={<IconButton disabled><PasswordRounded style={{ color: '#707070' }} /></IconButton>}
                 />
-                <TextFieldComponent
+                {/* <TextFieldComponent
                   label="Confirm Password"
                   type="password"
                   value={newPassword}
                   onChange={handleNewPasswordChange}
                   startAdornment={<IconButton disabled><PasswordRounded style={{ color: '#707070' }} /></IconButton>}
-                />
+                /> */}
                 </>
               )}
               <ButtonComponent

@@ -7,10 +7,10 @@ import countries from '../assets/country.json';
 import states from '../assets/states.json';
 import { isEmailValid, isPhoneNumberValid } from "../utils/validation";
 import LoadingScreen from "../Components/Common/Loading";
-import NoDataPopup from "../Components/Common/NoDatapop";
 import Male from '../assets/Photos/Male.jpg'
 import Female from '../assets/Photos/female.png'
 import ButtonComponent from "../Components/Fields/Buttonfield";
+import PopUpModel from "../Components/Common/PopupModel";
 
 interface UserData {
   name: string,
@@ -29,6 +29,8 @@ const Profile = () => {
   type Country = keyof typeof states;
   const [loading,setLoading] = useState(false);
   const [showPopup, setShowPopup] = useState(false);
+  const [content , setContent] = useState('');
+  const [success,setSuccess] = useState(Boolean);
 
   // For Closing No Data PopUp
   const handlePopupClose = () => {
@@ -142,7 +144,9 @@ const Profile = () => {
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     if  (formData.name === '' || formData.email === ''|| formData.phone === '' || formData.gender === '' || formData.country === '' || formData.state === ''){
-        window.alert("Required Fields should not be empty")
+        setContent("Required Fields should not be empty")
+        setSuccess(false);
+        setShowPopup(true);
       }else{
       if(isEmailValid(formData.email)){
         if(isPhoneNumberValid(formData.phone)){
@@ -164,7 +168,9 @@ const Profile = () => {
             if (response.status === 200) {
               // Handle success, e.g., redirect to a success page or show a success message
               setLoading(false);
-              window.alert('Profile Updated Successfully');
+              setContent('Profile Updated Successfully');
+              setSuccess(true)
+              setShowPopup(true)
               Home("/Profile");
             } else {
               console.log(response.data);
@@ -174,24 +180,36 @@ const Profile = () => {
               if (error.response && error.response.status === 400) {
                 const responseData = error.response.data;
                 if (responseData.detail === "Email already exists") {
-                  window.alert('Email Already Registered. Please Enter Another Email Address');
+                  setContent('Email Already Registered. Please Enter Another Email Address');
+                  setSuccess(false)
+                  setShowPopup(true)
+                  setLoading(false)
                 } else if (responseData.detail === "Phone number already exists") {
-                  window.alert('Phone Number Already Registered. Please Enter Another Phone Number');
+                  setContent('Phone Number Already Registered. Please Enter Another Phone Number');
+                  setSuccess(false)
+                  setShowPopup(true)
+                  setLoading(false)
                 } else {
                   // Handle other 400 status cases if needed
                 }
               } else {
                 // Handle other errors
-                window.alert('An error occurred while updating the profile. Please try again later.');
+                setContent('An error occurred while updating the profile. Please try again later.');
+                setSuccess(false)
+                setShowPopup(true)
               }
             }           
           }
           else{
-            alert("Please enter valid Phone number");
+            setContent("Please enter valid Phone number");
+            setSuccess(false)
+            setShowPopup(true)
           }
         }
       else{
-        alert("Please Enter Valid Email");
+        setContent("Please Enter Valid Email");
+        setSuccess(false)
+        setShowPopup(true)
       }
     };
   }
@@ -204,7 +222,13 @@ const Profile = () => {
             <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
             <CssBaseline />
             {loading && <LoadingScreen />}
-            <NoDataPopup isOpen={showPopup} onClose={handlePopupClose} />
+            <PopUpModel
+              isOpen={showPopup}
+              onClose={handlePopupClose}
+              content={content}
+              success={success}
+            />
+
             {/* Sidebar */}
             <SideNav/>
             {/* Main content */}
@@ -212,10 +236,10 @@ const Profile = () => {
                 <main style={{ flexGrow: 1, padding: 3, marginTop: '70px' , marginLeft: isMobile? '20px' : '240px' }}>
                   <Grid container>
                     <Grid item xs={12} md={9}>
-                      <Typography variant="h5" gutterBottom style={{ margin:'10px' }}>
+                      {/* <Typography variant="h5" gutterBottom style={{ margin:'10px' }}>
                         User Profile
-                      </Typography>
-                      <Card sx={{ borderRadius: '20px', background: 'rgba(255,255,255,0.7)', fontWeight: 'bold' , boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.5)' }}>
+                      </Typography> */}
+                      <Card sx={{ borderRadius: '20px', marginTop:'20px' ,background: 'rgba(255,255,255,0.7)', fontWeight: 'bold' , boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.5)' }}>
                         <CardContent sx={{ color: 'black', padding: '20px' }}>
                           <Grid container spacing={2} alignItems="flex-start">
                             {/* Avatar */}

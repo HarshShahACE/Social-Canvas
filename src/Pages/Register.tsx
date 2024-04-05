@@ -23,6 +23,7 @@ import { LocationCity } from '@mui/icons-material';
 import ButtonComponent from '../Components/Fields/Buttonfield';
 import LoadingScreen from '../Components/Common/Loading';
 import CallIcon from '@mui/icons-material/Call';
+import PopUpModel from '../Components/Common/PopupModel';
 
 export default function Register() {
 
@@ -42,6 +43,14 @@ export default function Register() {
   const Home = useNavigate();
   const defaultImagePath = process.env.REACT_APP_DEFAULT_AUTHENTICATION_IMAGE;
   const [loading,setloading] = useState(false);
+  const [content,setcontent] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const [sucess,setSuccess] = useState(Boolean);
+
+   // For Closing No Data PopUp
+   const handlePopupClose = () => {
+    setShowPopup(false);
+  };
 
   useEffect(() => {
     // Update statesList when the selected country changes
@@ -65,7 +74,9 @@ export default function Register() {
   const handleemailBlur = () => {
     if(email1 !== ''){ 
       if(!isEmailValid(email1)){
-        window.alert("Please enter a valid Email ID");
+        setcontent("Please enter a valid Email ID");
+        setSuccess(false);
+        setShowPopup(true);
       };
     };
   }
@@ -74,7 +85,9 @@ export default function Register() {
   const handlephoneBlur = () => {
     if(phone1 !== ''){
       if(!isPhoneNumberValid(phone1)){
-        window.alert("Please enter valid Phone number");
+        setcontent("Please enter valid Phone number");
+        setSuccess(false);
+        setShowPopup(true);
       };
     };
   }
@@ -83,7 +96,9 @@ export default function Register() {
   const handlepasswordBlur = () => {
     if(password1 !== ''){
       if(!isPasswordValid(password1)){
-        window.alert("Please enter valid Password");
+        setcontent("Please enter valid Password");
+        setSuccess(false);
+        setShowPopup(true);
       };
     };
   }
@@ -92,7 +107,9 @@ export default function Register() {
   const handlecpasswordBlur = () => {
     if(confirmpassword !== ''){
       if(password1 !==  confirmpassword){
-        window.alert("Password And Confirm Password Must Be Same");
+        setcontent("Password And Confirm Password Must Be Same");
+        setSuccess(false);
+        setShowPopup(true);
       };
     };
   }
@@ -102,11 +119,15 @@ export default function Register() {
     event.preventDefault();
     const agreeCheckbox = document.querySelector<HTMLInputElement>('input[type="checkbox"][value="Agree"]');
     if (!agreeCheckbox || !agreeCheckbox.checked) {
-      window.alert("Please agree to the Terms and Conditions before Registering.");
+      setcontent("Please agree to the Terms and Conditions before Registering.");
+      setSuccess(false);
+      setShowPopup(true);
       return; // Exit the function early if terms are not agreed
     }
-    if(name1==='' || email1==='' || password1 ==='' || state1 === '' || phone1==='' || gender1 ===''){
-      window.alert("Required Fields should not be empty")
+    if(name1==='' || email1==='' || password1 ==='' || phone1==='' || state1 === ''  || gender1 ===''){
+      setcontent("Required Fields should not be empty")
+      setSuccess(false);
+      setShowPopup(true);
     }else{
     if(isEmailValid(email1)){
       if(isPhoneNumberValid(phone1)){
@@ -130,7 +151,9 @@ export default function Register() {
           
             if (response.status === 200) {
               // Handle success, e.g., redirect to a success page or show a success message
-              window.alert('Registration Successful');
+              setcontent('Registration Successful');
+              setShowPopup(true);
+              setSuccess(true);
               setloading(false);
               Home("/Login");
               console.log('Registration successful!');
@@ -139,7 +162,9 @@ export default function Register() {
               if (response.data) {
                 if (response.status === 400) {
                   setloading(false);
-                  window.alert(response.data.detail)
+                  setcontent(response.data.detail);
+                  setSuccess(true);
+                  setShowPopup(true);
                 }
               }
             }
@@ -153,27 +178,37 @@ export default function Register() {
                 if (responseData && typeof responseData === 'object') {
                   // Use a type assertion to inform TypeScript that responseData has a 'detail' property
                   const detail = (responseData as { detail: string }).detail;
-                  window.alert(detail)
+                  setcontent(detail);
+                  setSuccess(false);
+                  setShowPopup(true);
                   setloading(false)
                 }
               } else {
                 setloading(false);
                 console.error('Error occurred:', axiosError);
-                window.alert('Registration failed. Please try again later.');
+                setcontent('Registration failed. Please try again later.');
+                setSuccess(false);
+                setShowPopup(true);
               }
             }
           }
         }
         else{
-          alert("Please make sure your Password Have 8 Characters Which contains at least one uppercase letter, one lowercase letter, one Number & One Sepcial Character")
+          setcontent("Please make sure your Password Have 8 Characters Which contains at least one uppercase letter, one lowercase letter, one Number & One Sepcial Character")
+          setSuccess(false);
+          setShowPopup(true);
         }
       }
       else{
-        alert("Please enter valid Phone number");
+        setcontent("Please enter valid Phone number");
+        setSuccess(false);
+        setShowPopup(true);
       }
     }
     else{
-      alert("Please Enter Valid Email");
+      setcontent("Please Enter Valid Email");
+      setSuccess(false);
+      setShowPopup(true);
     }
   }
   };
@@ -182,6 +217,12 @@ export default function Register() {
     <div style={{ backgroundImage: `url(${defaultImagePath})`, backgroundSize:'cover'}}>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     {loading && <LoadingScreen />}
+    <PopUpModel
+        isOpen={showPopup}
+        onClose={handlePopupClose}
+        content={content}
+        success={sucess}
+      />
     <Grid container component="main" sx={{}}>
       <CssBaseline />
       <Grid item xs={12} sm={8} md={4} component={Paper} elevation={6} square style={{border:'none', 
@@ -233,7 +274,7 @@ export default function Register() {
               onChange={e=>setpassword(e.target.value)}
               onBlur={handlepasswordBlur}
               startAdornment={<IconButton><PasswordRounded style={{color:'#707070'}} /></IconButton>}
-              suggestion='It should contain at least 8 character: 1 UC(A-Z), 1 LC(a-z), 1 Number(0-9), 1 SC(@,#,$..)'
+              suggestion='8 character: 1 UC(A-Z), 1 LC(a-z), 1 Number(0-9), 1 SC(@,#,$..)'
             />
             <TextFieldComponent
             label="Confirm Password"

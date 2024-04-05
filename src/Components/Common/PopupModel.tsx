@@ -1,25 +1,31 @@
 import React from 'react';
 import { IconButton } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
 import ButtonComponent from '../Fields/Buttonfield';
+import ReportOutlinedIcon from '@mui/icons-material/ReportOutlined';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 
 interface NoDataPopupProps {
   isOpen: boolean;
   onClose: () => void;
+  content: string;
+  success: boolean; // Assuming you have a prop indicating success/error
 }
 
-const NoDataPopup: React.FC<NoDataPopupProps> = ({ isOpen, onClose }) => {
+const PopUpModel: React.FC<NoDataPopupProps> = ({ isOpen, onClose, content, success }) => {
+  // Determine which icon to display based on the 'success' prop
+  const icon = success ? <CheckCircleIcon style={{ color: 'green', fontSize: '80px'}} /> : <ReportOutlinedIcon style={{fontSize: '80px', color:'red'}}/>;
+
   return (
     <div className={isOpen ? 'popup-overlay' : 'popup-overlay hidden'}>
       <div className="popup">
         <div className="popup-inner">
           <div className="icon-container">
-            <IconButton className="close-icon" color="primary">
-              <CloseIcon style={{ color: 'red', fontSize: '80px' , padding:'10px' , border: '2px solid black', borderRadius: '50%' }} />
+            <IconButton className="close-icon" color="primary" style={{borderRadius:'50%' , border: '2px solid black'}}>
+              {icon}
             </IconButton>
           </div>
           <div className="text-container">
-            <h2>No Data Found</h2>
+            <h2 style={{color:'black'}}>{content}</h2>
           </div>
           <div className="button-container">
             <ButtonComponent variant="contained" onClick={onClose}>OK</ButtonComponent>
@@ -67,7 +73,7 @@ const NoDataPopup: React.FC<NoDataPopupProps> = ({ isOpen, onClose }) => {
 
         .close-icon {
           border-radius: 50%;
-          border:black
+          border:black;
           padding: 10px;
         }
       `}</style>
@@ -75,4 +81,4 @@ const NoDataPopup: React.FC<NoDataPopupProps> = ({ isOpen, onClose }) => {
   );
 }
 
-export default NoDataPopup;
+export default PopUpModel;

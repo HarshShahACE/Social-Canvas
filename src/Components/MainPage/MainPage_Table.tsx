@@ -8,6 +8,8 @@ import SocialMediaPopup from './SocialMediaPopup';
 import LinkInputPopup from './LinkInput';
 import TwitterLink from './TwitterLink';
 import ButtonComponent from '../Fields/Buttonfield';
+import PopUpModel from '../Common/PopupModel';
+import CloseIcon from '@mui/icons-material/Close'
 
 interface SocialAccountData { 
   username: string;
@@ -20,6 +22,14 @@ const SocialAccount = () => {
   const [username, setUsername] = useState<string[]>([]);
   const [userPic, setUserPic] = useState<string[]>([]);
   const [platform, setPlatform] = useState<string[]>([]);
+  const [content,setcontent] = useState('');
+  const [success,setSuccess] = useState(Boolean);
+  const [showPopup, setShowPopup] = useState(false);
+
+   // For Closing No Data PopUp
+   const handlePopupClose = () => {
+    setShowPopup(false);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -169,17 +179,23 @@ const SocialAccount = () => {
               if (response.status === 200) {
                 const JsonData = response.data;
                 console.log(JsonData);
-                window.alert("Account Added Successfully")
+                setcontent("Account Added Successfully");
+                setSuccess(true);
+                setShowPopup(true);
                 window.location.reload();
               } else {
                 console.log('Error:', response.statusText);
                 setLoading(false);
-                window.alert("Error In Adding Account , Try After Some Time");
+                setcontent("Error In Adding Account , Try After Some Time");
+                setSuccess(false)
+                setShowPopup(true);
               }
             } catch (error) {
               console.error('Error fetching data:', error);
               setLoading(false);
-                window.alert("Error In Adding Account , Try After Some Time");
+              setcontent("Error In Adding Account , Try After Some Time");
+              setSuccess(false)
+              setShowPopup(true);
             }
           };
       
@@ -211,6 +227,12 @@ const SocialAccount = () => {
         </DialogContent>
       </Dialog>
       {loading && <LoadingScreen />}
+      <PopUpModel
+              isOpen={showPopup}
+              onClose={handlePopupClose}
+              content={content}
+              success={success}
+            />
       <Card sx={{ maxWidth:'75%' , margin:'10px' , borderRadius:'20px' , padding:'10px' , backgroundColor:'rgba(255, 255, 255, 0.8)' , boxShadow:'2px 2px 5px 2px rgba(0, 0, 0, 0.5)' }}>
         <CardContent>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop:'0px'  }}>

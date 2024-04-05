@@ -235,12 +235,12 @@ const EventDetailsDialog: React.FC<Props> = ({ eventId, plateform , open, onClos
             </div>
             {media.map(item => (
               item.type === "image" ? (
-                <img key={item.id} src={`data:image/jpeg;base64,${item.url}`} alt={`${item.id}`} style={{ width: '60%', height: '60%'}} />
+                <img key={item.id} src={`data:image/jpeg;base64,${item.url}`} alt={`${item.id}`} style={{ width: '60%', height: '60%' , marginTop:'10px'}} />
               ) : (
-                <video key={item.id} controls style={{ width: '500px', height: '500px' }}>
+                <video key={item.id} controls style={{ width: '500px' , marginTop:'10px' }}>
                 <source src={`data:video/mp4;base64,${item.url}`} type="video/mp4" />
                 Your browser does not support the video tag.
-                </video>
+                </video>  
               )
             ))}
           </>

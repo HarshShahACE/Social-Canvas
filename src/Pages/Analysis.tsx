@@ -199,7 +199,7 @@ const Analysis = () => {
                                     </div>
                                 </>
                             ) : (
-                                <h2>Add Account for Insights</h2>
+                                <h2>Please Add account for insights</h2>
                             )}
                         </>
                     ) : selectedPlatform === 'twitter' ?  (
@@ -220,7 +220,7 @@ const Analysis = () => {
                             </div>
                             </>
                             ) : (
-                               <h2>Please add account for insights</h2>
+                               <h2>Please Add account for insights</h2>
                             )}
                         </>
                     ) : selectedPlatform === 'youtube' ?  (
@@ -243,7 +243,7 @@ const Analysis = () => {
                                     </div>
                                 </>
                             ) : (
-                                <h2>Please add account for insights</h2>
+                                <h2>Please Add account for insights</h2>
                             )}
                         </>
                     ) : (
