@@ -1,22 +1,22 @@
 {
   "files": {
-    "main.css": "/static/css/main.e6c13ad2.css",
-    "main.js": "/static/js/main.dc85e8e6.js",
-    "static/js/592.9cb0e20c.chunk.js": "/static/js/592.9cb0e20c.chunk.js",
-    "static/media/Male.jpg": "/static/media/Male.cfe9f79c746ba3002568.jpg",
-    "static/media/SCLOGO.png": "/static/media/SCLOGO.7462f2c74190b792aacd.png",
-    "static/media/Person.png": "/static/media/Person.dd010bdf99052159c588.png",
-    "static/media/Youtube.png": "/static/media/Youtube.2d1bf23fa6a5b8b867c2.png",
-    "static/media/twitter.jpg": "/static/media/twitter.4db0651578578655bb17.jpg",
-    "static/media/female.png": "/static/media/female.a761d9f6b32a2c8f700c.png",
-    "static/media/Linkedin_Guide.png": "/static/media/Linkedin_Guide.024dbdac67eb9bf0b974.png",
-    "index.html": "/index.html",
-    "main.e6c13ad2.css.map": "/static/css/main.e6c13ad2.css.map",
-    "main.dc85e8e6.js.map": "/static/js/main.dc85e8e6.js.map",
-    "592.9cb0e20c.chunk.js.map": "/static/js/592.9cb0e20c.chunk.js.map"
+    "main.css": "/social-canvas/static/css/main.e6c13ad2.css",
+    "main.js": "/social-canvas/static/js/main.3e7b134b.js",
+    "static/js/592.9cb0e20c.chunk.js": "/social-canvas/static/js/592.9cb0e20c.chunk.js",
+    "static/media/Male.jpg": "/social-canvas/static/media/Male.cfe9f79c746ba3002568.jpg",
+    "static/media/SCLOGO.png": "/social-canvas/static/media/SCLOGO.7462f2c74190b792aacd.png",
+    "static/media/Person.png": "/social-canvas/static/media/Person.dd010bdf99052159c588.png",
+    "static/media/Youtube.png": "/social-canvas/static/media/Youtube.2d1bf23fa6a5b8b867c2.png",
+    "static/media/twitter.jpg": "/social-canvas/static/media/twitter.4db0651578578655bb17.jpg",
+    "static/media/female.png": "/social-canvas/static/media/female.a761d9f6b32a2c8f700c.png",
+    "static/media/Linkedin_Guide.png": "/social-canvas/static/media/Linkedin_Guide.024dbdac67eb9bf0b974.png",
+    "index.html": "/social-canvas/index.html",
+    "main.e6c13ad2.css.map": "/social-canvas/static/css/main.e6c13ad2.css.map",
+    "main.3e7b134b.js.map": "/social-canvas/static/js/main.3e7b134b.js.map",
+    "592.9cb0e20c.chunk.js.map": "/social-canvas/static/js/592.9cb0e20c.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e6c13ad2.css",
-    "static/js/main.dc85e8e6.js"
+    "static/js/main.3e7b134b.js"
   ]
 }
