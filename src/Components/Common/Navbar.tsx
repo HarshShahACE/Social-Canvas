@@ -13,6 +13,7 @@ import ManageHistoryIcon from '@mui/icons-material/ManageHistory';
 import { Dashboard, NotificationsRounded } from '@mui/icons-material';
 import CampaignIcon from '@mui/icons-material/Campaign';
 import Person from '../../assets/Photos/Person.png'
+import { useLogout } from './Logout';
 
 const drawerWidth = 230;
 
@@ -31,6 +32,7 @@ export default function SideNav() {
   const [profileAnchorEl, setProfileAnchorEl] = useState<HTMLElement | null>(null); // Anchor element for the profile popover
   const [selectedItem, setSelectedItem] = useState<SideNavItem | null>(null); // Selected item in the drawer
   const location = useLocation();
+  const Logout = useLogout();
 
   const username = sessionStorage.getItem('Uname');
   
@@ -78,7 +80,6 @@ export default function SideNav() {
     { id: 'managepost', text: 'Manange Post', icon:<ManageHistoryIcon style={{color:'#0090E7'}}/>, path: '/Manage_Post' },
     { id: 'analysis', text: 'Insights', icon: <AnalyticsIcon style={{color:'#52D017'}}/>, path: '/Analysis' },
     { id: 'profile', text: 'My Profile', icon: <AccountCircleIcon style={{color:'#EB5406'}}/>, path: '/Profile' },
-    { id: 'logout', text: 'Logout', icon: <LogoutIcon style={{color:'#D53940'}} /> , path:'/Logout' }, // Change path to the login page
   ];
 
   // For Changing Selected Page Or Item
@@ -191,7 +192,7 @@ export default function SideNav() {
                   </ListItemIcon>
                   Profile
                 </MenuItem>
-                <MenuItem component={Link} to="/Logout" onClick={handleProfileClose}>
+                <MenuItem onClick={() => { Logout(); handleProfileClose(); }}>
                   <ListItemIcon>
                       <LogoutIcon fontSize="small" />
                   </ListItemIcon>

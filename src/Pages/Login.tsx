@@ -15,11 +15,10 @@ import { isEmailValid, handlepasswordcheck } from '../utils/validation';
 import Copyright from '../Components/Common/Copyright';
 import axios, { AxiosError } from 'axios';
 import TextFieldComponent from '../Components/Fields/Textfield';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LoadingScreen from '../Components/Common/Loading';
 import ButtonComponent from '../Components/Fields/Buttonfield';
 import PopUpModel from '../Components/Common/PopupModel';
-import CloseIcon from '@mui/icons-material/Close';
 
 export default function Login() {
   
@@ -187,10 +186,18 @@ export default function Login() {
               </ButtonComponent>
               <Grid container>
                 <Grid item xs>
-                  <ButtonComponent variant='text' href='/Forgot_Password'>Forgot Password</ButtonComponent>
+                  <ButtonComponent variant='text'>
+                    <Link to="/Forgot_Password">
+                    Forgot Password
+                    </Link>
+                  </ButtonComponent>
                 </Grid>
                 <Grid item>
-                  <ButtonComponent variant='text' href='/Register'> Don't Have Account? Sign Up </ButtonComponent>
+                  <ButtonComponent variant='text'>
+                    <Link to="/Register">
+                      Don't Have Account? Sign Up
+                    </Link>  
+                  </ButtonComponent>
                 </Grid>
               </Grid>
               <Copyright sx={{ mt: 5 }} />

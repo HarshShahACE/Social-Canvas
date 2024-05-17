@@ -14,7 +14,7 @@ import LoadingScreen from '../Components/Common/Loading';
 import ButtonComponent from '../Components/Fields/Buttonfield';
 import axios from 'axios';
 import TextFieldComponent from '../Components/Fields/Textfield';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import Copyright from '../Components/Common/Copyright';
 import PopUpModel from '../Components/Common/PopupModel';
@@ -243,7 +243,11 @@ export default function ForgotPassword() {
               </ButtonComponent>
               <Grid container justifyContent="center">
                 <Grid item>
-                  <ButtonComponent variant='text' href='/Login'>Back To Login</ButtonComponent>
+                  <ButtonComponent variant='text'>
+                    <Link to="/Login">
+                      Back To Login
+                    </Link>
+                  </ButtonComponent>
                 </Grid>
               </Grid>
               <Copyright sx={{ mt: 5 }} />

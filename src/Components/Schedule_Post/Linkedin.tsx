@@ -59,7 +59,7 @@ const LinkedInPost:React.FC<LinkedInPostProps> = ({ content, media }) => {
   return (
     <>
       <div style={{ display: 'flex', alignItems: 'center' , margin:'10px' }}>
-        <img src={LinkedinLogo} style={{ width: '30px', height: '30px' }}/>
+        <img src={LinkedinLogo} alt='linkedin' style={{ width: '30px', height: '30px' }}/>
         <Typography variant="body1" color="textPrimary" style={{ marginLeft:'5px'}}>
           Linkedin
         </Typography>

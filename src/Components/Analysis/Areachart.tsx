@@ -63,9 +63,6 @@ const AreaChartComponent: React.FC<{ apiResponse: APIResponse }> = ({ apiRespons
   const totaltime = Object.values(data).reduce((acc, curr) => acc + curr, 0);
   const totalview = Object.values(views).reduce((acc, curr) => acc + curr, 0);
 
-  const lastDataValue = data[data.length - 1];
-  const lastViewsValue = views[views.length - 1];
-
   const chartData = {
     labels: labels,
     datasets: [

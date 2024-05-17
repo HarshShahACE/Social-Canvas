@@ -94,10 +94,10 @@ const GrowthCard: React.FC<GrowthCardProps> = ({ platform }) => {
                       },
                 }}>
                     <CardContent style={{ position: 'relative', zIndex: 1, color: '#000', textAlign: 'center' }}>
-                        <Typography variant="h5" component="div" >
+                        <Typography variant="h6" component="div" >
                             {key}
                         </Typography>
-                        <Typography variant="h6">
+                        <Typography variant="h5" fontStyle={'bold'}>
                             {value !== null && value !== undefined ? String(value) : 0}
                         </Typography>
                     </CardContent>

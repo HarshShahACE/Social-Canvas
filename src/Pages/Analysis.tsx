@@ -1,4 +1,4 @@
-import { Avatar, Box, Divider, Select, Typography, useMediaQuery } from "@mui/material";
+import { Avatar, Box, Divider, Typography, useMediaQuery } from "@mui/material";
 import { CssBaseline } from "@mui/material"
 import SideNav from "../Components/Common/Navbar";
 import Barchart from "../Components/Analysis/BarChart";

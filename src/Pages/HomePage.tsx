@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import SideNav from '../Components/Common/Navbar';
-import { Avatar, Box, CssBaseline, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { Avatar, Box, CssBaseline, Typography, useMediaQuery } from '@mui/material';
 import GrowthCard from '../Components/MainPage/MainPage_cards';
 import SocialAccount from '../Components/MainPage/MainPage_Table';
 import { platforms } from '../Components/Common/platefroms';

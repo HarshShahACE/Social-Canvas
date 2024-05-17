@@ -7,27 +7,9 @@ import Schedule_Post from './Pages/schedulePost';
 import ManagePost from './Pages/ManagePost';
 import Analysis from './Pages/Analysis';
 import PrivateRoute from './Components/Authentication/Private_Route';
-import { useState } from 'react';
-import LoadingScreen from './Components/Common/Loading';
 import ForgotPassword from './Pages/forgotpassword';
 
 function App() {
-
-  const [loading, setLoading] = useState(false);
-
-  const Logout = () => {
-      setLoading(true);
-      console.log("logging out");
-      sessionStorage.clear();
-      // Redirect to the login page
-      setLoading(false);
-      window.location.href = "/Login";
-    return(
-      <>
-        {loading && <LoadingScreen />}
-      </>
-    )
-  }
 
   return (
     <div className="App">
@@ -38,7 +20,6 @@ function App() {
           <Route path='/Login' element={<Login/>} />
           <Route path='/Forgot_Password' element={<ForgotPassword/>} />
           <Route path='/Register' element={<Register/>} />
-          <Route path='/Logout' element={<Logout/>} />
 
           {/* Private Routes */}
           <Route path='/Dashboard' element={<PrivateRoute element={Homepage}/>} />

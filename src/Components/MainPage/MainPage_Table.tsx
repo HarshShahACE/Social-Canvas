@@ -9,7 +9,6 @@ import LinkInputPopup from './LinkInput';
 import TwitterLink from './TwitterLink';
 import ButtonComponent from '../Fields/Buttonfield';
 import PopUpModel from '../Common/PopupModel';
-import CloseIcon from '@mui/icons-material/Close'
 
 interface SocialAccountData { 
   username: string;

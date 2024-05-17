@@ -76,7 +76,7 @@ const TwitterPostLayout: React.FC<TwitterProps> = ({ content, media }) => {
   return (
     <>
       <div style={{ display: 'flex', alignItems: 'center' , margin:'10px' }}>
-        <img src={TwitterLogo} style={{ width: '30px', height: '30px' }}/>
+        <img src={TwitterLogo} alt='twitter' style={{ width: '30px', height: '30px' }}/>
         <Typography variant="body1" color="textPrimary" style={{marginLeft:'5px' }}>
           Twitter
         </Typography>

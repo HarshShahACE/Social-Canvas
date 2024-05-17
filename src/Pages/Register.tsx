@@ -11,7 +11,7 @@ import HowToRegOutlinedIcon from '@mui/icons-material/HowToRegOutlined';
 import { useEffect, useState } from 'react';
 import countries from '../assets/country.json';
 import states from '../assets/states.json';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { EmailRounded, PasswordRounded, Person2Rounded } from '@mui/icons-material';
 import PublicRoundedIcon from '@mui/icons-material/PublicRounded';
 import axios, { AxiosError } from "axios";
@@ -330,11 +330,15 @@ export default function Register() {
                 sx={{ display: 'flex', alignItems: 'center', marginLeft: '-8px', mt:2}}
               />
               <ButtonComponent type="submit" variant="contained" fullWidth style={{ marginTop: '10px', marginBottom: '10px' }}>
-                register
+                Register
               </ButtonComponent>
               <Grid container>
                 <Grid item>
-                  <ButtonComponent href='/Login' style={{textAlign:'end'}} variant='text'>Already Have An Account? Sign In</ButtonComponent>
+                  <ButtonComponent style={{textAlign:'end'}} variant='text'>
+                    <Link to="/Login">
+                    Already Have An Account? Sign In
+                    </Link>
+                  </ButtonComponent>
                 </Grid>
               </Grid>
               <Copyright sx={{ mt: 1 }} />
